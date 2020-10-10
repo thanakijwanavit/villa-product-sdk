@@ -35,8 +35,8 @@ result = sdk.updateWithS3(
 result
 ```
 
-    CPU times: user 48.3 ms, sys: 10.2 ms, total: 58.4 ms
-    Wall time: 733 ms
+    CPU times: user 66.4 ms, sys: 17.3 ms, total: 83.7 ms
+    Wall time: 717 ms
 
 
 
@@ -46,7 +46,7 @@ result
      'failure': 0,
      'skipped': 5,
      'failureMessage': [],
-     'timetaken': 67.68299999999999}
+     'timetaken': 30.341}
 
 
 
@@ -58,8 +58,8 @@ result = sdk.querySingleProduct('0171670')
 result
 ```
 
-    CPU times: user 2.93 ms, sys: 1.12 ms, total: 4.05 ms
-    Wall time: 98.7 ms
+    CPU times: user 3.54 ms, sys: 1.27 ms, total: 4.81 ms
+    Wall time: 59.5 ms
 
 
 
@@ -130,8 +130,8 @@ response = sdk.syncS3()
 response
 ```
 
-    CPU times: user 2.59 ms, sys: 1 ms, total: 3.59 ms
-    Wall time: 286 ms
+    CPU times: user 3.16 ms, sys: 1.44 ms, total: 4.6 ms
+    Wall time: 367 ms
 
 
 
