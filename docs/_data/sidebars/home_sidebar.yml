@@ -10,7 +10,7 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
+      title: Schema
       url: Schema.html
     - output: web,pdf
       title: Products
