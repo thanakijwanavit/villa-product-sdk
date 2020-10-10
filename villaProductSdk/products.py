@@ -8,7 +8,6 @@ from s3bz.s3bz import S3, Requests
 from lambdasdk.lambdasdk import Lambda
 from .schema import Event, Response
 import bz2, json, boto3, base64, logging
-logging.basicConfig(level=logging.INFO)
 
 # Cell
 class FunctionNames:

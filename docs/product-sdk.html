@@ -54,7 +54,7 @@ nb_path: "product-sdk.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FunctionNames" class="doc_header"><code>class</code> <code>FunctionNames</code><a href="https://github.com/nic/villaProductSdk/tree/master/villaProductSdk/products.py#L14" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FunctionNames</code>(<strong><code>branchName</code></strong>=<em><code>'dev-manual'</code></em>)</p>
+<h2 id="FunctionNames" class="doc_header"><code>class</code> <code>FunctionNames</code><a href="https://github.com/nic/villaProductSdk/tree/master/villaProductSdk/products.py#L13" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FunctionNames</code>(<strong><code>branchName</code></strong>=<em><code>'dev-manual'</code></em>)</p>
 </blockquote>
 <p>determine function and resources name based on branchName</p>
 
@@ -86,7 +86,7 @@ nb_path: "product-sdk.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ProductSdk" class="doc_header"><code>class</code> <code>ProductSdk</code><a href="https://github.com/nic/villaProductSdk/tree/master/villaProductSdk/products.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductSdk</code>(<strong><code>branch</code></strong>=<em><code>'dev-manual'</code></em>, <strong><code>user</code></strong>=<em><code>None</code></em>, <strong><code>pw</code></strong>=<em><code>None</code></em>, <strong><code>region</code></strong>=<em><code>'ap-southeast-1'</code></em>)</p>
+<h2 id="ProductSdk" class="doc_header"><code>class</code> <code>ProductSdk</code><a href="https://github.com/nic/villaProductSdk/tree/master/villaProductSdk/products.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductSdk</code>(<strong><code>branch</code></strong>=<em><code>'dev-manual'</code></em>, <strong><code>user</code></strong>=<em><code>None</code></em>, <strong><code>pw</code></strong>=<em><code>None</code></em>, <strong><code>region</code></strong>=<em><code>'ap-southeast-1'</code></em>)</p>
 </blockquote>
 
 </div>
@@ -203,21 +203,9 @@ nb_path: "product-sdk.ipynb"
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>INFO:root:bucket is input-product-bucket-dev-manual
-INFO:root:using accelerate endpoint
-INFO:root:data was saved to s3
-INFO:root:data is saved to s3, invoking ingestion function
-INFO:root:input to lambda is {&#39;body&#39;: &#39;{&#34;key&#34;: &#34;input-data-name&#34;}&#39;, &#39;header&#39;: {}}
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 86 ms, sys: 12.1 ms, total: 98 ms
-Wall time: 808 ms
+<pre>CPU times: user 81.5 ms, sys: 11.7 ms, total: 93.2 ms
+Wall time: 650 ms
 </pre>
 </div>
 </div>
@@ -231,7 +219,7 @@ Wall time: 808 ms
  &#39;failure&#39;: 0,
  &#39;skipped&#39;: 5,
  &#39;failureMessage&#39;: [],
- &#39;timetaken&#39;: 77.16000000000001}</pre>
+ &#39;timetaken&#39;: 28.382}</pre>
 </div>
 
 </div>
@@ -269,17 +257,9 @@ Wall time: 808 ms
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>INFO:root:{&#39;body&#39;: &#39;{&#34;iprcode&#34;: &#34;0171670&#34;}&#39;, &#39;header&#39;: {}}
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 4.05 ms, sys: 1.32 ms, total: 5.37 ms
-Wall time: 105 ms
+<pre>CPU times: user 2.93 ms, sys: 1.05 ms, total: 3.98 ms
+Wall time: 61.9 ms
 </pre>
 </div>
 </div>
@@ -407,8 +387,8 @@ Wall time: 105 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 2.72 ms, sys: 1.03 ms, total: 3.75 ms
-Wall time: 291 ms
+<pre>CPU times: user 2.74 ms, sys: 1.01 ms, total: 3.76 ms
+Wall time: 413 ms
 </pre>
 </div>
 </div>
