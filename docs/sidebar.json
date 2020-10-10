@@ -1,6 +1,7 @@
 {
-  "villaInventorySdk": {
+  "villaProductSdk": {
     "Overview": "/",
-    "module name here": "core.html"
+    "Title": "Schema.html",
+    "Products": "product-sdk.html"
   }
 }

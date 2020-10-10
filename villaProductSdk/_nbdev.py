@@ -10,7 +10,7 @@ index = {"Response": "Schema.ipynb",
          "ProductSdk": "product-sdk.ipynb"}
 
 modules = ["schema.py",
-           "inventory.py"]
+           "products.py"]
 
 doc_url = "https://nic.github.io/villaProductSdk/"
 
