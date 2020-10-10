@@ -4,35 +4,48 @@ __all__ = ['Response', 'Event', 'Product', 'Products']
 
 # Cell
 from dataclasses import field
-from dataclasses import dataclass
-from dataclasses_json import dataclass_json
-from typing import Optional, List
-import json
+from dataclasses import dataclass, field
+from dataclasses_json import dataclass_json, Undefined
+from typing import Optional, List, Callable, Any
+import ujson as json
 
 @dataclass_json
 @dataclass
 class Response:
+  '''
+    parse response from apigateway
+  '''
   body: str
   statusCode: int = 200
   header: dict = field(default_factory = dict)
   @classmethod
   def fromDict(cls, dictInput:dict):
+    '''
+      output object from Dict,
+      dictInput should follow apigateway proxy integration
+    '''
     body = dictInput.pop('body')
     return cls(
       body = json.loads(body),
       **dictInput
     )
   @classmethod
-  def getReturn(cls, body:dict, header:dict = {}, statusCode = 200)->dict:
+  def getReturn(cls, body:dict, header:dict = {}, statusCode:int = 200)->dict:
+    '''
+      output dictionary which is suitable for apigateway proxy integration return
+    '''
     returnObj = cls(
       body = json.dumps(body),
       header = header,
       statusCode = statusCode
                    ).to_dict()
     return returnObj
-@dataclass_json
+@dataclass_json(undefined=Undefined.EXCLUDE)
 @dataclass
 class Event:
+  '''
+    parse event from apigateway
+  '''
   body: str
   header: dict = field(default_factory = dict)
   def getBody(self):

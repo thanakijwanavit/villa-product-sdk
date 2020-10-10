@@ -54,7 +54,7 @@ nb_path: "product-sdk.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FunctionNames" class="doc_header"><code>class</code> <code>FunctionNames</code><a href="https://github.com/nic/villa-product-sdk/tree/master/villaProductSdk/products.py#L13" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FunctionNames</code>(<strong><code>branchName</code></strong>=<em><code>'dev-manual'</code></em>)</p>
+<h2 id="FunctionNames" class="doc_header"><code>class</code> <code>FunctionNames</code><a href="https://github.com/nic/villa-product-sdk/tree/master/villaProductSdk/products.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FunctionNames</code>(<strong><code>branchName</code></strong>:<code>str</code>=<em><code>'dev-manual'</code></em>)</p>
 </blockquote>
 
 <pre><code>determine function and resources name based on branchName</code></pre>
@@ -87,8 +87,11 @@ nb_path: "product-sdk.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ProductSdk" class="doc_header"><code>class</code> <code>ProductSdk</code><a href="https://github.com/nic/villa-product-sdk/tree/master/villaProductSdk/products.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductSdk</code>(<strong><code>branch</code></strong>=<em><code>'dev-manual'</code></em>, <strong><code>user</code></strong>=<em><code>None</code></em>, <strong><code>pw</code></strong>=<em><code>None</code></em>, <strong><code>region</code></strong>=<em><code>'ap-southeast-1'</code></em>)</p>
+<h2 id="ProductSdk" class="doc_header"><code>class</code> <code>ProductSdk</code><a href="https://github.com/nic/villa-product-sdk/tree/master/villaProductSdk/products.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductSdk</code>(<strong><code>branch</code></strong>:<code>str</code>=<em><code>'dev-manual'</code></em>, <strong><code>user</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>pw</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>region</code></strong>:<code>str</code>=<em><code>'ap-southeast-1'</code></em>)</p>
 </blockquote>
+
+<pre><code>the main class for interacting with product endpoint
+user/pw are optional</code></pre>
 
 </div>
 
@@ -205,8 +208,8 @@ nb_path: "product-sdk.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 75.9 ms, sys: 9.74 ms, total: 85.7 ms
-Wall time: 739 ms
+<pre>CPU times: user 75.5 ms, sys: 9.83 ms, total: 85.3 ms
+Wall time: 2.8 s
 </pre>
 </div>
 </div>
@@ -220,7 +223,7 @@ Wall time: 739 ms
  &#39;failure&#39;: 0,
  &#39;skipped&#39;: 5,
  &#39;failureMessage&#39;: [],
- &#39;timetaken&#39;: 33.538}</pre>
+ &#39;timetaken&#39;: 113.04599999999999}</pre>
 </div>
 
 </div>
@@ -259,8 +262,8 @@ Wall time: 739 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 2.73 ms, sys: 1.04 ms, total: 3.78 ms
-Wall time: 57 ms
+<pre>CPU times: user 2.73 ms, sys: 1.02 ms, total: 3.75 ms
+Wall time: 2.25 s
 </pre>
 </div>
 </div>
@@ -388,8 +391,8 @@ Wall time: 57 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 3 ms, sys: 1.1 ms, total: 4.1 ms
-Wall time: 308 ms
+<pre>CPU times: user 2.65 ms, sys: 1.02 ms, total: 3.67 ms
+Wall time: 229 ms
 </pre>
 </div>
 </div>

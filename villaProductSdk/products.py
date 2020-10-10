@@ -7,12 +7,14 @@ from botocore.config import Config
 from s3bz.s3bz import S3, Requests
 from lambdasdk.lambdasdk import Lambda
 from .schema import Event, Response
-import bz2, json, boto3, base64, logging
+from typing import Optional
+import ujson as json
+import bz2,  boto3, base64, logging
 
 # Cell
 class FunctionNames:
   '''determine function and resources name based on branchName'''
-  def __init__(self, branchName = 'dev-manual'):
+  def __init__(self, branchName:str = 'dev-manual'):
     self.branchName = branchName
   dumpToS3 = lambda self: f'product-dump-s3-{self.branchName}'
   updateProduct = lambda self: f'product-update-{self.branchName}'
@@ -25,8 +27,15 @@ class FunctionNames:
 
 # Cell
 class ProductSdk:
-
-  def __init__(self, branch = 'dev-manual', user = None, pw = None, region = 'ap-southeast-1'):
+  '''
+    the main class for interacting with product endpoint
+    user/pw are optional
+  '''
+  def __init__(self,
+               branch:str = 'dev-manual',
+               user:Optional[str] = None,
+               pw:Optional[str] = None,
+               region:str = 'ap-southeast-1'):
     self.branchName = branch
     self.functionNames = FunctionNames(branchName = branch)
     self.lambdaClient = Lambda(user =user, pw=pw, region = region)

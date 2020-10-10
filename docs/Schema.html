@@ -50,7 +50,7 @@ nb_path: "Schema.ipynb"
 <h2 id="Response" class="doc_header"><code>class</code> <code>Response</code><a href="" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Response</code>(<strong><code>body</code></strong>:<code>str</code>, <strong><code>statusCode</code></strong>:<code>int</code>=<em><code>200</code></em>, <strong><code>header</code></strong>:<code>dict</code>=<em><code>&lt;factory&gt;</code></em>)</p>
 </blockquote>
 
-<pre><code>Response(body: str, statusCode: int = 200, header: dict = &lt;factory&gt;)</code></pre>
+<pre><code>parse response from apigateway</code></pre>
 
 </div>
 
@@ -76,7 +76,7 @@ nb_path: "Schema.ipynb"
 <h2 id="Event" class="doc_header"><code>class</code> <code>Event</code><a href="" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Event</code>(<strong><code>body</code></strong>:<code>str</code>, <strong><code>header</code></strong>:<code>dict</code>=<em><code>&lt;factory&gt;</code></em>)</p>
 </blockquote>
 
-<pre><code>Event(body: str, header: dict = &lt;factory&gt;)</code></pre>
+<pre><code>parse event from apigateway</code></pre>
 
 </div>
 
@@ -130,6 +130,39 @@ nb_path: "Schema.ipynb"
 
 <pre><code>Products(products: List[__main__.Product])</code></pre>
 
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Event</span><span class="p">(</span><span class="n">body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;test&#39;</span><span class="p">:</span><span class="s1">&#39;test&#39;</span><span class="p">}))</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;body&#39;: &#39;{&#34;test&#34;:&#34;test&#34;}&#39;, &#39;header&#39;: {}}</pre>
 </div>
 
 </div>
