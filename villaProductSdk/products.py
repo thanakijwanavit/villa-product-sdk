@@ -96,4 +96,4 @@ class ProductSdk:
     lambdaResponse = self.lambdaClient.invoke(
       functionName = functionName, input = {}
     )
-    return lambdaResponse
+    return self.returnLambdaResponse(lambdaResponse)

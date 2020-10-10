@@ -12,8 +12,8 @@ index = {"Response": "Schema.ipynb",
 modules = ["schema.py",
            "products.py"]
 
-doc_url = "https://nic.github.io/villaProductSdk/"
+doc_url = "https://thanakijwanavit.github.io/villa-product-sdk/"
 
-git_url = "https://github.com/nic/villaProductSdk/tree/master/"
+git_url = "https://github.com/nic/villa-product-sdk/tree/master/"
 
 def custom_doc_links(name): return None
