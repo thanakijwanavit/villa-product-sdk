@@ -14,6 +14,6 @@ modules = ["schema.py",
 
 doc_url = "https://thanakijwanavit.github.io/villa-product-sdk/"
 
-git_url = "https://github.com/nic/villa-product-sdk/tree/master/"
+git_url = "https://github.com/thanakijwanavit/villa-product-sdk/tree/master/"
 
 def custom_doc_links(name): return None

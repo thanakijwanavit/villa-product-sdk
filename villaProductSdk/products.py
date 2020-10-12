@@ -46,7 +46,8 @@ class ProductSdk:
     try:
       return Response.fromDict(lambdaResponse).body
     except:
-      logging.exception('error parsing body, perhaps there is no body in response')
+      logging.exception(f'error parsing body, perhaps there is no body in response\
+      response is {lambdaResponse}')
       logging.error(lambdaResponse)
   @staticmethod
   def printFirst(inputDict:dict):
@@ -78,6 +79,7 @@ class ProductSdk:
       functionName= functionName ,
       input=inputValue,
       invocationType= invocationType )
+    logging.info(f'lambdaResponse is {lambdaResponse}')
     return self.returnLambdaResponse(lambdaResponse)
 
   def querySingleProduct(self, iprcode = '0171670', user=None, pw=None):
