@@ -1,5 +1,5 @@
 # villaProductSdk
-> read and write product information in real time
+
 
 
 ## Install
