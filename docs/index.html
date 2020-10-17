@@ -132,14 +132,12 @@ nb_path: "index.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>ERROR:root:error parsing body, perhaps there is no body in response
-Traceback (most recent call last):
-  File &#34;/Users/nic/pip/villa-product-sdk/villaProductSdk/products.py&#34;, line 47, in returnLambdaResponse
-    return Response.fromDict(lambdaResponse).body
-  File &#34;/Users/nic/pip/villa-product-sdk/villaProductSdk/schema.py&#34;, line 27, in fromDict
-    body = dictInput.pop(&#39;body&#39;)
-KeyError: &#39;body&#39;
-ERROR:root:{&#39;errorMessage&#39;: &#34;invalid literal for int() with base 10: &#39;&#39;&#34;, &#39;errorType&#39;: &#39;ValueError&#39;, &#39;stackTrace&#39;: [&#39;  File &#34;/var/task/villaProductDatabase/database.py&#34;, line 144, in lambdaUpdateS3\n    updateResult = ProductDatabase.updateS3Input(\n&#39;, &#39;  File &#34;/var/task/villaProductDatabase/update.py&#34;, line 81, in updateS3Input\n    updateResult = cls.valueUpdate(s3Result)\n&#39;, &#39;  File &#34;/var/task/villaProductDatabase/update.py&#34;, line 62, in valueUpdate\n    itemsUpdated[\&#39;timetaken\&#39;] = (datetime.now()- t0).total_seconds()*1000\n&#39;, &#39;  File &#34;/opt/python/pynamodb/models.py&#34;, line 113, in __exit__\n    return self.commit()\n&#39;, &#39;  File &#34;/opt/python/pynamodb/models.py&#34;, line 131, in commit\n    data = self.model._get_connection().batch_write_item(\n&#39;, &#39;  File &#34;/opt/python/pynamodb/connection/table.py&#34;, line 173, in batch_write_item\n    return self.connection.batch_write_item(\n&#39;, &#39;  File &#34;/opt/python/pynamodb/connection/base.py&#34;, line 1159, in batch_write_item\n    return self.dispatch(BATCH_WRITE_ITEM, operation_kwargs)\n&#39;, &#39;  File &#34;/opt/python/pynamodb/connection/base.py&#34;, line 349, in dispatch\n    data = self._make_api_call(operation_name, operation_kwargs)\n&#39;, &#39;  File &#34;/opt/python/pynamodb/connection/base.py&#34;, line 379, in _make_api_call\n    return self.dax_write_client.dispatch(operation_name, operation_kwargs)\n&#39;, &#39;  File &#34;/opt/python/pynamodb/connection/base.py&#34;, line 559, in dax_write_client\n    self._dax_write_client = DaxClient(\n&#39;, &#39;  File &#34;/opt/python/pynamodb/connection/dax.py&#34;, line 30, in __init__\n    self.connection = AmazonDaxClient(\n&#39;, &#39;  File &#34;/opt/python/amazondax/AmazonDaxClient.py&#34;, line 177, in __init__\n    self._cluster = Cluster(self._region_name,\n&#39;, &#39;  File &#34;/opt/python/amazondax/Cluster.py&#34;, line 30, in __init__\n    self._discovery_endpoints = [_parse_host_ports(endpoint) for endpoint in discovery_endpoints]\n&#39;, &#39;  File &#34;/opt/python/amazondax/Cluster.py&#34;, line 30, in &lt;listcomp&gt;\n    self._discovery_endpoints = [_parse_host_ports(endpoint) for endpoint in discovery_endpoints]\n&#39;, &#39;  File &#34;/opt/python/amazondax/Cluster.py&#34;, line 116, in _parse_host_ports\n    return parts[0].strip(), int(parts[1].strip())\n&#39;]}
+<pre>INFO:root:bucket is input-product-bucket-dev-manual
+INFO:root:using accelerate endpoint
+INFO:root:data was saved to s3
+INFO:root:data is saved to s3, invoking ingestion function
+INFO:root:input to lambda is {&#39;body&#39;: &#39;{&#34;key&#34;:&#34;input-data-name&#34;}&#39;, &#39;header&#39;: {}}
+INFO:root:lambdaResponse is {&#39;body&#39;: &#39;{&#34;success&#34;: 1, &#34;failure&#34;: 0, &#34;skipped&#34;: 4, &#34;failureMessage&#34;: [], &#34;timetaken&#34;: 64.086}&#39;, &#39;statusCode&#39;: 200, &#39;header&#39;: {}}
 </pre>
 </div>
 </div>
@@ -147,10 +145,24 @@ ERROR:root:{&#39;errorMessage&#39;: &#34;invalid literal for int() with base 10:
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 58.7 ms, sys: 15.4 ms, total: 74.2 ms
-Wall time: 838 ms
+<pre>CPU times: user 53.8 ms, sys: 8.23 ms, total: 62 ms
+Wall time: 625 ms
 </pre>
 </div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;success&#39;: 1,
+ &#39;failure&#39;: 0,
+ &#39;skipped&#39;: 4,
+ &#39;failureMessage&#39;: [],
+ &#39;timetaken&#39;: 64.086}</pre>
+</div>
+
 </div>
 
 </div>
@@ -186,9 +198,17 @@ Wall time: 838 ms
 
 <div class="output_area">
 
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>INFO:root:{&#39;body&#39;: &#39;{&#34;iprcode&#34;:&#34;0171670&#34;}&#39;, &#39;header&#39;: {}}
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 3.14 ms, sys: 1.14 ms, total: 4.28 ms
-Wall time: 123 ms
+<pre>CPU times: user 4.91 ms, sys: 123 µs, total: 5.04 ms
+Wall time: 74.6 ms
 </pre>
 </div>
 </div>
@@ -207,7 +227,7 @@ Wall time: 123 ms
  &#39;pr_cgcode&#39;: &#39;05&#39;,
  &#39;pr_code&#39;: &#39;0171670&#39;,
  &#39;pr_dpcode&#39;: &#39;19&#39;,
- &#39;pr_engname&#39;: &#39;JIRAPAT YOUNG KALE 200 G.&#39;,
+ &#39;pr_engname&#39;: &#39;IRAPAT YOUNG KALE 200 G.&#39;,
  &#39;pr_ggcode&#39;: &#39;057&#39;,
  &#39;pr_market&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
  &#39;pr_name&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
@@ -316,8 +336,8 @@ Wall time: 123 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 3.05 ms, sys: 902 µs, total: 3.95 ms
-Wall time: 329 ms
+<pre>CPU times: user 3.97 ms, sys: 0 ns, total: 3.97 ms
+Wall time: 739 ms
 </pre>
 </div>
 </div>
@@ -327,7 +347,7 @@ Wall time: 329 ms
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;result&#39;: &#39;saved 5 products&#39;}</pre>
+<pre>{&#39;result&#39;: &#39;saved 3351 products&#39;}</pre>
 </div>
 
 </div>

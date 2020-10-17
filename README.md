@@ -35,18 +35,27 @@ result = sdk.updateWithS3(
 result
 ```
 
-    ERROR:root:error parsing body, perhaps there is no body in response
-    Traceback (most recent call last):
-      File "/Users/nic/pip/villa-product-sdk/villaProductSdk/products.py", line 47, in returnLambdaResponse
-        return Response.fromDict(lambdaResponse).body
-      File "/Users/nic/pip/villa-product-sdk/villaProductSdk/schema.py", line 27, in fromDict
-        body = dictInput.pop('body')
-    KeyError: 'body'
-    ERROR:root:{'errorMessage': "invalid literal for int() with base 10: ''", 'errorType': 'ValueError', 'stackTrace': ['  File "/var/task/villaProductDatabase/database.py", line 144, in lambdaUpdateS3\n    updateResult = ProductDatabase.updateS3Input(\n', '  File "/var/task/villaProductDatabase/update.py", line 81, in updateS3Input\n    updateResult = cls.valueUpdate(s3Result)\n', '  File "/var/task/villaProductDatabase/update.py", line 62, in valueUpdate\n    itemsUpdated[\'timetaken\'] = (datetime.now()- t0).total_seconds()*1000\n', '  File "/opt/python/pynamodb/models.py", line 113, in __exit__\n    return self.commit()\n', '  File "/opt/python/pynamodb/models.py", line 131, in commit\n    data = self.model._get_connection().batch_write_item(\n', '  File "/opt/python/pynamodb/connection/table.py", line 173, in batch_write_item\n    return self.connection.batch_write_item(\n', '  File "/opt/python/pynamodb/connection/base.py", line 1159, in batch_write_item\n    return self.dispatch(BATCH_WRITE_ITEM, operation_kwargs)\n', '  File "/opt/python/pynamodb/connection/base.py", line 349, in dispatch\n    data = self._make_api_call(operation_name, operation_kwargs)\n', '  File "/opt/python/pynamodb/connection/base.py", line 379, in _make_api_call\n    return self.dax_write_client.dispatch(operation_name, operation_kwargs)\n', '  File "/opt/python/pynamodb/connection/base.py", line 559, in dax_write_client\n    self._dax_write_client = DaxClient(\n', '  File "/opt/python/pynamodb/connection/dax.py", line 30, in __init__\n    self.connection = AmazonDaxClient(\n', '  File "/opt/python/amazondax/AmazonDaxClient.py", line 177, in __init__\n    self._cluster = Cluster(self._region_name,\n', '  File "/opt/python/amazondax/Cluster.py", line 30, in __init__\n    self._discovery_endpoints = [_parse_host_ports(endpoint) for endpoint in discovery_endpoints]\n', '  File "/opt/python/amazondax/Cluster.py", line 30, in <listcomp>\n    self._discovery_endpoints = [_parse_host_ports(endpoint) for endpoint in discovery_endpoints]\n', '  File "/opt/python/amazondax/Cluster.py", line 116, in _parse_host_ports\n    return parts[0].strip(), int(parts[1].strip())\n']}
+    INFO:root:bucket is input-product-bucket-dev-manual
+    INFO:root:using accelerate endpoint
+    INFO:root:data was saved to s3
+    INFO:root:data is saved to s3, invoking ingestion function
+    INFO:root:input to lambda is {'body': '{"key":"input-data-name"}', 'header': {}}
+    INFO:root:lambdaResponse is {'body': '{"success": 1, "failure": 0, "skipped": 4, "failureMessage": [], "timetaken": 64.086}', 'statusCode': 200, 'header': {}}
 
 
-    CPU times: user 58.7 ms, sys: 15.4 ms, total: 74.2 ms
-    Wall time: 838 ms
+    CPU times: user 53.8 ms, sys: 8.23 ms, total: 62 ms
+    Wall time: 625 ms
+
+
+
+
+
+    {'success': 1,
+     'failure': 0,
+     'skipped': 4,
+     'failureMessage': [],
+     'timetaken': 64.086}
+
 
 
 ## Query Single Product
@@ -57,8 +66,11 @@ result = sdk.querySingleProduct('0171670')
 result
 ```
 
-    CPU times: user 3.14 ms, sys: 1.14 ms, total: 4.28 ms
-    Wall time: 123 ms
+    INFO:root:{'body': '{"iprcode":"0171670"}', 'header': {}}
+
+
+    CPU times: user 4.91 ms, sys: 123 µs, total: 5.04 ms
+    Wall time: 74.6 ms
 
 
 
@@ -73,7 +85,7 @@ result
      'pr_cgcode': '05',
      'pr_code': '0171670',
      'pr_dpcode': '19',
-     'pr_engname': 'JIRAPAT YOUNG KALE 200 G.',
+     'pr_engname': 'IRAPAT YOUNG KALE 200 G.',
      'pr_ggcode': '057',
      'pr_market': 'JIRAPAT ยอดคะน้า 200 G.',
      'pr_name': 'JIRAPAT ยอดคะน้า 200 G.',
@@ -129,13 +141,13 @@ response = sdk.syncS3()
 response
 ```
 
-    CPU times: user 3.05 ms, sys: 902 µs, total: 3.95 ms
-    Wall time: 329 ms
+    CPU times: user 3.97 ms, sys: 0 ns, total: 3.97 ms
+    Wall time: 739 ms
 
 
 
 
 
-    {'result': 'saved 5 products'}
+    {'result': 'saved 3351 products'}
 
 
