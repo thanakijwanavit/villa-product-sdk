@@ -194,7 +194,7 @@ user/pw are optional</code></pre>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">updateWithS3</span><span class="p">(</span>
     <span class="n">sampleProducts</span><span class="p">,</span>
-    <span class="n">invocationType</span> <span class="o">=</span> <span class="s1">&#39;RequestResponse&#39;</span>
+    <span class="n">invocationType</span> <span class="o">=</span> <span class="s1">&#39;Event&#39;</span>
   <span class="p">)</span>
 <span class="n">result</span>
 </pre></div>
@@ -209,8 +209,8 @@ user/pw are optional</code></pre>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 52.6 ms, sys: 50 µs, total: 52.7 ms
-Wall time: 2.93 s
+<pre>CPU times: user 110 ms, sys: 6.42 ms, total: 116 ms
+Wall time: 239 ms
 </pre>
 </div>
 </div>
@@ -220,11 +220,7 @@ Wall time: 2.93 s
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;success&#39;: 0,
- &#39;failure&#39;: 0,
- &#39;skipped&#39;: 5,
- &#39;failureMessage&#39;: [],
- &#39;timetaken&#39;: 142.7}</pre>
+<pre>&#39;successfully sent event, please watch your slack&#39;</pre>
 </div>
 
 </div>
@@ -277,8 +273,8 @@ Wall time: 2.93 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 10.3 s, sys: 239 ms, total: 10.6 s
-Wall time: 12.2 s
+<pre>CPU times: user 10.5 s, sys: 202 ms, total: 10.7 s
+Wall time: 12.1 s
 </pre>
 </div>
 </div>
@@ -292,7 +288,7 @@ Wall time: 12.2 s
  &#39;failure&#39;: 0,
  &#39;skipped&#39;: 100,
  &#39;failureMessage&#39;: [],
- &#39;timetaken&#39;: 1097.6680000000001}</pre>
+ &#39;timetaken&#39;: 1020.9200000000001}</pre>
 </div>
 
 </div>
@@ -331,8 +327,8 @@ Wall time: 12.2 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 4.08 ms, sys: 145 µs, total: 4.23 ms
-Wall time: 2.36 s
+<pre>CPU times: user 4.14 ms, sys: 6 µs, total: 4.14 ms
+Wall time: 2.37 s
 </pre>
 </div>
 </div>
@@ -460,8 +456,8 @@ Wall time: 2.36 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 4.22 ms, sys: 8 µs, total: 4.23 ms
-Wall time: 1.15 s
+<pre>CPU times: user 3.89 ms, sys: 0 ns, total: 3.89 ms
+Wall time: 3.98 s
 </pre>
 </div>
 </div>
@@ -471,7 +467,7 @@ Wall time: 1.15 s
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;result&#39;: &#39;saved 3351 products&#39;}</pre>
+<pre>{&#39;result&#39;: &#39;saved 10707 products&#39;}</pre>
 </div>
 
 </div>
