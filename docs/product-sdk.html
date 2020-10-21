@@ -209,8 +209,8 @@ user/pw are optional</code></pre>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 110 ms, sys: 6.42 ms, total: 116 ms
-Wall time: 239 ms
+<pre>CPU times: user 52.4 ms, sys: 0 ns, total: 52.4 ms
+Wall time: 324 ms
 </pre>
 </div>
 </div>
@@ -250,7 +250,7 @@ Wall time: 239 ms
 <span class="c1"># try with 100 rows</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">updateWithS3</span><span class="p">(</span>
     <span class="n">data</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span>
-    <span class="n">invocationType</span> <span class="o">=</span> <span class="s1">&#39;RequestResponse&#39;</span>
+    <span class="n">invocationType</span> <span class="o">=</span> <span class="s1">&#39;Event&#39;</span>
   <span class="p">)</span>
 <span class="n">result</span>
 </pre></div>
@@ -273,8 +273,8 @@ Wall time: 239 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 10.5 s, sys: 202 ms, total: 10.7 s
-Wall time: 12.1 s
+<pre>CPU times: user 10.3 s, sys: 239 ms, total: 10.6 s
+Wall time: 10.7 s
 </pre>
 </div>
 </div>
@@ -284,11 +284,7 @@ Wall time: 12.1 s
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;success&#39;: 0,
- &#39;failure&#39;: 0,
- &#39;skipped&#39;: 100,
- &#39;failureMessage&#39;: [],
- &#39;timetaken&#39;: 1020.9200000000001}</pre>
+<pre>&#39;successfully sent event, please watch your slack&#39;</pre>
 </div>
 
 </div>
@@ -327,8 +323,8 @@ Wall time: 12.1 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 4.14 ms, sys: 6 µs, total: 4.14 ms
-Wall time: 2.37 s
+<pre>CPU times: user 13.6 ms, sys: 1e+03 ns, total: 13.6 ms
+Wall time: 2.54 s
 </pre>
 </div>
 </div>
@@ -456,8 +452,8 @@ Wall time: 2.37 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 3.89 ms, sys: 0 ns, total: 3.89 ms
-Wall time: 3.98 s
+<pre>CPU times: user 4.94 ms, sys: 34 µs, total: 4.97 ms
+Wall time: 1.44 s
 </pre>
 </div>
 </div>
@@ -467,7 +463,7 @@ Wall time: 3.98 s
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;result&#39;: &#39;saved 10707 products&#39;}</pre>
+<pre>{&#39;result&#39;: &#39;saved 10929 products&#39;}</pre>
 </div>
 
 </div>

@@ -21,6 +21,7 @@ sampleProducts = [{'cprcode': '0171670', 'iprcode': '0171670', 'oprcode': '01716
 ## Create main class object
 
 ```python
+from villaProductSdk.products import ProductSdk
 sdk = ProductSdk(branch = 'dev-manual', user=USER, pw=PW)
 ```
 
@@ -40,11 +41,11 @@ result
     INFO:root:data was saved to s3
     INFO:root:data is saved to s3, invoking ingestion function
     INFO:root:input to lambda is {'body': '{"key":"input-data-name"}', 'header': {}}
-    INFO:root:lambdaResponse is {'body': '{"success": 1, "failure": 0, "skipped": 4, "failureMessage": [], "timetaken": 64.086}', 'statusCode': 200, 'header': {}}
+    INFO:root:lambdaResponse is {'body': '{"success": 1, "failure": 0, "skipped": 4, "failureMessage": [], "timetaken": 107.42500000000001}', 'statusCode': 200, 'header': {}}
 
 
-    CPU times: user 53.8 ms, sys: 8.23 ms, total: 62 ms
-    Wall time: 625 ms
+    CPU times: user 45.7 ms, sys: 15.8 ms, total: 61.5 ms
+    Wall time: 3.34 s
 
 
 
@@ -54,7 +55,7 @@ result
      'failure': 0,
      'skipped': 4,
      'failureMessage': [],
-     'timetaken': 64.086}
+     'timetaken': 107.42500000000001}
 
 
 
@@ -69,8 +70,8 @@ result
     INFO:root:{'body': '{"iprcode":"0171670"}', 'header': {}}
 
 
-    CPU times: user 4.91 ms, sys: 123 µs, total: 5.04 ms
-    Wall time: 74.6 ms
+    CPU times: user 4.36 ms, sys: 556 µs, total: 4.92 ms
+    Wall time: 2.34 s
 
 
 
@@ -141,13 +142,13 @@ response = sdk.syncS3()
 response
 ```
 
-    CPU times: user 3.97 ms, sys: 0 ns, total: 3.97 ms
-    Wall time: 739 ms
+    CPU times: user 3.99 ms, sys: 0 ns, total: 3.99 ms
+    Wall time: 1.7 s
 
 
 
 
 
-    {'result': 'saved 3351 products'}
+    {'result': 'saved 10929 products'}
 
 
