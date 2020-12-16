@@ -8,7 +8,9 @@ index = {"Response": "Schema.ipynb",
          "Products": "Schema.ipynb",
          "FunctionNames": "product-sdk.ipynb",
          "ProductSdk": "product-sdk.ipynb",
-         "querySingleProduct": "product-sdk.ipynb"}
+         "querySingleProduct": "product-sdk.ipynb",
+         "ProductsFromList": "product-sdk.ipynb",
+         "queryList": "product-sdk.ipynb"}
 
 modules = ["schema.py",
            "products.py"]
