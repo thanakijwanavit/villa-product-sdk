@@ -1,10 +1,10 @@
 """Checks on the offline harness in conftest.py (vps-l7s).
 
-The guard really blocks boto3, requests, DNS, socket connections and datagrams. It fails
-the run even when the code under test swallows the error, and also when the attempt is
-made outside any test (here, at import during collection). A run started with AWS_* set
-sees none. load_sdk leaves nothing behind, and the fakes keep the signatures of the
-installed lambdasdk and s3bz.
+The guard really blocks boto3, requests, forward and reverse DNS lookups, socket
+connections and datagrams. It fails the run even when the code under test swallows the
+error, and also when the attempt is made outside any test (here, at import during
+collection). A run started with AWS_* set sees none. load_sdk leaves nothing behind,
+and the fakes keep the signatures of the installed lambdasdk and s3bz.
 """
 import ast
 import importlib.util
@@ -58,11 +58,15 @@ def test_a_real_requests_call_is_blocked(offline_guard):
 def test_dns_and_sockets_are_blocked(offline_guard):
     with pytest.raises(Exception, match="blocked DNS lookup of 'example.invalid'"):
         socket.create_connection(("example.invalid", 443), timeout=1)
+    with pytest.raises(Exception, match="blocked reverse DNS lookup of '192.0.2.1'"):
+        socket.gethostbyaddr("192.0.2.1")  # TEST-NET-1: documentation only, not routed
+    with pytest.raises(Exception, match="blocked reverse DNS lookup"):
+        socket.getnameinfo(("192.0.2.1", 443), 0)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.settimeout(1)
         with pytest.raises(Exception, match="blocked socket connection"):
-            sock.connect(("192.0.2.1", 443))  # TEST-NET-1: documentation only, not routed
-    assert len(offline_guard) == 2
+            sock.connect(("192.0.2.1", 443))
+    assert len(offline_guard) == 4
     offline_guard.clear()
 
 

@@ -5,14 +5,15 @@ Nothing in tests/ may reach AWS or the network:
 * Every ``AWS_*`` environment variable is removed when pytest starts and again before
   each test, so boto3 cannot pick up keys, a profile or a region from the environment.
 * From pytest_configure to pytest_unconfigure, collection included, a guard in the
-  pytest process blocks botocore API calls and HTTP requests, ``requests`` sessions, DNS
-  lookups, and IPv4/IPv6 socket connections and datagram sends. A blocked attempt raises
+  pytest process blocks botocore API calls and HTTP requests, ``requests`` sessions,
+  forward and reverse DNS lookups through the ``socket`` module, and IPv4/IPv6
+  connections and datagram sends through ``socket.socket``. A blocked attempt raises
   ``NetworkBlocked`` and is recorded. One made during a test errors that test at
   teardown (the autouse ``offline_guard`` fixture); one made outside any test fails the
   run at the end. So the run fails even when the code under test swallows the exception
-  (products.py has bare ``except:`` blocks). The guard is in-process: a subprocess that a
-  test starts is not covered unless it loads this conftest, as the harness's inner
-  pytest runs do.
+  (products.py has bare ``except:`` blocks). Not covered: code that uses the C-level
+  ``_socket`` module directly, and subprocesses that a test starts, unless they load
+  this conftest, as the harness's inner pytest runs do.
 
 The SDK reaches AWS only through ``lambdasdk.lambdasdk.Lambda`` and
 ``s3bz.s3bz.S3``/``Requests``. The ``load_sdk`` fixture imports an SDK module afresh
@@ -95,11 +96,16 @@ class _Guard:
         def lookup(host, *args, **kwargs):
             block("DNS lookup of %r" % (host,))
 
+        def reverse_lookup(address, *args, **kwargs):
+            block("reverse DNS lookup of %r" % (address,))
+
         for name, function in (("connect", connect), ("connect_ex", connect_ex),
                                ("sendto", sendto), ("sendmsg", sendmsg)):
             patch(socket.socket, name, function)
         for name in ("getaddrinfo", "gethostbyname", "gethostbyname_ex"):
             patch(socket, name, lookup)
+        for name in ("gethostbyaddr", "getnameinfo"):
+            patch(socket, name, reverse_lookup)
 
         try:
             import botocore.client

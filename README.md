@@ -153,12 +153,14 @@ response
 
 ## Running the tests
 
-The tests in `tests/` run offline. They replace the AWS client libraries (`lambdasdk` and `s3bz`) with recording fakes, remove every `AWS_*` environment variable, and block real boto3, requests, DNS and socket calls in the pytest process for the whole run (subprocesses a test starts are not covered). A blocked call fails the run, even when the code swallows the error (see `tests/conftest.py`). They need no AWS credentials and no deployed stack. From the repository root, with Python 3.12 and the pinned development dependencies:
+The tests in `tests/` run offline, with no AWS credentials and no deployed stack. They replace the AWS client libraries (`lambdasdk` and `s3bz`) with recording fakes and remove every `AWS_*` environment variable. In the pytest process they block botocore API calls and HTTP requests, `requests` sessions, DNS lookups through the `socket` module, and IPv4/IPv6 connections and datagram sends through `socket.socket`. A blocked call fails the run, even when the code swallows the error. Code that uses the `_socket` module directly, and subprocesses that a test starts, are not covered (see `tests/conftest.py`).
+
+They need Python 3.12 and six packages: pytest, boto3, ujson, dataclasses-json, nicHelper and awsSchema. From the repository root:
 
 ```bash
-uv run --no-project --python 3.12 --with-requirements requirements-dev.txt python -m pytest tests -q
+uv run --no-project --python 3.12 --with pytest --with boto3 --with ujson --with dataclasses-json --with nicHelper --with awsSchema python -m pytest tests -q
 ```
 
-Without uv, install `requirements-dev.txt` into a Python 3.12 virtual environment and run `python -m pytest tests -q`. The suite itself needs only pytest, boto3, ujson, dataclasses-json, nicHelper and awsSchema (it fakes lambdasdk and s3bz); `requirements-dev.txt` pins them.
+Without uv, install those packages into a Python 3.12 virtual environment and run `python -m pytest tests -q`. Six tests that check the fakes against the real `lambdasdk` and `s3bz` signatures are skipped unless those two packages are installed too.
 
 `make test` runs the notebooks instead (`nbdev_test_nbs`). They call the live `dev-manual` stack and need AWS credentials.
