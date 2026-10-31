@@ -151,4 +151,14 @@ response
 
     {'result': 'saved 10929 products'}
 
+## Running the tests
 
+The tests in `tests/` run offline. They replace the AWS client libraries (`lambdasdk` and `s3bz`) with recording fakes, remove every `AWS_*` environment variable, and fail any test that tries a real boto3, requests or network call (see `tests/conftest.py`). They need no AWS credentials and no deployed stack. From the repository root, with Python 3.12 and the pinned development dependencies:
+
+```bash
+uv run --no-project --python 3.12 --with-requirements requirements-dev.txt python -m pytest tests -q
+```
+
+Without uv, install `requirements-dev.txt` into a Python 3.12 virtual environment and run `python -m pytest tests -q`.
+
+`make test` runs the notebooks instead (`nbdev_test_nbs`). They call the live `dev-manual` stack and need AWS credentials.
