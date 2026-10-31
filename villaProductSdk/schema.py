@@ -24,6 +24,7 @@ class Response:
       output object from Dict,
       dictInput should follow apigateway proxy integration
     '''
+    dictInput = dict(dictInput)  # copy: never mutate the caller's dict
     body = dictInput.pop('body')
     return cls(
       body = json.loads(body),
