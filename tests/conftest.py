@@ -3,7 +3,9 @@
 Nothing in tests/ may reach AWS or the network:
 
 * Every ``AWS_*`` environment variable is removed when pytest starts and again before
-  each test, so boto3 cannot pick up keys, a profile or a region from the environment.
+  each test, so boto3 cannot pick up keys, a profile or a region from the environment,
+  and botocore's credential lookup is stubbed to find none, so boto3 never uses the
+  caller's own credentials (``~/.aws``, instance metadata) either.
 * From pytest_configure to pytest_unconfigure, collection included, a guard in the
   pytest process blocks botocore API calls and HTTP requests, ``requests`` sessions,
   forward and reverse DNS lookups through the ``socket`` module, and IPv4/IPv6
@@ -110,6 +112,7 @@ class _Guard:
         try:
             import botocore.client
             import botocore.httpsession
+            import botocore.session
         except ImportError:
             pass
         else:
@@ -120,11 +123,15 @@ class _Guard:
             def http_send(session, request):
                 block("boto3 HTTP request %s %s" % (request.method, request.url))
 
-            # every boto3 client call goes through BaseClient._make_api_call; other
-            # botocore HTTP traffic, such as the instance-metadata lookup a client
-            # without credentials makes, goes through URLLib3Session.send
+            # every boto3 client call goes through BaseClient._make_api_call; any other
+            # botocore HTTP traffic goes through URLLib3Session.send
             patch(botocore.client.BaseClient, "_make_api_call", api_call)
             patch(botocore.httpsession.URLLib3Session, "send", http_send)
+            # boto3 finds no credentials: no ~/.aws files, no credential_process, no
+            # instance-metadata lookup. A client built without keys, as
+            # lambdasdk.Lambda(user=None) builds one, is then created offline and never
+            # holds real credentials; its calls are still blocked above.
+            patch(botocore.session.Session, "get_credentials", lambda session: None)
 
         try:
             import requests.sessions
@@ -196,8 +203,9 @@ class FakeAws:
     * ``saves``: one dict per ``S3.save`` call, with ``key``, ``objectToSave`` (the object
       itself), ``bucket`` and any keyword arguments, such as ``user`` and ``pw``. Set
       ``fail_saves_with`` to an exception to make saves raise it.
-    * ``downloads``: the URLs passed to ``Requests.getContentFromUrl``. ``serve()`` sets
-      what each URL returns.
+    * ``downloads``: the URLs passed to ``Requests.getContentFromUrl``, or to ``download``
+      where a test puts it in place of another downloader. ``serve()`` sets what each URL
+      returns.
     * ``calls``: the invokes, saves and downloads in order, as ``(kind, name)`` pairs.
     """
 
@@ -222,7 +230,7 @@ class FakeAws:
             self._responses[function_name] = {"statusCode": statusCode, "body": json.dumps(body)}
 
     def serve(self, url, content):
-        """Make ``Requests.getContentFromUrl(url)`` return ``content``."""
+        """Make ``Requests.getContentFromUrl(url)`` and ``download(url)`` return ``content``."""
         self._contents[url] = content
 
     def _invoke(self, functionName, input, invocationType):
@@ -246,7 +254,8 @@ class FakeAws:
             raise self.fail_saves_with
         return True
 
-    def _download(self, url):
+    def download(self, url):
+        """The fake download of ``url``: recorded, answered from ``serve()``."""
         self.calls.append(("download", url))
         self.downloads.append(url)
         if url not in self._contents:
@@ -277,7 +286,7 @@ class FakeAws:
         class Requests:
             @staticmethod
             def getContentFromUrl(url):
-                return fake._download(url)
+                return fake.download(url)
 
         s3bz, s3bz_s3bz = types.ModuleType("s3bz"), types.ModuleType("s3bz.s3bz")
         s3bz_s3bz.S3, s3bz_s3bz.Requests = S3, Requests

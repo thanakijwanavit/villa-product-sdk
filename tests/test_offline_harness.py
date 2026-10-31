@@ -36,14 +36,15 @@ def test_a_real_boto3_call_is_blocked(offline_guard):
     offline_guard.clear()  # blocked on purpose
 
 
-def test_a_boto3_client_without_credentials_is_blocked_too(offline_guard):
-    """What lambdasdk.Lambda(user=None, pw=None) builds: boto3 looks for credentials
-    (instance metadata) when the client is made, or uses ~/.aws and fails at the call."""
+def test_a_client_without_keys_is_built_offline_and_finds_no_credentials(offline_guard):
+    """What lambdasdk.Lambda(user=None, pw=None) builds, as a real ProductSdk() does."""
     boto3 = pytest.importorskip("boto3")
-    with pytest.raises(Exception, match="offline test suite: blocked boto3"):
-        boto3.client("lambda", region_name="ap-southeast-1").invoke(
-            FunctionName="product-get-dev-manual", Payload=b"{}")
-    assert offline_guard
+    client = boto3.client("lambda", region_name="ap-southeast-1")
+    assert offline_guard == []  # no instance-metadata lookup, no ~/.aws credentials
+    assert boto3.session.Session().get_credentials() is None
+    with pytest.raises(Exception, match="blocked boto3 call lambda.Invoke"):
+        client.invoke(FunctionName="product-get-dev-manual", Payload=b"{}")
+    assert offline_guard == ["boto3 call lambda.Invoke"]
     offline_guard.clear()
 
 

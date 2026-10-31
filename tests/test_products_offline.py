@@ -122,10 +122,15 @@ def test_query_list_sends_the_iprcodes_to_product_get_list(sdk, fake_aws):
     assert call["invocationType"] == "RequestResponse"
 
 
-def test_all_query_downloads_the_url_that_product_get_all_returns(sdk, fake_aws):
-    url = "https://example.invalid/product-dump.bz2"  # only the fake Requests sees it
+def test_all_query_downloads_the_url_that_product_get_all_returns(products, sdk, fake_aws,
+                                                                 monkeypatch):
+    url = "https://example.invalid/product-dump.bz2"  # only the fake downloader sees it
     fake_aws.respond("product-get-all-feature-x", body={"url": url})
     fake_aws.serve(url, {"0171670": KALE, "0235141": PUZZLE})
+    if hasattr(products, "retrieveJsonZl"):
+        # products.py regenerated from product-sdk.ipynb (vps-jg2) downloads with its own
+        # retrieveJsonZl (requests, zlib, pandas) instead of s3bz's Requests: fake that one
+        monkeypatch.setattr(products, "retrieveJsonZl", fake_aws.download)
     assert sdk.allQuery() == {"0171670": KALE, "0235141": PUZZLE}
     assert fake_aws.invocations == [{"functionName": "product-get-all-feature-x", "input": {},
                                      "invocationType": "RequestResponse"}]
@@ -139,7 +144,8 @@ def test_update_with_s3_saves_the_data_then_invokes_ingestion_with_its_key(sdk, 
     [save] = fake_aws.saves
     assert save["bucket"] == "input-product-bucket-feature-x"
     assert save["key"] == "upload-1"
-    assert save["objectToSave"] is data
+    # the caller's products, in order (vps-jg2 saves a copy with the code columns as int)
+    assert [int(p["iprcode"]) for p in save["objectToSave"]] == [171670, 235141]
     [call] = fake_aws.invocations
     assert call["functionName"] == "product-update-s3-feature-x"
     assert sent_body(call)["key"] == "upload-1"
