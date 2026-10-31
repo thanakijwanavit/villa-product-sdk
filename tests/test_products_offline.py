@@ -144,8 +144,13 @@ def test_update_with_s3_saves_the_data_then_invokes_ingestion_with_its_key(sdk, 
     [save] = fake_aws.saves
     assert save["bucket"] == "input-product-bucket-feature-x"
     assert save["key"] == "upload-1"
-    # the caller's products, in order (vps-jg2 saves a copy with the code columns as int)
-    assert [int(p["iprcode"]) for p in save["objectToSave"]] == [171670, 235141]
+    # the caller's products, every field, in order; vps-jg2 saves a copy with the code
+    # columns cast to int, so only those three are compared as numbers
+    def normalised(products_):
+        return [dict(p, **{column: int(p[column]) for column in ("cprcode", "iprcode", "oprcode")})
+                for p in products_]
+
+    assert normalised(save["objectToSave"]) == normalised(data)
     [call] = fake_aws.invocations
     assert call["functionName"] == "product-update-s3-feature-x"
     assert sent_body(call)["key"] == "upload-1"
