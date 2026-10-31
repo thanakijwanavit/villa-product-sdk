@@ -1,0 +1,46 @@
+# Exact Python 3.12 development/test pins for vps-b7v.
+# Regenerate: copy the direct pins below (dataclasses-json, boto3, requests, lambdasdk,
+# s3bz, ujson, awsSchema, nicHelper, pytest) into a scratch requirements.in, one per line.
+# uv pip compile --universal --python-version 3.12 --no-annotate --no-header requirements.in; strip platform markers.
+# s3bz is held at 0.1.5 because 0.1.6+ invokes a broken import-time classmethod decorator.
+# urllib3 deliberately differs from settings.ini's 1.25.10 pin (owned by vps-9kk).
+attrs==26.1.0
+awsSchema==0.0.27
+beartype==0.23.1
+boto3==1.43.123
+botocore==1.43.123
+cachetools==7.2.8
+certifi==2026.10.23
+charset-normalizer==3.5.2
+colorama==0.4.6
+dataclasses-json==0.6.7
+dataclasses-jsonschema==2.16.0
+dpath==2.2.0
+genson==1.4.0
+idna==3.20
+iniconfig==2.3.1
+jmespath==1.1.0
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+lambdasdk==0.1.4
+marshmallow==3.26.2
+mypy-extensions==1.1.0
+nicHelper==0.0.123
+packaging==26.3
+pillow==13.0.0
+pluggy==1.7.0
+pycryptodome==4.2.0
+pygments==2.21.0
+pytest==9.2.0
+python-dateutil==2.9.0.post0
+pyyaml==6.0.3
+referencing==0.37.0
+requests==2.34.2
+rpds-py==2026.9.1
+s3bz==0.1.5
+s3transfer==0.19.3
+six==1.17.0
+typing-extensions==4.16.0
+typing-inspect==0.9.0
+ujson==6.0.0
+urllib3==2.8.0
