@@ -146,3 +146,8 @@ checklink/cookies.txt
 .beads-credential-key
 .beads/proxieddb/
 *.gate.lock*
+# Leftovers removed from git and from the wheel (vps-0ax)
+dask-worker-space/
+nbdev_template/
+# make release-env
+.release-venv/

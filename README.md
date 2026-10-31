@@ -151,4 +151,6 @@ response
 
     {'result': 'saved 10929 products'}
 
+## Releasing
 
+Run `make release-env` once (Python 3.12 tools in `.release-venv`; needs `uv` and `gitleaks`), then `make release-check`. It stops at the first failing gate: clean notebooks, library matches notebooks, offline tests, wheel build, wheel contents, `twine check`, install and import in a fresh Python 3.12 venv, `pip-audit`, and a `gitleaks` scan of the tracked files. `make release` runs it, then uploads those exact files to TestPyPI; the PyPI upload is the separate, manual `make pypi`. Both uploads ask you to type the version at a terminal; steps in docs/RELEASE.md.
