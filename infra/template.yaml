@@ -1,0 +1,310 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Villa product API, dev stage, account villaai2 (917866274866) ap-southeast-1 (vps-52s).
+  API Gateway (API key + usage plan) -> Lambda -> DynamoDB; uploads through S3 presigned URLs.
+  Serverless only: no VPC, no ECS/Fargate/EC2. The old product-* functions in 394922924679 are untouched.
+
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+    AllowedValues: [dev]
+    Description: Only the dev stage is allowed in this template (vps-52s).
+  ThrottleRateLimit:
+    Type: Number
+    Default: 10
+  ThrottleBurstLimit:
+    Type: Number
+    Default: 20
+  DailyQuota:
+    Type: Number
+    Default: 10000
+  UploadExpiryDays:
+    Type: Number
+    Default: 1
+    Description: Uploaded input files are deleted after this many days.
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Architectures: [arm64]
+    CodeUri: handlers/
+    Timeout: 29
+    MemorySize: 512
+    Environment:
+      Variables:
+        REGION: !Ref AWS::Region
+        TABLE_NAME: !Ref ProductTable
+        INPUT_BUCKET: !Ref InputBucket
+        PRODUCT_BUCKET: !Ref ProductBucket
+        URL_EXPIRES: '900'
+    Tags:
+      project: villa-product-api
+      stage: !Ref Stage
+
+Resources:
+  # ------------------------------------------------------------ data
+  ProductTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub product-api-table-${Stage}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: iprcode, AttributeType: N}
+        - {AttributeName: cprcode, AttributeType: N}
+      KeySchema:
+        - {AttributeName: iprcode, KeyType: HASH}
+        - {AttributeName: cprcode, KeyType: RANGE}
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - {Key: project, Value: villa-product-api}
+        - {Key: stage, Value: !Ref Stage}
+
+  InputBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub product-api-input-${Stage}-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-uploaded-input
+            Status: Enabled
+            Prefix: uploads/
+            ExpirationInDays: !Ref UploadExpiryDays
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
+      Tags:
+        - {Key: project, Value: villa-product-api}
+        - {Key: stage, Value: !Ref Stage}
+
+  ProductBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub product-api-data-${Stage}-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: abort-incomplete-uploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
+      Tags:
+        - {Key: project, Value: villa-product-api}
+        - {Key: stage, Value: !Ref Stage}
+
+  InputBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref InputBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource:
+              - !GetAtt InputBucket.Arn
+              - !Sub '${InputBucket.Arn}/*'
+            Condition:
+              Bool: {'aws:SecureTransport': 'false'}
+
+  ProductBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ProductBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource:
+              - !GetAtt ProductBucket.Arn
+              - !Sub '${ProductBucket.Arn}/*'
+            Condition:
+              Bool: {'aws:SecureTransport': 'false'}
+
+  # ------------------------------------------------------------ API
+  # SAM creates the API key (logical id ProductApiApiKey) and the usage plan.
+  # The key value stays in API Gateway; scripts read it by id, never print it.
+  ProductApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub villa-product-api-${Stage}
+      StageName: !Ref Stage
+      EndpointConfiguration:
+        Type: REGIONAL
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          UsagePlanName: !Sub villa-product-api-${Stage}
+          Description: villa product API dev usage plan (vps-52s)
+          Throttle:
+            RateLimit: !Ref ThrottleRateLimit
+            BurstLimit: !Ref ThrottleBurstLimit
+          Quota:
+            Limit: !Ref DailyQuota
+            Period: DAY
+
+  GetProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      LoggingConfig:
+        LogGroup: !Ref GetProductLogs
+      FunctionName: !Sub product-api-get-${Stage}
+      Handler: product_api.get_product
+      Policies:
+        - DynamoDBReadPolicy: {TableName: !Ref ProductTable}
+      Events:
+        Api:
+          Type: Api
+          Properties: {RestApiId: !Ref ProductApi, Path: /product, Method: GET}
+
+  ListProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      LoggingConfig:
+        LogGroup: !Ref ListProductsLogs
+      FunctionName: !Sub product-api-list-${Stage}
+      Handler: product_api.list_products
+      Policies:
+        - DynamoDBReadPolicy: {TableName: !Ref ProductTable}
+      Events:
+        Api:
+          Type: Api
+          Properties: {RestApiId: !Ref ProductApi, Path: /products/list, Method: POST}
+
+  AllProductsUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      LoggingConfig:
+        LogGroup: !Ref AllProductsUrlLogs
+      FunctionName: !Sub product-api-all-url-${Stage}
+      Handler: product_api.all_products_url
+      Policies:
+        - S3ReadPolicy: {BucketName: !Ref ProductBucket}
+      Events:
+        Api:
+          Type: Api
+          Properties: {RestApiId: !Ref ProductApi, Path: /products/all-url, Method: GET}
+
+  UploadRequestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      LoggingConfig:
+        LogGroup: !Ref UploadRequestLogs
+      FunctionName: !Sub product-api-upload-request-${Stage}
+      Handler: product_api.upload_request
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: s3:PutObject
+              Resource: !Sub '${InputBucket.Arn}/uploads/*'
+      Events:
+        Api:
+          Type: Api
+          Properties: {RestApiId: !Ref ProductApi, Path: /upload-request, Method: POST}
+
+  IngestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      LoggingConfig:
+        LogGroup: !Ref IngestLogs
+      FunctionName: !Sub product-api-ingest-${Stage}
+      Handler: product_api.ingest
+      MemorySize: 1024
+      Policies:
+        - DynamoDBCrudPolicy: {TableName: !Ref ProductTable}
+        - Statement:
+            - Effect: Allow
+              Action: [s3:GetObject, s3:DeleteObject]
+              Resource: !Sub '${InputBucket.Arn}/uploads/*'
+            - Effect: Allow
+              Action: s3:ListBucket
+              Resource: !GetAtt InputBucket.Arn
+      Events:
+        Api:
+          Type: Api
+          Properties: {RestApiId: !Ref ProductApi, Path: /ingest, Method: POST}
+
+  DumpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      LoggingConfig:
+        LogGroup: !Ref DumpLogs
+      FunctionName: !Sub product-api-dump-${Stage}
+      Handler: product_api.dump_all
+      Timeout: 300
+      MemorySize: 1024
+      Policies:
+        - DynamoDBReadPolicy: {TableName: !Ref ProductTable}
+        - Statement:
+            - Effect: Allow
+              Action: s3:PutObject
+              Resource: !Sub '${ProductBucket.Arn}/all-products.json.bz2'
+      Events:
+        Hourly:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+
+  # Explicit log groups so logs expire and are deleted with the stack.
+  GetProductLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: !Sub '/aws/lambda/product-api-get-${Stage}', RetentionInDays: 14}
+  ListProductsLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: !Sub '/aws/lambda/product-api-list-${Stage}', RetentionInDays: 14}
+  AllProductsUrlLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: !Sub '/aws/lambda/product-api-all-url-${Stage}', RetentionInDays: 14}
+  UploadRequestLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: !Sub '/aws/lambda/product-api-upload-request-${Stage}', RetentionInDays: 14}
+  IngestLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: !Sub '/aws/lambda/product-api-ingest-${Stage}', RetentionInDays: 14}
+  DumpLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {LogGroupName: !Sub '/aws/lambda/product-api-dump-${Stage}', RetentionInDays: 14}
+
+Outputs:
+  ApiUrl:
+    Description: Base URL of the dev product API
+    Value: !Sub 'https://${ProductApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}'
+  ApiKeyId:
+    Description: API key id (read the value with get-api-key --include-value; never print or commit it)
+    Value: !Ref ProductApiApiKey
+  TableName:
+    Value: !Ref ProductTable
+  InputBucketName:
+    Value: !Ref InputBucket
+  ProductBucketName:
+    Value: !Ref ProductBucket
