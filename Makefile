@@ -21,15 +21,18 @@ docs: $(SRC)
 test:
 	nbdev_test_nbs
 
-release: pypi
-	nbdev_conda_package
-	nbdev_bump_version
+# Releases go through scripts/release.sh (docs/RELEASE.md): it builds, runs twine check, and uploads
+# only with --publish and a typed confirmation. Bump the version in settings.ini first.
+release-dry-run:
+	./scripts/release.sh --dry-run
 
-pypi: dist
-	twine upload --repository pypi dist/*
+release: pypi
+
+pypi:
+	./scripts/release.sh --publish
 
 dist: clean
-	python setup.py sdist bdist_wheel
+	uv build --out-dir dist
 
 clean:
 	rm -rf dist
