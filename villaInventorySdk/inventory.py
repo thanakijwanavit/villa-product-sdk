@@ -17,7 +17,7 @@ class FunctionNames:
   dumpToS3 = lambda self: f'product-dump-s3-{self.branchName}'
   updateProduct = lambda self: f'product-update-{self.branchName}'
   updateS3 = lambda self: f'product-update-s3-{self.branchName}'
-  singleQuery = lambda self: f'product-update-s3-{self.branchName}'
+  singleQuery = lambda self: f'product-get-{self.branchName}'
   allQuery = lambda self: f'product-get-all-{self.branchName}'
   inputBucket = lambda self: f'input-product-bucket-{self.branchName}'
   inventoryBucket = lambda self: f'product-bucket-{self.branchName}'
