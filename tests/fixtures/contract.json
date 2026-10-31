@@ -1,0 +1,34 @@
+{
+  "_comment": "vps-3y4: the deployed product functions' names and payloads the SDK depends on. A change here breaks every consumer; change it only together with the functions.",
+  "branch": "dev-manual",
+  "functionNames": {
+    "dumpToS3": "product-dump-s3-dev-manual",
+    "updateProduct": "product-update-dev-manual",
+    "updateS3": "product-update-s3-dev-manual",
+    "singleQuery": "product-get-dev-manual",
+    "allQuery": "product-get-all-dev-manual",
+    "inputBucket": "input-product-bucket-dev-manual",
+    "inventoryBucket": "product-bucket-dev-manual",
+    "listQuery": "product-get-list-dev-manual"
+  },
+  "querySingleProduct": {
+    "functionName": "product-get-dev-manual",
+    "invocationType": "RequestResponse",
+    "iprcode": "0171670",
+    "body": {"iprcode": "0171670"}
+  },
+  "queryList": {
+    "functionName": "product-get-list-dev-manual",
+    "invocationType": "RequestResponse",
+    "iprcodes": ["0217153", "203915", "0000009"],
+    "body": {"iprcodes": ["0217153", "203915", "0000009"]}
+  },
+  "allQuery": {"functionName": "product-get-all-dev-manual", "input": {}},
+  "syncS3": {"functionName": "product-dump-s3-dev-manual", "input": {}},
+  "updateWithS3": {
+    "functionName": "product-update-s3-dev-manual",
+    "bucket": "input-product-bucket-dev-manual",
+    "invocationType": "Event",
+    "bodyKeys": ["key"]
+  }
+}
