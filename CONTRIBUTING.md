@@ -7,6 +7,12 @@ Before anything else, please install the git hooks that run automatic scripts du
 nbdev_install_git_hooks
 ```
 
+## Before a release
+
+Run `make release-env` once (Python 3.12 tools in `.release-venv`; needs `uv` and `gitleaks`), then `make release-check`. It stops at the first failing gate: clean notebooks, library matches notebooks, offline tests, wheel build, wheel contents, `twine check`, install and import in a fresh Python 3.12 venv, `pip-audit`, and a `gitleaks` scan of the tracked files. `make release` runs it and uploads to TestPyPI; the PyPI upload is the separate, manual `make pypi`.
+
+GitHub Actions is not used for this repo: run the checks locally.
+
 ## Did you find a bug?
 
 * Ensure the bug was not already reported by searching on GitHub under Issues.

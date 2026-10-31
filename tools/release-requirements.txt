@@ -1,0 +1,11 @@
+# Tools for `make release-check` (bead vps-0ax); `make release-env` installs them into
+# .release-venv with Python 3.12. nbdev 1.x needs fastcore 1.4.x, and setuptools below 81
+# for the distutils shim its sync module imports.
+nbdev==1.2.11
+fastcore==1.4.5
+setuptools==80.10.2
+wheel==0.48.0
+build==1.6.1
+twine==7.0.0
+pytest==9.2.0
+pip-audit==2.10.1
