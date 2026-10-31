@@ -7,6 +7,21 @@ Before anything else, please install the git hooks that run automatic scripts du
 nbdev_install_git_hooks
 ```
 
+## Running the notebooks in Docker
+
+`docker-compose.yml` serves Jupyter on <http://127.0.0.1:8080> and the docs preview on <http://127.0.0.1:4000>, on
+this machine only. Jupyter runs code as root inside the container, so it needs a token: set `JUPYTER_TOKEN` to a long
+random value before starting it (compose refuses to start the notebook without one), and open
+`http://127.0.0.1:8080/?token=<your token>`.
+
+```
+export JUPYTER_TOKEN="$(openssl rand -hex 32)"
+docker compose up notebook
+```
+
+Keep the token out of the repository (no `.env` file committed). To reach Jupyter from another machine, use an SSH
+tunnel (`ssh -L 8080:127.0.0.1:8080 <host>`) rather than publishing the port.
+
 ## Did you find a bug?
 
 * Ensure the bug was not already reported by searching on GitHub under Issues.
