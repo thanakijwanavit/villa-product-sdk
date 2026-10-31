@@ -1,8 +1,9 @@
 """Offline behaviour tests for villaProductSdk.inventory (vps-l7s).
 
 This is the older copy of the SDK class that products.py replaced. It is still shipped,
-and vps-jg2 does not change it, so these tests pin today's behaviour, error paths
-included. No AWS: lambdasdk and s3bz are the recording fakes in conftest.py.
+and vps-jg2 changes only products.py, so these tests pin today's behaviour here, error
+paths included: errors propagate unchanged, and an unparseable response is logged and
+returns None. No AWS: lambdasdk and s3bz are the recording fakes in conftest.py.
 """
 import json
 import logging

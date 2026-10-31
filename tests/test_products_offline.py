@@ -4,11 +4,12 @@ No AWS: lambdasdk and s3bz are replaced by the recording fakes in conftest.py, a
 autouse offline_guard fails any test that tries a real boto3, requests or socket call.
 
 Error paths are asserted only where vps-jg2 (typed ProductSdkError, unique upload keys)
-keeps today's behaviour: a failure raises, and the raised error carries the original
-one. Not asserted here, because vps-jg2 changes them: the error body that generalInvoke
-returns for a non-200 response, the None that querySingleProduct and
-returnLambdaResponse return on failure, updateWithS3's fixed default key and its return
-values.
+keeps today's behaviour: a failure raises. Which exception, and whether it chains the
+original, is vps-jg2's to choose, so the tests check only that the call raised after the
+failing step and that the fakes did not raise it. Not asserted here, because vps-jg2
+changes them: the error body that generalInvoke returns for a non-200 response, the None
+that querySingleProduct and returnLambdaResponse return on failure, updateWithS3's fixed
+default key and its return values.
 """
 import json
 
@@ -52,14 +53,9 @@ def lambda_error(operation):
                        operation)
 
 
-def carries(excinfo, original):
-    """True if the raised exception is ``original`` or was raised from or during it."""
-    error = excinfo.value
-    while error is not None:
-        if error is original:
-            return True
-        error = error.__cause__ or error.__context__
-    return False
+def assert_raised_by_the_sdk(excinfo):
+    """The SDK raised it: not an UnexpectedCall from the fakes, not a failed assertion."""
+    assert not isinstance(excinfo.value, AssertionError), excinfo.value
 
 
 # --- FunctionNames and the constructor ---------------------------------------------
@@ -203,11 +199,12 @@ FAILING_CALLS = {
 @pytest.mark.parametrize("method", sorted(FAILING_CALLS))
 def test_a_failed_invoke_raises(sdk, fake_aws, method):
     function_name, call = FAILING_CALLS[method]
-    original = lambda_error("Invoke")
-    fake_aws.respond(function_name, error=original)
+    fake_aws.respond(function_name, error=lambda_error("Invoke"))
     with pytest.raises(Exception) as excinfo:
         call(sdk)
-    assert carries(excinfo, original)
+    assert_raised_by_the_sdk(excinfo)
+    assert [c["functionName"] for c in fake_aws.invocations] == [function_name]
+    assert fake_aws.downloads == []
 
 
 @pytest.mark.parametrize("raw", [{"statusCode": 200}, {"statusCode": 200, "body": "not json"}],
@@ -216,7 +213,7 @@ def test_general_invoke_raises_on_an_unparseable_response(sdk, fake_aws, raw):
     fake_aws.respond("some-function", raw=raw)
     with pytest.raises(Exception) as excinfo:
         sdk.generalInvoke("some-function", {})
-    assert not isinstance(excinfo.value, AssertionError)  # not the fakes complaining
+    assert_raised_by_the_sdk(excinfo)
     assert [c["functionName"] for c in fake_aws.invocations] == ["some-function"]
 
 
@@ -224,14 +221,14 @@ def test_all_query_raises_and_downloads_nothing_without_a_url(sdk, fake_aws):
     fake_aws.respond("product-get-all-feature-x", body={"error": "no dump yet"})
     with pytest.raises(Exception) as excinfo:
         sdk.allQuery()
-    assert not isinstance(excinfo.value, AssertionError)
+    assert_raised_by_the_sdk(excinfo)
     assert fake_aws.downloads == []
 
 
 def test_update_with_s3_raises_and_does_not_invoke_when_the_save_fails(sdk, fake_aws):
-    original = lambda_error("PutObject")
-    fake_aws.fail_saves_with = original
+    fake_aws.fail_saves_with = lambda_error("PutObject")
     with pytest.raises(Exception) as excinfo:
         sdk.updateWithS3([KALE], inputKeyName="k", invocationType="RequestResponse")
-    assert carries(excinfo, original)
+    assert_raised_by_the_sdk(excinfo)
+    assert [save["key"] for save in fake_aws.saves] == ["k"]
     assert fake_aws.invocations == []

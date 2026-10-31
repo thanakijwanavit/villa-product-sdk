@@ -1,9 +1,10 @@
 """Offline behaviour tests for villaInventorySdk.inventory (vps-l7s).
 
-The single-product query's Lambda name (FunctionNames.singleQuery) is left to vps-6fo,
-which fixes it: these tests check that querySingleProduct invokes whatever singleQuery()
-names, and do not pin today's name. No AWS: lambdasdk and s3bz are the recording fakes
-in conftest.py.
+vps-jg2 changes only villaProductSdk/products.py, so these tests pin today's behaviour
+here, error paths included: errors propagate unchanged. The single-product query's
+Lambda name (FunctionNames.singleQuery) is left to vps-6fo, which fixes it: these tests
+check that querySingleProduct invokes whatever singleQuery() names, and do not pin
+today's name. No AWS: lambdasdk and s3bz are the recording fakes in conftest.py.
 """
 import pytest
 from botocore.exceptions import ClientError

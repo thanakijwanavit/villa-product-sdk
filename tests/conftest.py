@@ -4,9 +4,11 @@ Nothing in tests/ may reach AWS or the network:
 
 * Every ``AWS_*`` environment variable is removed when pytest starts and again before
   each test, so boto3 cannot pick up keys, a profile or a region from the environment.
-* The autouse ``offline_guard`` fixture blocks botocore API calls and HTTP requests,
-  ``requests`` sessions, DNS lookups and IPv4/IPv6 socket connections. A blocked attempt
-  raises ``NetworkBlocked`` and is recorded, and the test then errors at teardown, so the
+* From pytest_configure to pytest_unconfigure, collection included, a guard blocks
+  botocore API calls and HTTP requests, ``requests`` sessions, DNS lookups, and IPv4/IPv6
+  socket connections and datagram sends. A blocked attempt raises ``NetworkBlocked`` and
+  is recorded. One made during a test errors that test at teardown (the autouse
+  ``offline_guard`` fixture); one made outside any test fails the run at the end. So the
   run fails even when the code under test swallows the exception (products.py has bare
   ``except:`` blocks).
 
@@ -37,87 +39,132 @@ if str(ROOT) not in sys.path:  # test this checkout, also under a bare `pytest`
 _MISSING = object()
 
 
-# --- no AWS environment ------------------------------------------------------------
+# --- no AWS environment, no network --------------------------------------------------
 
 def _aws_variables():
     return [name for name in os.environ if name.startswith("AWS_")]
 
 
+class NetworkBlocked(RuntimeError):
+    """Something in the test run tried to reach AWS or the network."""
+
+
+class _Guard:
+    """Patches that block real AWS and network calls, and where blocked attempts go.
+
+    ``sink`` is the running test's list (set by offline_guard), else ``outside``.
+    """
+
+    def __init__(self):
+        self.outside = []
+        self.sink = self.outside
+        self.patches = pytest.MonkeyPatch()
+
+    def block(self, what):
+        self.sink.append(what)
+        raise NetworkBlocked("offline test suite: blocked " + what)
+
+    def install(self):
+        block, patch = self.block, self.patches.setattr
+        inet = (socket.AF_INET, socket.AF_INET6)
+        real = {name: getattr(socket.socket, name)
+                for name in ("connect", "connect_ex", "sendto", "sendmsg")}
+
+        def connect(sock, address):
+            if sock.family in inet:
+                block("socket connection to %r" % (address,))
+            return real["connect"](sock, address)
+
+        def connect_ex(sock, address):
+            if sock.family in inet:
+                block("socket connection to %r" % (address,))
+            return real["connect_ex"](sock, address)
+
+        def sendto(sock, data, *flags_and_address):
+            if sock.family in inet:  # UDP needs no connect
+                block("datagram to %r" % (flags_and_address[-1],))
+            return real["sendto"](sock, data, *flags_and_address)
+
+        def sendmsg(sock, *args):  # (buffers, ancdata, flags, address)
+            if sock.family in inet:
+                block("datagram to %r" % (args[3] if len(args) > 3 else "the connected peer",))
+            return real["sendmsg"](sock, *args)
+
+        def lookup(host, *args, **kwargs):
+            block("DNS lookup of %r" % (host,))
+
+        for name, function in (("connect", connect), ("connect_ex", connect_ex),
+                               ("sendto", sendto), ("sendmsg", sendmsg)):
+            patch(socket.socket, name, function)
+        for name in ("getaddrinfo", "gethostbyname", "gethostbyname_ex"):
+            patch(socket, name, lookup)
+
+        try:
+            import botocore.client
+            import botocore.httpsession
+        except ImportError:
+            pass
+        else:
+            def api_call(client, operation_name, api_params):
+                block("boto3 call %s.%s"
+                      % (client.meta.service_model.service_name, operation_name))
+
+            def http_send(session, request):
+                block("boto3 HTTP request %s %s" % (request.method, request.url))
+
+            # every boto3 client call goes through BaseClient._make_api_call; other
+            # botocore HTTP traffic, such as the instance-metadata lookup a client
+            # without credentials makes, goes through URLLib3Session.send
+            patch(botocore.client.BaseClient, "_make_api_call", api_call)
+            patch(botocore.httpsession.URLLib3Session, "send", http_send)
+
+        try:
+            import requests.sessions
+        except ImportError:
+            pass
+        else:  # requests.get/post/... all end in Session.send
+            def send(session, request, **kwargs):
+                block("requests %s %s" % (request.method, request.url))
+
+            patch(requests.sessions.Session, "send", send)
+
+
+_GUARD = _Guard()
+
+
 def pytest_configure(config):
     for name in _aws_variables():
         del os.environ[name]
+    _GUARD.install()
 
 
-# --- network guard -----------------------------------------------------------------
+def pytest_unconfigure(config):
+    _GUARD.patches.undo()
 
-class NetworkBlocked(RuntimeError):
-    """A test tried to reach AWS or the network."""
+
+def pytest_sessionfinish(session, exitstatus):
+    if _GUARD.outside:  # collection, a session fixture, a hook: no test to fail
+        if session.exitstatus == pytest.ExitCode.OK:
+            session.exitstatus = pytest.ExitCode.TESTS_FAILED
+        reporter = session.config.pluginmanager.get_plugin("terminalreporter")
+        if reporter is not None:
+            reporter.write_line("offline test suite: blocked outside any test: "
+                                + "; ".join(_GUARD.outside), red=True)
 
 
 @pytest.fixture(autouse=True)
 def offline_guard(monkeypatch):
-    """Block real AWS and network calls; error the test if one was attempted.
+    """Error the test if it tried a real AWS or network call.
 
-    The fixture value is the list of blocked attempts. A test that makes one on purpose
-    clears the list after checking it.
+    The fixture value is the list of the test's blocked attempts. A test that makes one
+    on purpose clears the list after checking it.
     """
     for name in _aws_variables():
         monkeypatch.delenv(name)
     attempts = []
-
-    def block(what):
-        attempts.append(what)
-        raise NetworkBlocked("offline test suite: blocked " + what)
-
-    real_connect, real_connect_ex = socket.socket.connect, socket.socket.connect_ex
-
-    def connect(sock, address):
-        if sock.family in (socket.AF_INET, socket.AF_INET6):
-            block("socket connection to %r" % (address,))
-        return real_connect(sock, address)
-
-    def connect_ex(sock, address):
-        if sock.family in (socket.AF_INET, socket.AF_INET6):
-            block("socket connection to %r" % (address,))
-        return real_connect_ex(sock, address)
-
-    def lookup(host, *args, **kwargs):
-        block("DNS lookup of %r" % (host,))
-
-    monkeypatch.setattr(socket.socket, "connect", connect)
-    monkeypatch.setattr(socket.socket, "connect_ex", connect_ex)
-    for name in ("getaddrinfo", "gethostbyname", "gethostbyname_ex"):
-        monkeypatch.setattr(socket, name, lookup)
-
-    try:
-        import botocore.client
-        import botocore.httpsession
-    except ImportError:
-        pass
-    else:
-        def api_call(client, operation_name, api_params):
-            block("boto3 call %s.%s" % (client.meta.service_model.service_name, operation_name))
-
-        def http_send(session, request):
-            block("boto3 HTTP request %s %s" % (request.method, request.url))
-
-        # every boto3 client call goes through BaseClient._make_api_call; other botocore
-        # HTTP traffic, such as the instance-metadata lookup a client without credentials
-        # makes, goes through URLLib3Session.send
-        monkeypatch.setattr(botocore.client.BaseClient, "_make_api_call", api_call)
-        monkeypatch.setattr(botocore.httpsession.URLLib3Session, "send", http_send)
-
-    try:
-        import requests.sessions
-    except ImportError:
-        pass
-    else:  # requests.get/post/... all end in Session.send
-        def send(session, request, **kwargs):
-            block("requests %s %s" % (request.method, request.url))
-
-        monkeypatch.setattr(requests.sessions.Session, "send", send)
-
+    _GUARD.sink = attempts
     yield attempts
+    _GUARD.sink = _GUARD.outside
     if attempts:
         pytest.fail("a test tried to reach AWS or the network: " + "; ".join(attempts),
                     pytrace=False)

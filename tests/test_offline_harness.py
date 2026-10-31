@@ -1,9 +1,10 @@
 """Checks on the offline harness in conftest.py (vps-l7s).
 
-The guard really blocks boto3, requests, DNS and sockets, and it fails the run even
-when the code under test swallows the error. A run started with AWS_* set sees none.
-load_sdk leaves nothing behind, and the fakes keep the signatures of the installed
-lambdasdk and s3bz.
+The guard really blocks boto3, requests, DNS, socket connections and datagrams. It fails
+the run even when the code under test swallows the error, and also when the attempt is
+made outside any test (here, at import during collection). A run started with AWS_* set
+sees none. load_sdk leaves nothing behind, and the fakes keep the signatures of the
+installed lambdasdk and s3bz.
 """
 import ast
 import importlib.util
@@ -65,6 +66,30 @@ def test_dns_and_sockets_are_blocked(offline_guard):
     offline_guard.clear()
 
 
+def test_datagrams_are_blocked(offline_guard):
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:  # UDP needs no connect
+        with pytest.raises(Exception, match="blocked datagram to"):
+            sock.sendto(b"x", ("192.0.2.1", 53))
+        with pytest.raises(Exception, match="blocked datagram to"):
+            sock.sendmsg([b"x"], [], 0, ("192.0.2.1", 53))
+    assert offline_guard == ["datagram to ('192.0.2.1', 53)"] * 2
+    offline_guard.clear()
+
+
+def run_pytest(directory, tests, extra_env=None):
+    """Run pytest in a subprocess on ``tests`` (file name: source) with this conftest."""
+    (directory / "pytest.ini").write_text("[pytest]\n")
+    (directory / "conftest.py").write_text((HERE / "conftest.py").read_text(encoding="utf-8"))
+    for name, source in tests.items():
+        (directory / name).write_text(source)
+    env = dict(os.environ, **(extra_env or {}))
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(ROOT), os.environ.get("PYTHONPATH")]))
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", str(directory)],
+        cwd=str(directory), env=env, capture_output=True, text=True, timeout=300)
+    return result.returncode, result.stdout + result.stderr
+
+
 INNER_TESTS = '''
 import os
 import sys
@@ -102,21 +127,35 @@ def test_load_sdk_left_nothing_behind():
 
 def test_the_guard_fails_the_run_and_a_run_sees_no_aws_variables(tmp_path):
     pytest.importorskip("boto3")
-    (tmp_path / "pytest.ini").write_text("[pytest]\n")
-    (tmp_path / "conftest.py").write_text((HERE / "conftest.py").read_text(encoding="utf-8"))
-    (tmp_path / "test_inner.py").write_text(INNER_TESTS)
-    env = dict(os.environ, AWS_ACCESS_KEY_ID="not-a-key", AWS_SECRET_ACCESS_KEY="not-a-secret",
-               AWS_PROFILE="not-a-profile",
-               PYTHONPATH=os.pathsep.join(filter(None, [str(ROOT), os.environ.get("PYTHONPATH")])))
-    result = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", str(tmp_path)],
-        cwd=str(tmp_path), env=env, capture_output=True, text=True, timeout=300)
-    output = result.stdout + result.stderr
-    assert result.returncode == 1, output
+    returncode, output = run_pytest(tmp_path, {"test_inner.py": INNER_TESTS}, {
+        "AWS_ACCESS_KEY_ID": "not-a-key", "AWS_SECRET_ACCESS_KEY": "not-a-secret",
+        "AWS_PROFILE": "not-a-profile"})
+    assert returncode == 1, output
     # the swallowing test passes its call phase and errors at teardown
     assert "4 passed, 1 error" in output, output
     assert "ERROR at teardown of test_swallowed_real_call" in output, output
     assert "a test tried to reach AWS or the network: boto3 call lambda.Invoke" in output, output
+
+
+SWALLOWED_AT_IMPORT = '''
+import socket
+
+try:  # runs during collection, before any test
+    socket.getaddrinfo("example.invalid", 443)
+except Exception:
+    pass
+
+
+def test_passes():
+    pass
+'''
+
+
+def test_a_blocked_call_outside_any_test_fails_the_run(tmp_path):
+    returncode, output = run_pytest(tmp_path, {"test_inner.py": SWALLOWED_AT_IMPORT})
+    assert returncode == 1, output
+    assert "1 passed" in output, output
+    assert "blocked outside any test: DNS lookup of 'example.invalid'" in output, output
 
 
 # --- the fakes keep the signatures of the real libraries -----------------------------
