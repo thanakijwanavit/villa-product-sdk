@@ -153,7 +153,7 @@ response
 
 ## Running the tests
 
-The tests in `tests/` run offline. They replace the AWS client libraries (`lambdasdk` and `s3bz`) with recording fakes, remove every `AWS_*` environment variable, and block real boto3, requests, DNS and socket calls for the whole run. A blocked call fails the run, even when the code swallows the error (see `tests/conftest.py`). They need no AWS credentials and no deployed stack. From the repository root, with Python 3.12 and the pinned development dependencies:
+The tests in `tests/` run offline. They replace the AWS client libraries (`lambdasdk` and `s3bz`) with recording fakes, remove every `AWS_*` environment variable, and block real boto3, requests, DNS and socket calls in the pytest process for the whole run (subprocesses a test starts are not covered). A blocked call fails the run, even when the code swallows the error (see `tests/conftest.py`). They need no AWS credentials and no deployed stack. From the repository root, with Python 3.12 and the pinned development dependencies:
 
 ```bash
 uv run --no-project --python 3.12 --with-requirements requirements-dev.txt python -m pytest tests -q
