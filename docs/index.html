@@ -6,8 +6,8 @@ title: villaProductSdk
 keywords: fastai
 sidebar: home_sidebar
 
-
-
+summary: "Read and write Villa product master data through the product Lambda functions on AWS."
+description: "Read and write Villa product master data through the product Lambda functions on AWS."
 nb_path: "index.ipynb"
 ---
 <!--
@@ -19,346 +19,169 @@ nb_path: "index.ipynb"
 # command to build the docs after a change: nbdev_build_docs
 
 -->
-
 <div class="container" id="notebook-container">
         
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-
 </div>
     {% endraw %}
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Install">Install<a class="anchor-link" href="#Install"> </a></h2>
+<p>Documentation site: <a href="https://thanakijwanavit.github.io/villa-product-sdk/">https://thanakijwanavit.github.io/villa-product-sdk/</a> (to be confirmed before a public release).</p>
+<p><strong>Status: pre-alpha.</strong> The API below is what this repository's source does today. Known gaps, and the beads that track them, are listed under <a href="#known-issues">Known issues</a>. See <code>CHANGELOG.md</code> for version history.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><code>pip install villaProductSdk</code></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="How-to-use">How to use<a class="anchor-link" href="#How-to-use"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Uploading a large amount of data using s3</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="generate-dummy-data-for-testing">generate dummy data for testing<a class="anchor-link" href="#generate-dummy-data-for-testing"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sampleProducts</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;JIRAPAT YOUNG KALE 2&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;05&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;IRAPAT YOUNG KALE 200 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;057&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;JIRAPAT ยอดคะน้า 200 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;JIRAPAT ยอดคะน้า 200 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;CM845     &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;EEBOO-PZCT3-PUZZLE&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;08&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;EEBOO,ANIMAL COUNTING PUZZLE_3ED,PZCT3&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;113&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;eeboo,PUZZLE-PZCT3&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;EEBOO-PZCT3-ตัวต่อนับเลข ANIMAL COUNTING_3ED&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;CM1979    &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOC&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;98&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;003&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOCOLATE OWL&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;F1222     &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO PIZZASSIMO 400&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;06&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;06&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO PIZZASSIMO 400G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;004&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO ซอสทำพิซซ่า 400 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO ซอสทำพิซซ่า 400 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;2589      &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE LYCHEE&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;02&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;02&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE LYCHEE&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;003&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE กลิ่นลิ้นจี่&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE กลิ่นลิ้นจี่&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;695       &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">}]</span>
+<h2 id="Install">Install<a class="anchor-link" href="#Install"> </a></h2><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>villaProductSdk
 </pre></div>
-
-    </div>
+<h3 id="Supported-Python">Supported Python<a class="anchor-link" href="#Supported-Python"> </a></h3><p><code>setup.py</code> declares Python &gt;= 3.6, but the dependency pin <code>urllib3==1.25.10</code> breaks the import on newer interpreters. Checked on 2026-10-31 by importing <code>villaProductSdk.products</code> with that pin:</p>
+<table>
+<thead>
+<tr>
+<th>Python</th>
+<th>Import</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.8, 3.9</td>
+<td>works</td>
+</tr>
+<tr>
+<td>3.10, 3.11, 3.12</td>
+<td>fails inside urllib3 1.25.10</td>
+</tr>
+</tbody>
+</table>
+<p>Use Python 3.8 or 3.9 until the pin is removed (vps-9kk).</p>
+<h3 id="Versions-on-PyPI-and-in-this-repository">Versions on PyPI and in this repository<a class="anchor-link" href="#Versions-on-PyPI-and-in-this-repository"> </a></h3><p>The newest release on PyPI is <strong>0.0.20</strong> (27 Jan 2021). It was built from a state that is not in this repository: it has no <code>syncS3</code>, and its <code>allQuery</code> downloads a feather file through pandas, which is not a declared dependency. This repository's <code>settings.ini</code> says 0.0.19. Everything below describes this repository's source, which is what the next release will ship.</p>
 </div>
 </div>
-
 </div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Create-main-class-object">Create main class object<a class="anchor-link" href="#Create-main-class-object"> </a></h2>
+<h2 id="Authentication">Authentication<a class="anchor-link" href="#Authentication"> </a></h2><p>The SDK calls AWS Lambda directly (the <strong>Lambda mode</strong>), so the caller needs AWS credentials that may invoke the product functions and, for uploads, write to the input bucket.</p>
+<ul>
+<li><code>ProductSdk(user=..., pw=...)</code>: <code>user</code> is an <strong>AWS access key ID</strong> and <code>pw</code> is the matching <strong>AWS secret access key</strong>. They are passed straight to <code>boto3</code>.</li>
+<li>Leave both as <code>None</code> (recommended) and boto3 uses its normal credential chain: environment variables, <code>~/.aws</code> profiles, or an instance or container role.</li>
+</ul>
+<p>Lambda mode is <strong>deprecated</strong> for callers outside Villa's own AWS accounts: it needs IAM credentials on the caller's machine. An HTTPS mode, <code>ProductSdk(endpoint=..., api_key=...)</code>, is being built (vps-8hj) so that callers only hold an API key. It is not in this release.</p>
+<h2 id="Stages-(branch)">Stages (<code>branch</code>)<a class="anchor-link" href="#Stages-(branch)"> </a></h2><p>Every AWS resource name ends with the stage name, chosen with <code>branch</code> (default <code>dev-manual</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>single product query</td>
+<td><code>product-get-&lt;branch&gt;</code></td>
+</tr>
+<tr>
+<td>list query</td>
+<td><code>product-get-list-&lt;branch&gt;</code></td>
+</tr>
+<tr>
+<td>full dump query</td>
+<td><code>product-get-all-&lt;branch&gt;</code></td>
+</tr>
+<tr>
+<td>S3 upload ingestion</td>
+<td><code>product-update-s3-&lt;branch&gt;</code></td>
+</tr>
+<tr>
+<td>dump to S3</td>
+<td><code>product-dump-s3-&lt;branch&gt;</code></td>
+</tr>
+<tr>
+<td>upload bucket</td>
+<td><code>input-product-bucket-&lt;branch&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use the dev stage (<code>dev-manual</code>) for development and testing. Use the production stage only from production systems, with credentials scoped to that stage. The region defaults to <code>ap-southeast-1</code> (<code>region=</code>).</p>
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">villaProductSdk.products</span> <span class="kn">import</span> <span class="n">ProductSdk</span>
-<span class="n">sdk</span> <span class="o">=</span> <span class="n">ProductSdk</span><span class="p">(</span><span class="n">branch</span> <span class="o">=</span> <span class="s1">&#39;dev-manual&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">USER</span><span class="p">,</span> <span class="n">pw</span><span class="o">=</span><span class="n">PW</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Upload-lots-of-data-using-s3">Upload lots of data using s3<a class="anchor-link" href="#Upload-lots-of-data-using-s3"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
+<h2 id="Example-(dev-stage)">Example (dev stage)<a class="anchor-link" href="#Example-(dev-stage)"> </a></h2><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">villaProductSdk.products</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProductSdk</span>
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">updateWithS3</span><span class="p">(</span>
-    <span class="n">sampleProducts</span><span class="p">,</span>
-    <span class="n">invocationType</span> <span class="o">=</span> <span class="s1">&#39;RequestResponse&#39;</span>
-  <span class="p">)</span>
-<span class="n">result</span>
+<span class="c1"># credentials come from the environment or an AWS profile; never write keys in code</span>
+<span class="n">sdk</span> <span class="o">=</span> <span class="n">ProductSdk</span><span class="p">(</span><span class="n">branch</span><span class="o">=</span><span class="s2">"dev-manual"</span><span class="p">)</span>
+
+<span class="n">product</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">querySingleProduct</span><span class="p">(</span><span class="s2">"0171670"</span><span class="p">)</span>   <span class="c1"># dict, or None on failure</span>
+<span class="k">if</span> <span class="n">product</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="s2">"query failed; see the printed message"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
 </pre></div>
-
-    </div>
+<p>Run it with credentials from the environment, for example <code>AWS_PROFILE=&lt;your-dev-profile&gt; python example.py</code>.</p>
 </div>
 </div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>INFO:root:bucket is input-product-bucket-dev-manual
-INFO:root:using accelerate endpoint
-INFO:root:data was saved to s3
-INFO:root:data is saved to s3, invoking ingestion function
-INFO:root:input to lambda is {&#39;body&#39;: &#39;{&#34;key&#34;:&#34;input-data-name&#34;}&#39;, &#39;header&#39;: {}}
-INFO:root:lambdaResponse is {&#39;body&#39;: &#39;{&#34;success&#34;: 1, &#34;failure&#34;: 0, &#34;skipped&#34;: 4, &#34;failureMessage&#34;: [], &#34;timetaken&#34;: 107.42500000000001}&#39;, &#39;statusCode&#39;: 200, &#39;header&#39;: {}}
-</pre>
 </div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 45.7 ms, sys: 15.8 ms, total: 61.5 ms
-Wall time: 3.34 s
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;success&#39;: 1,
- &#39;failure&#39;: 0,
- &#39;skipped&#39;: 4,
- &#39;failureMessage&#39;: [],
- &#39;timetaken&#39;: 107.42500000000001}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Query-Single-Product">Query Single Product<a class="anchor-link" href="#Query-Single-Product"> </a></h2>
+<h2 id="API-reference:-villaProductSdk.products">API reference: <code>villaProductSdk.products</code><a class="anchor-link" href="#API-reference:-villaProductSdk.products"> </a></h2><p>All methods are on <a href="/villa-product-sdk/product-sdk.html#ProductSdk"><code>ProductSdk</code></a>. "Lambda error" means a <code>botocore.exceptions.ClientError</code> raised by boto3 (for example <code>AccessDeniedException</code> or <code>ResourceNotFoundException</code>) or a <code>botocore.exceptions.NoCredentialsError</code>.</p>
+<h3 id="ProductSdk(branch='dev-manual',-user=None,-pw=None,-region='ap-southeast-1')"><code>ProductSdk(branch='dev-manual', user=None, pw=None, region='ap-southeast-1')</code><a class="anchor-link" href="#ProductSdk(branch='dev-manual',-user=None,-pw=None,-region='ap-southeast-1')"> </a></h3><p>Creates the Lambda client. Makes no network call.</p>
+<h3 id="querySingleProduct(iprcode='0171670')"><code>querySingleProduct(iprcode='0171670')</code><a class="anchor-link" href="#querySingleProduct(iprcode='0171670')"> </a></h3><ul>
+<li><strong>Input:</strong> <code>iprcode</code>, the product code as a string.</li>
+<li><strong>Output:</strong> the product as a <code>dict</code> of product fields (<code>iprcode</code>, <code>cprcode</code>, <code>pr_name</code>, ...), as returned by <code>product-get-&lt;branch&gt;</code>.</li>
+<li><strong>Errors:</strong> none raised. Any exception, including a Lambda error, prints <code>calling lambda failed</code> and returns <code>None</code>. An unparseable response is logged and returns <code>None</code>. A product that is not found comes back as whatever body the function returns, not as an exception. (vps-jg2, vps-b4r)</li>
+</ul>
+<h3 id="queryList(iprcodes)"><code>queryList(iprcodes)</code><a class="anchor-link" href="#queryList(iprcodes)"> </a></h3><ul>
+<li><strong>Input:</strong> <code>iprcodes</code>, a list of product codes (strings).</li>
+<li><strong>Output:</strong> the response body of <code>product-get-list-&lt;branch&gt;</code>, a list of product dicts.</li>
+<li><strong>Errors:</strong> a Lambda error is raised. An unparseable response raises a plain <code>Exception</code> whose message is the traceback. A non-200 status prints <code>error</code> and <strong>returns the error body as data</strong>. (vps-jg2, vps-b4r)</li>
+</ul>
+<h3 id="allQuery()"><code>allQuery()</code><a class="anchor-link" href="#allQuery()"> </a></h3><ul>
+<li><strong>Input:</strong> none.</li>
+<li><strong>Output:</strong> every product, as decoded from the bz2-compressed JSON file at the URL returned by <code>product-get-all-&lt;branch&gt;</code>.</li>
+<li><strong>Errors:</strong> a Lambda error is raised, and so is a <code>KeyError</code> if the response has no <code>url</code>. If the download fails, it prints <code>error downloading</code> and <strong>returns the raw response bytes</strong> instead of the data.</li>
+</ul>
+<h3 id="updateWithS3(data,-inputKeyName='input-data-name',-invocationType=InvocationType.event,-user=None,-pw=None)"><code>updateWithS3(data, inputKeyName='input-data-name', invocationType=InvocationType.event, user=None, pw=None)</code><a class="anchor-link" href="#updateWithS3(data,-inputKeyName='input-data-name',-invocationType=InvocationType.event,-user=None,-pw=None)"> </a></h3><p>Uploads many products: it saves <code>data</code> to the bucket <code>input-product-bucket-&lt;branch&gt;</code> under the key <code>inputKeyName</code>, then invokes <code>product-update-s3-&lt;branch&gt;</code> with that key.</p>
+<ul>
+<li><strong>Input:</strong> <code>data</code>, a list of product dicts; <code>invocationType</code>, either <code>InvocationType.event</code> (<code>'Event'</code>, asynchronous, the default) or <code>InvocationType.requestResponse</code> (<code>'RequestResponse'</code>, waits for the result). Import <code>InvocationType</code> from <code>lambdasdk.lambdasdk</code>. <code>user</code>/<code>pw</code> override the credentials for the S3 write.</li>
+<li><strong>Output:</strong> with <code>'Event'</code>, the string <code>successfully sent event, please watch your slack</code>; with <code>'RequestResponse'</code>, the ingestion function's response body, or <code>None</code> if it cannot be parsed.</li>
+<li><strong>Errors:</strong> S3 and Lambda errors are raised.</li>
+<li><strong>Warning:</strong> the default key is fixed, so two uploads running at the same time to the same stage overwrite each other's file. Pass a unique <code>inputKeyName</code> per upload. (vps-jg2)</li>
+</ul>
+<h3 id="syncS3()"><code>syncS3()</code><a class="anchor-link" href="#syncS3()"> </a></h3><ul>
+<li><strong>Input:</strong> none.</li>
+<li><strong>Output:</strong> the response body of <code>product-dump-s3-&lt;branch&gt;</code>, which rebuilds the dump <code>allQuery</code> reads; <code>None</code> if the response cannot be parsed.</li>
+<li><strong>Errors:</strong> a Lambda error is raised.</li>
+</ul>
+<h3 id="Helpers">Helpers<a class="anchor-link" href="#Helpers"> </a></h3><ul>
+<li><code>FunctionNames(branchName)</code>: builds the resource names in the stage table above.</li>
+<li><a href="/villa-product-sdk/product-sdk.html#ProductSdk.printFirst(d)"><code>ProductSdk.printFirst(d)</code></a>: returns the first <code>(key, value)</code> pair of a dict.</li>
+<li>[<code>ProductSdk.generalInvoke(functionName, payload)</code>](/villa-product-sdk/product-sdk.html#ProductSdk.generalInvoke(functionName, payload)): invokes any Lambda function synchronously and returns its body; errors as for <a href="/villa-product-sdk/product-sdk.html#queryList"><code>queryList</code></a>.</li>
+<li><a href="/villa-product-sdk/product-sdk.html#ProductSdk.returnLambdaResponse(response)"><code>ProductSdk.returnLambdaResponse(response)</code></a>: parses a Lambda proxy response and returns its body, or logs and returns <code>None</code> if it cannot be parsed.</li>
+</ul>
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">querySingleProduct</span><span class="p">(</span><span class="s1">&#39;0171670&#39;</span><span class="p">)</span>
-<span class="n">result</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>INFO:root:{&#39;body&#39;: &#39;{&#34;iprcode&#34;:&#34;0171670&#34;}&#39;, &#39;header&#39;: {}}
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 4.36 ms, sys: 556 µs, total: 4.92 ms
-Wall time: 2.34 s
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;cprcode&#39;: &#39;0171670&#39;,
- &#39;iprcode&#39;: &#39;0171670&#39;,
- &#39;oprcode&#39;: &#39;0171670&#39;,
- &#39;ordertype&#39;: &#39;Y&#39;,
- &#39;pr_abb&#39;: &#39;JIRAPAT YOUNG KALE 2&#39;,
- &#39;pr_active&#39;: &#39;Y&#39;,
- &#39;pr_cgcode&#39;: &#39;05&#39;,
- &#39;pr_code&#39;: &#39;0171670&#39;,
- &#39;pr_dpcode&#39;: &#39;19&#39;,
- &#39;pr_engname&#39;: &#39;IRAPAT YOUNG KALE 200 G.&#39;,
- &#39;pr_ggcode&#39;: &#39;057&#39;,
- &#39;pr_market&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
- &#39;pr_name&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
- &#39;pr_puqty&#39;: &#39;1&#39;,
- &#39;pr_sa_method&#39;: &#39;1&#39;,
- &#39;pr_sucode1&#39;: &#39;CM845&#39;,
- &#39;pr_suref3&#39;: &#39;A&#39;,
- &#39;prtype&#39;: &#39;I&#39;,
- &#39;psqty&#39;: &#39;1&#39;,
- &#39;pstype&#39;: &#39;1&#39;}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="All-Query">All Query<a class="anchor-link" href="#All-Query"> </a></h2>
+<h2 id="Security">Security<a class="anchor-link" href="#Security"> </a></h2><ul>
+<li><strong>Never embed AWS keys</strong> in code, notebooks, or pickled files, and never commit them. Use an AWS profile, environment variables, or a role. The <code>user</code>/<code>pw</code> arguments exist for compatibility; prefer leaving them unset.</li>
+<li>Use credentials that can reach <strong>only the stage you need</strong>: dev credentials for <code>dev-manual</code>, and production credentials only on production systems.</li>
+<li><strong>API keys</strong> (HTTPS mode, vps-8hj, not yet released) will be issued per caller by the Villa platform team and rotated by issuing a new key and then revoking the old one. Until that mode ships, there are no API keys for this SDK.</li>
+<li><strong>Reporting a problem:</strong> do not open a public issue for a security problem. Contact the maintainer listed in <code>settings.ini</code> (<code>author_email</code>) privately, with steps to reproduce.</li>
+</ul>
+<h2 id="Known-issues">Known issues<a class="anchor-link" href="#Known-issues"> </a></h2><ul>
+<li>Error handling is inconsistent: some failures print and return <code>None</code> or an error body instead of raising (vps-jg2, vps-b4r).</li>
+<li><code>updateWithS3</code> uses a fixed S3 key by default (vps-jg2).</li>
+<li>The <code>urllib3==1.25.10</code> pin blocks Python 3.10+ and carries known advisories (vps-9kk).</li>
+<li>The PyPI release 0.0.20 and this repository differ (see above).</li>
+<li>The wheel also ships the <code>villaInventorySdk</code> and <code>nbdev_template</code> packages (vps-0ax).</li>
+</ul>
+<h2 id="Contributing">Contributing<a class="anchor-link" href="#Contributing"> </a></h2><p>See <code>CONTRIBUTING.md</code>.</p>
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">allQuery</span><span class="p">()</span>
-<span class="n">sdk</span><span class="o">.</span><span class="n">printFirst</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-</pre></div>
-
-    </div>
 </div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(&#39;0217153&#39;,
- {&#39;0217153&#39;: {&#39;cprcode&#39;: &#39;0217153&#39;,
-   &#39;iprcode&#39;: &#39;0217153&#39;,
-   &#39;oprcode&#39;: &#39;0217153&#39;,
-   &#39;ordertype&#39;: &#39;Y&#39;,
-   &#39;pr_abb&#39;: &#39;COCOA LOCO MILK CHOC&#39;,
-   &#39;pr_active&#39;: &#39;Y&#39;,
-   &#39;pr_cgcode&#39;: &#39;98&#39;,
-   &#39;pr_code&#39;: &#39;0217153&#39;,
-   &#39;pr_dpcode&#39;: &#39;28&#39;,
-   &#39;pr_engname&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_ggcode&#39;: &#39;003&#39;,
-   &#39;pr_market&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL&#39;,
-   &#39;pr_name&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_puqty&#39;: &#39;24&#39;,
-   &#39;pr_sa_method&#39;: &#39;1&#39;,
-   &#39;pr_sucode1&#39;: &#39;F1222&#39;,
-   &#39;pr_suref3&#39;: &#39;S&#39;,
-   &#39;prtype&#39;: &#39;I&#39;,
-   &#39;psqty&#39;: &#39;1&#39;,
-   &#39;pstype&#39;: &#39;1&#39;}})</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Trigger-s3-sync">Trigger s3 sync<a class="anchor-link" href="#Trigger-s3-sync"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">syncS3</span><span class="p">()</span>
-<span class="n">response</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 3.99 ms, sys: 0 ns, total: 3.99 ms
-Wall time: 1.7 s
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;result&#39;: &#39;saved 10929 products&#39;}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-</div>
- 
-
