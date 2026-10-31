@@ -13,6 +13,7 @@ changes them: the error body that generalInvoke returns for a non-200 response, 
 that querySingleProduct and returnLambdaResponse return on failure, updateWithS3's fixed
 default key and its return values.
 """
+import copy
 import json
 
 import pytest
@@ -138,7 +139,8 @@ def test_all_query_downloads_the_url_that_product_get_all_returns(products, sdk,
 
 
 def test_update_with_s3_saves_the_data_then_invokes_ingestion_with_its_key(sdk, fake_aws):
-    data = [KALE, PUZZLE]
+    data = [copy.deepcopy(KALE), copy.deepcopy(PUZZLE)]
+    expected = copy.deepcopy(data)  # taken before the call, so in-place changes show
     fake_aws.respond("product-update-s3-feature-x", body={"success": 2, "failure": 0})
     sdk.updateWithS3(data, inputKeyName="upload-1", invocationType="RequestResponse")
     [save] = fake_aws.saves
@@ -150,7 +152,8 @@ def test_update_with_s3_saves_the_data_then_invokes_ingestion_with_its_key(sdk, 
         return [dict(p, **{column: int(p[column]) for column in ("cprcode", "iprcode", "oprcode")})
                 for p in products_]
 
-    assert normalised(save["objectToSave"]) == normalised(data)
+    assert normalised(save["objectToSave"]) == normalised(expected)
+    assert data == expected  # the caller's products are not changed
     [call] = fake_aws.invocations
     assert call["functionName"] == "product-update-s3-feature-x"
     assert sent_body(call)["key"] == "upload-1"
