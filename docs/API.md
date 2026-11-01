@@ -213,13 +213,18 @@ Returns:
 - The rebuild starts its scan after `requestedAt` and uses consistent reads, so the file includes every write
   acknowledged before `requestedAt`. It records the scan's start as `generatedAt`.
 - The file never goes back in time: a rebuild whose scan started before the stored file's `generatedAt` does not
-  replace it.
+  replace it, even when the newer file lands while that rebuild is running. Otherwise `syncS3` could return, and a
+  later `allQuery` still read an older file.
 
 ### POST /products/delete (new)
 
 `{"iprcodes": ["9999000", "9999001"]}` deletes every row (every `cprcode`) under each code, and answers
 `{"deleted": [...], "missing": [...]}`. Both lists hold codes as they were sent: `deleted` the ones that had rows,
 `missing` the ones that had none.
+
+After a 200 answer, no listed code has a row left. The two lists only say what this call found: when the SDK retries
+a lost answer, a code the earlier attempt deleted comes back in `missing`. A caller checking its clean-up therefore
+treats a code in either list as gone.
 
 400 is returned when a code is outside 9999000 to 9999999, or for an empty list, a non-list, more than 100 codes or a
 bad code. In every 400 case nothing is deleted.
@@ -288,7 +293,7 @@ ProductSdk(branch="dev-manual")   # Lambda mode, unchanged, with a DeprecationWa
 | `allQuery()` | `GET /products/all-url`, then the presigned GET (no key), bz2, `read_json(orient="records")` | a pandas DataFrame |
 | `updateWithS3(data, ...)` | per chunk of up to 1000 rows and 10 MiB: `POST /upload-request`, PUT, `POST /ingest` | `{"keys": [...], "result": {"success", "skipped", "failure", "errors"}}` |
 | `syncS3(timeout=300)` | `POST /products/sync`, then poll `GET /products/all-url` (a 404 counts as not ready) | `{"status": "done", "requestedAt", "generatedAt"}` |
-| `deleteProducts(iprcodes)` | `POST /products/delete`, in calls of 100 | `{"deleted": [...], "missing": [...]}`; Lambda mode raises `ProductSdkError` |
+| `deleteProducts(iprcodes)` | `POST /products/delete`, in calls of 100 | `{"deleted": [...], "missing": [...]}`, and a code in either list has no row left; Lambda mode raises `ProductSdkError` |
 
 **`updateWithS3`:**
 
@@ -318,7 +323,11 @@ These are measured against `polecat/vps-52s` 4462400. Everything else there stay
 3. **Rebuild changes.**
    - The rebuild scans with `ConsistentRead`.
    - It stores its scan start as S3 object metadata, and `GET /products/all-url` returns it as `generatedAt`.
-   - It does not replace a file whose `generatedAt` is newer.
+   - It does not replace a file whose `generatedAt` is newer. The check and the write must be one step, because the
+     hourly rebuild and a sync rebuild can run at the same time (the dump function has no concurrency limit). It
+     writes with a conditional PUT: `If-Match` with the ETag of the file it compared against, or `If-None-Match: *`
+     when there was no file. On 412 or 409 it reads the stored `generatedAt` again and compares again. moto 5.2.4
+     enforces both conditions, so this can be tested offline.
 4. **Upload cap.** `MAX_INGEST_ITEMS` drops from 10000 to 1000.
    - `merge_products` makes one `GetItem` call per product. At a few milliseconds per call (an estimate, not a
      measurement), 10000 products cannot finish inside API Gateway's 29 s. On a timeout the Lambda is stopped part
