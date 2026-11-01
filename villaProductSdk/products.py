@@ -189,7 +189,9 @@ def retrieveJsonZl(url, timeout = (10, 30)):
     raise ProductSdkError('downloading the product table failed', statusCode = response.status_code, body = response.text[:500])
   import pandas as pd
   jsonDb = zlib.decompress(response.content).decode()
-  return pd.read_json(jsonDb,orient='split')
+  # a literal JSON string is read as a path from pandas 2.1 on (removed in 3); StringIO works on every version (vps-0ax)
+  from io import StringIO
+  return pd.read_json(StringIO(jsonDb),orient='split')
 
 # Cell
 @add_method(ProductSdk)
