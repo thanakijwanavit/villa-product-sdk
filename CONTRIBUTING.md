@@ -7,6 +7,8 @@ Before anything else, please install the git hooks that run automatic scripts du
 nbdev_install_git_hooks
 ```
 
+Before making the repository public or pushing a release, run `tools/secret_scan.sh .`: gitleaks over every commit on every ref and over the files on disk (values redacted); accept a finding only with a `.gitleaks.toml` allowlist entry that says why.
+
 ## Did you find a bug?
 
 * Ensure the bug was not already reported by searching on GitHub under Issues.
