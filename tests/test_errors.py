@@ -109,5 +109,5 @@ def test_query_list_returns_body_on_200(products):
 def test_query_list_raises_on_non_200(products):
   sdk = makeSdk(products, FakeLambda(response=apiResponse(400, {'error': 'bad'})))
   with pytest.raises(products.ProductSdkError) as info:
-    sdk.queryList(['x'])
+    sdk.queryList(['0171670'])  # a valid code: vps-28b refuses 'x' before any call
   assert info.value.statusCode == 400

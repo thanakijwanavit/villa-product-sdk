@@ -112,6 +112,7 @@ class ProductSdk:
     never overwrite each other's upload (the fixed default key did). Returns
     {'key', 'bucket', 'functionName', 'invocationType', 'result'}: result is the parsed body for
     RequestResponse and None for an Event (async) invocation.'''
+    _checkProducts(data)  # vps-28b: before anything is saved or invoked
     # put users if not specified
     user = user or self.user; pw = pw or self.pw
     key = inputKeyName or f'input-data-name-{uuid.uuid4().hex}'
@@ -165,6 +166,7 @@ def retrieveJsonZl(url):
 @add_method(ProductSdk)
 def querySingleProduct(self, iprcode = '0171670', user=None, pw=None):
   '''query a single product; ProductSdkError when the call fails (it used to print and return None)'''
+  _checkIprcode(iprcode)  # vps-28b
   return self.generalInvoke(self.functionNames.singleQuery(), Event.getInput({'iprcode': iprcode}))
 
 # Cell
@@ -177,4 +179,43 @@ class ProductsFromList:
 @add_method(ProductSdk)
 def queryList(self,iprcodes:List[str])->List[dict]:
   '''query several products; ProductSdkError when the call fails'''
+  _checkIprcodes(iprcodes)  # vps-28b
   return self.generalInvoke(functionName=self.functionNames.listQuery() ,payload=Event.getInput({'iprcodes': iprcodes}))
+
+# Cell
+import re as _re
+
+
+def _checkIprcode(code, name:str = 'iprcode'):
+  '''vps-28b: a product code is a non-empty str of digits 0-9 or a non-negative int (never a bool)'''
+  if isinstance(code, bool) or not isinstance(code, (str, int)):
+    raise TypeError(f'{name} must be a str of digits or an int, not {type(code).__name__}')
+  if isinstance(code, int):
+    if code < 0:
+      raise ValueError(f'{name} must not be negative')
+  elif not _re.fullmatch(r'[0-9]+', code):
+    raise ValueError(f'{name} must be a non-empty string of digits 0-9')
+
+
+def _checkIprcodes(iprcodes):
+  '''a non-empty list or tuple of product codes'''
+  if not isinstance(iprcodes, (list, tuple)):
+    raise TypeError(f'iprcodes must be a list or tuple of codes, not {type(iprcodes).__name__}')
+  if not iprcodes:
+    raise ValueError('iprcodes must not be empty')
+  for i, code in enumerate(iprcodes):
+    _checkIprcode(code, f'iprcodes[{i}]')
+
+
+def _checkProducts(data):
+  '''a non-empty list of product dicts, each with a valid iprcode'''
+  if not isinstance(data, list):
+    raise TypeError(f'data must be a list of product dicts, not {type(data).__name__}')
+  if not data:
+    raise ValueError('data must not be empty')
+  for i, product in enumerate(data):
+    if not isinstance(product, dict):
+      raise TypeError(f'data[{i}] must be a dict, not {type(product).__name__}')
+    if 'iprcode' not in product:
+      raise ValueError(f'data[{i}] has no iprcode')
+    _checkIprcode(product['iprcode'], f'data[{i}].iprcode')
