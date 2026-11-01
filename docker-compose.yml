@@ -15,9 +15,13 @@ services:
 
   notebook:
     <<: *fastai
-    command: bash -c "pip install -e . && jupyter notebook --allow-root --no-browser --ip=0.0.0.0 --port=8080 --NotebookApp.token='' --NotebookApp.password=''"
+    # vps-4wr: Jupyter runs code as root here, so it needs a token and listens on this machine only. It reads the token
+    # from JUPYTER_TOKEN (kept out of the command line); compose refuses to start without one (see CONTRIBUTING.md).
+    environment:
+      JUPYTER_TOKEN: ${JUPYTER_TOKEN:?set JUPYTER_TOKEN to a long random value, see CONTRIBUTING.md}
+    command: bash -c "pip install -e . && jupyter notebook --allow-root --no-browser --ip=0.0.0.0 --port=8080"
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080" # --ip=0.0.0.0 is inside the container; the host side is loopback only
 
   watcher:
     <<: *fastai
@@ -27,7 +31,7 @@ services:
   jekyll:
     <<: *fastai
     ports:
-     - "4000:4000"
+     - "127.0.0.1:4000:4000" # vps-4wr: the docs preview on this machine only
     command: >
      bash -c "cp -r docs_src docs
      && pip install .

@@ -4,9 +4,9 @@ __all__ = ['Response', 'Event', 'Product', 'Products']
 
 # Cell
 from dataclasses import field
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from dataclasses_json import dataclass_json, Undefined
-from typing import Optional, List, Callable, Any
+from typing import List
 import ujson as json
 
 @dataclass_json
@@ -24,6 +24,7 @@ class Response:
       output object from Dict,
       dictInput should follow apigateway proxy integration
     '''
+    dictInput = dict(dictInput)  # copy: never mutate the caller's dict
     body = dictInput.pop('body')
     return cls(
       body = json.loads(body),

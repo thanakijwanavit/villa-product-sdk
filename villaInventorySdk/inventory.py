@@ -3,21 +3,38 @@
 __all__ = ['FunctionNames', 'ProductSdk']
 
 # Cell
-from botocore.config import Config
-from s3bz.s3bz import S3, Requests
+from s3bz.s3bz import S3
 from lambdasdk.lambdasdk import Lambda
-import bz2, json, boto3, base64, logging
-logging.basicConfig(level=logging.INFO)
+import logging
+
+# vps-160: a separate package with no notebook, so its own copy of villaProductSdk.products.validateConfig
+import re as _re
+
+_BRANCH = _re.compile(r'^[a-z0-9][a-z0-9-]{0,40}[a-z0-9]?$')
+_REGION = _re.compile(r'^[a-z]{2}(-[a-z]+)+-[0-9]+$')
+
+def validateConfig(branch:str, region = ...):
+  '''raise ValueError, naming the argument, before any AWS name is built from it (vps-160).
+  branch goes into Lambda and S3 names ("input-product-bucket-<branch>" must stay within S3's 63 lowercase
+  characters), so it is lowercase letters, digits and hyphens, 1 to 42 characters, not starting with a hyphen.
+  region (when given: FunctionNames has none) looks like ap-southeast-1; None is refused.'''
+  if not isinstance(branch, str) or not _BRANCH.match(branch):
+    raise ValueError(f'invalid branch {branch!r}: use 1-42 lowercase letters, digits or hyphens, e.g. dev-manual')
+  if region is not ... and (not isinstance(region, str) or not _REGION.match(region)):
+    raise ValueError(f'invalid region {region!r}: expected an AWS region such as ap-southeast-1')
+
+log = logging.getLogger(__name__)  # a library never configures logging (vps-53u)
 
 # Cell
 class FunctionNames:
   '''determine function and resources name based on branchName'''
   def __init__(self, branchName = 'dev-manual'):
+    validateConfig(branchName)
     self.branchName = branchName
   dumpToS3 = lambda self: f'product-dump-s3-{self.branchName}'
   updateProduct = lambda self: f'product-update-{self.branchName}'
   updateS3 = lambda self: f'product-update-s3-{self.branchName}'
-  singleQuery = lambda self: f'product-update-s3-{self.branchName}'
+  singleQuery = lambda self: f'product-get-{self.branchName}'
   allQuery = lambda self: f'product-get-all-{self.branchName}'
   inputBucket = lambda self: f'input-product-bucket-{self.branchName}'
   inventoryBucket = lambda self: f'product-bucket-{self.branchName}'
@@ -27,6 +44,7 @@ class FunctionNames:
 class ProductSdk:
 
   def __init__(self, branch = 'dev-manual', user = None, pw = None, region = 'ap-southeast-1'):
+    validateConfig(branch, region)
     self.branchName = branch
     self.functionNames = FunctionNames(branchName = branch)
     self.lambdaClient = Lambda(user =user, pw=pw, region = region)
@@ -43,20 +61,20 @@ class ProductSdk:
     # extract function name and inputbucket name
     inputBucketName = self.functionNames.inputBucket()
     functionName = self.functionNames.updateS3()
-    logging.info(f'bucket is {inputBucketName}')
+    log.info(f'bucket is {inputBucketName}')
 
     # save data to s3
     S3.save(key = inputKeyName,
             objectToSave = data ,
             bucket = inputBucketName,
             user=user, pw=pw)
-    logging.info(f'data is saved to s3, invoking ingestion function')
+    log.info('data is saved to s3, invoking ingestion function')
 
     # call lambda function
     lambdaPayload = {
         'key': inputKeyName
     }
-    logging.info(f'input to lambda is {lambdaPayload}')
+    log.info(f'input to lambda is {lambdaPayload}')
     return self.lambdaClient.invoke(
       functionName= functionName ,
       input=lambdaPayload,

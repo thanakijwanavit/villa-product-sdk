@@ -1,0 +1,6 @@
+# vps-3ah: the project's own lint config, so a user-level ruff config elsewhere does not apply.
+# Pyflakes only (real defects: unused or redefined imports, undefined names); style is out of scope.
+extend-exclude = ["docs", "nbdev_template", "dask-worker-space", "*.ipynb"]
+
+[lint]
+select = ["F"]
