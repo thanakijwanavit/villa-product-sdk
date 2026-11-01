@@ -17,6 +17,7 @@ NAMES = {  # every FunctionNames method except singleQuery (vps-6fo)
     "allQuery": "product-get-all-feature-x",
     "inputBucket": "input-product-bucket-feature-x",
     "inventoryBucket": "product-bucket-feature-x",
+    "listQuery": "product-get-list-feature-x",  # names.py (vps-u5v) has it for both packages (vps-2t7)
 }
 KALE = {"cprcode": "0171670", "iprcode": "0171670", "oprcode": "0171670",
         "ordertype": "Y", "pr_abb": "JIRAPAT YOUNG KALE 2"}

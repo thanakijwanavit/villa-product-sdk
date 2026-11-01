@@ -36,9 +36,17 @@ def test_packages_are_the_intended_ones():
         assert os.path.isfile(os.path.join(ROOT, p, "__init__.py"))
 
 
+def tracked_files():
+    """git ls-files; in a `git archive` export (no .git), every file there is a tracked file (vps-2t7)."""
+    if os.path.exists(os.path.join(ROOT, ".git")):
+        return subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True,
+                              check=True).stdout.split()
+    return [os.path.relpath(os.path.join(d, f), ROOT).replace(os.sep, "/")
+            for d, dirs, files in os.walk(ROOT) for f in files if "__pycache__" not in d]
+
+
 def test_leftovers_not_tracked():
-    tracked = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True,
-                             check=True).stdout.split()
+    tracked = tracked_files()
     assert not [f for f in tracked if f.startswith(("nbdev_template/", "dask-worker-space/"))]
     assert ".github/workflows/main.yml" not in tracked
 

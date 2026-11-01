@@ -89,13 +89,13 @@ def test_query_list_payload(products):
 
 
 @pytest.mark.parametrize("method", ["allQuery", "syncS3"])
-def test_all_query_and_sync_send_an_empty_input(products, method):
+def test_all_query_and_sync_send_an_empty_input(products, method, monkeypatch):
     c = CONTRACT[method]
     sdk = sdk_for(products, {"url": "https://example.invalid/products"})
-    try:
-        getattr(sdk, method)()
-    except Exception:
-        pass  # what happens after the call (downloading the table) is not the contract
+    # downloading the table is not the contract. vps-2t7: a stub, not a swallowed error, since the offline
+    # guard (vps-l7s) fails the test on any real request, and ruff BLE001 (vps-9he) refuses the blind except
+    monkeypatch.setattr(products, "retrieveJsonZl", lambda url, timeout=None: None)
+    getattr(sdk, method)()
     call = sdk.lambdaClient.calls[0]
     assert call["functionName"] == c["functionName"] and call["input"] == c["input"]
 

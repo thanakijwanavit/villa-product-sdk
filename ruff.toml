@@ -5,3 +5,9 @@ extend-exclude = ["docs", "nbdev_template", "dask-worker-space", "*.ipynb"]
 
 [lint]
 select = ["F", "E722", "T201", "BLE001"]
+
+[lint.per-file-ignores]
+# vps-2t7: tools/ holds command-line programs (release gate, PyPI scan, license check) that report on stdout and
+# stderr, and whose broad excepts record the failure and exit non-zero. T201/BLE001 stay on for the packages,
+# tests/ and scripts/.
+"tools/*" = ["T201", "BLE001"]

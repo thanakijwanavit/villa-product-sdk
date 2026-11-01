@@ -60,6 +60,10 @@ class ProductSdk:
       functionName= functionName ,
       input=inputValue,
       invocationType= invocationType )
+    # an Event (async) invoke has no body to parse: lambdasdk returns True. None, as products.py's
+    # updateWithS3 answers (vps-2t7: vps-9he's typed errors raised 'no body' here)
+    if invocationType == 'Event':
+      return None
     return self.returnLambdaResponse(lambdaResponse, functionName)
 
   def querySingleProduct(self, iprcode = '0171670', user=None, pw=None):

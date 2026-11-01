@@ -2,11 +2,11 @@
 
 This is the older copy of the SDK class that products.py replaced. It is still shipped,
 and vps-jg2 changes only products.py, so these tests pin today's behaviour here, error
-paths included: errors propagate unchanged, and an unparseable response is logged and
-returns None. No AWS: lambdasdk and s3bz are the recording fakes in conftest.py.
+paths included: errors propagate unchanged, and since vps-9he an unparseable response raises
+ProductSdkError, as in products.py (vps-2t7 merged the two). No AWS: lambdasdk and s3bz are
+the recording fakes in conftest.py.
 """
 import json
-import logging
 
 import pytest
 from botocore.exceptions import ClientError
@@ -20,6 +20,7 @@ NAMES = {
     "allQuery": "product-get-all-feature-x",
     "inputBucket": "input-product-bucket-feature-x",
     "inventoryBucket": "product-bucket-feature-x",
+    "listQuery": "product-get-list-feature-x",  # names.py (vps-u5v) has it for both packages (vps-2t7)
 }
 KALE = {"cprcode": "0171670", "iprcode": "0171670", "oprcode": "0171670",
         "ordertype": "Y", "pr_abb": "JIRAPAT YOUNG KALE 2"}
@@ -92,8 +93,9 @@ def test_update_with_s3_tells_ingestion_the_key_it_saved_under_by_default(sdk, f
 
 
 def test_update_with_s3_writes_with_other_credentials_when_given(sdk, fake_aws):
-    sdk.updateWithS3([KALE], inputKeyName="k", invocationType="Event",
-                     user="other-user", pw="other-pw")
+    # an Event invoke has no body: None, as products.py answers (vps-2t7)
+    assert sdk.updateWithS3([KALE], inputKeyName="k", invocationType="Event",
+                            user="other-user", pw="other-pw") is None
     [save] = fake_aws.saves
     assert (save["user"], save["pw"]) == ("other-user", "other-pw")
     assert fake_aws.invocations[0]["invocationType"] == "Event"
@@ -131,10 +133,11 @@ def test_return_lambda_response_returns_the_parsed_body(inventory):
     assert inventory.ProductSdk.returnLambdaResponse(response) == KALE
 
 
-def test_return_lambda_response_logs_and_returns_none_when_it_cannot_parse(inventory, caplog):
-    with caplog.at_level(logging.ERROR):
-        assert inventory.ProductSdk.returnLambdaResponse({"statusCode": 502}) is None
-    assert "error parsing body" in caplog.text
+def test_return_lambda_response_raises_a_typed_error_when_it_cannot_parse(inventory):
+    # vps-9he: no more bare except that logged and returned None (vps-2t7 merged it with this test)
+    from villaProductSdk.products import ProductSdkError
+    with pytest.raises(ProductSdkError, match="no body"):
+        inventory.ProductSdk.returnLambdaResponse({"statusCode": 502})
 
 
 def test_print_first_returns_the_first_item(inventory):

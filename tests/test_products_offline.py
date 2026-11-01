@@ -131,7 +131,9 @@ def test_all_query_downloads_the_url_that_product_get_all_returns(products, sdk,
     if hasattr(products, "retrieveJsonZl"):
         # products.py regenerated from product-sdk.ipynb (vps-jg2) downloads with its own
         # retrieveJsonZl (requests, zlib, pandas) instead of s3bz's Requests: fake that one
-        monkeypatch.setattr(products, "retrieveJsonZl", fake_aws.download)
+        # it takes timeout= since vps-up7 (vps-2t7)
+        monkeypatch.setattr(products, "retrieveJsonZl",
+                            lambda url, timeout=None: fake_aws.download(url))
     assert sdk.allQuery() == {"0171670": KALE, "0235141": PUZZLE}
     assert fake_aws.invocations == [{"functionName": "product-get-all-feature-x", "input": {},
                                      "invocationType": "RequestResponse"}]

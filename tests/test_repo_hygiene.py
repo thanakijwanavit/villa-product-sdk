@@ -21,13 +21,27 @@ ALLOWED_LARGE: set[str] = set()  # a file over MAX_BYTES must be named here, wit
 FIXTURE = ROOT / "tests" / "fixtures" / "products_sample.csv"
 
 
+# vps-2t7: the acceptance run tests a `git archive` export, which has no .git. There every file is a tracked
+# file and its size on disk is its blob's size, so these checks still read the tree that goes public.
+IS_GIT = (ROOT / ".git").exists()
+
+
+def exported_files() -> list[str]:
+    return sorted(p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*")
+                  if p.is_file() and "__pycache__" not in p.parts)
+
+
 def tracked() -> list[str]:
+    if not IS_GIT:
+        return exported_files()
     out = subprocess.run(["git", "ls-files", "-z"], cwd=ROOT, capture_output=True, check=True).stdout
     return [p for p in out.decode().split("\0") if p]
 
 
 def indexed_sizes() -> dict[str, int]:
     """Size of every file as staged in the index (what a commit takes), not as it is on disk."""
+    if not IS_GIT:
+        return {p: (ROOT / p).stat().st_size for p in exported_files()}
     staged = subprocess.run(["git", "ls-files", "--stage", "-z"], cwd=ROOT, capture_output=True, check=True).stdout
     entries = [e.split("\t", 1) for e in staged.decode().split("\0") if e]
     objects = {meta.split()[1]: path for meta, path in entries}
@@ -43,9 +57,13 @@ def test_no_tracked_file_is_over_1_mb():
     assert large == {}, large
 
 
-def test_the_catalog_export_is_not_tracked_and_stays_ignored():
+def test_the_catalog_export_is_not_tracked_and_stays_ignored(tmp_path):
     assert "sampleData/products.csv" not in tracked()
-    ignored = subprocess.run(["git", "check-ignore", "-q", "sampleData/products.csv"], cwd=ROOT)
+    # outside a checkout, an empty repository reads this tree's .gitignore (vps-2t7)
+    git = ["git"] if IS_GIT else ["git", f"--git-dir={tmp_path / 'git'}", f"--work-tree={ROOT}"]
+    if not IS_GIT:
+        subprocess.run(["git", "init", "-q", "--bare", str(tmp_path / "git")], check=True)
+    ignored = subprocess.run([*git, "check-ignore", "-q", "--no-index", "sampleData/products.csv"], cwd=ROOT)
     assert ignored.returncode == 0, "sampleData/*.csv must stay in .gitignore"
 
 
