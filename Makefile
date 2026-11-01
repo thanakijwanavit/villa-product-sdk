@@ -21,6 +21,10 @@ docs: $(SRC)
 test:
 	nbdev_test_nbs
 
+# merge gate (vps-a8a): pytest in a fresh py3.12 venv with requirements-dev.txt pins
+gate:
+	tools/gate.sh
+
 release: pypi
 	nbdev_conda_package
 	nbdev_bump_version
