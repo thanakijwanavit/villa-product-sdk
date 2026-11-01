@@ -19,3 +19,11 @@ def test_pyflakes_finds_nothing_in_either_package():
     run = subprocess.run([*cmd, "check", "--no-cache", "villaProductSdk", "villaInventorySdk"], cwd=ROOT,
                          capture_output=True, text=True, timeout=300)
     assert run.returncode == 0, run.stdout + run.stderr
+
+
+@pytest.mark.skipif(not (shutil.which("ruff") or shutil.which("uvx")), reason="needs ruff or uvx")
+def test_pyflakes_finds_nothing_in_the_whole_repo():
+    # vps-n8y: the refinery gate runs `ruff check .`, which also covers tests/, tools/ and scripts/.
+    cmd = ["ruff"] if shutil.which("ruff") else ["uvx", "ruff"]
+    run = subprocess.run([*cmd, "check", "--no-cache", "."], cwd=ROOT, capture_output=True, text=True, timeout=300)
+    assert run.returncode == 0, run.stdout + run.stderr
