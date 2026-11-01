@@ -187,9 +187,11 @@ def retrieveJsonZl(url, timeout = (10, 30)):
   response:requests.Response = requests.get(url, timeout = timeout)  # vps-up7
   if response.status_code != 200:
     raise ProductSdkError('downloading the product table failed', statusCode = response.status_code, body = response.text[:500])
+  import io
   import pandas as pd
   jsonDb = zlib.decompress(response.content).decode()
-  return pd.read_json(jsonDb,orient='split')
+  # vps-0qr: pandas 2.1 deprecated passing literal JSON as a str and pandas 3 reads a str as a file path
+  return pd.read_json(io.StringIO(jsonDb), orient='split')
 
 # Cell
 @add_method(ProductSdk)
