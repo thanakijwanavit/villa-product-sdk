@@ -1,0 +1,5 @@
+# vps-3ug: build with an isolated environment (uv build, python -m build). Package metadata stays in settings.ini,
+# which setup.py reads; keep its version equal to villaProductSdk/__init__.py (tests/test_version.py checks).
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
