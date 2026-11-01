@@ -40,7 +40,8 @@
   "product": {"iprcode": "integer", "cprcode": "integer"},
   "handlerErrorBody": {"error": "string"},
   "gatewayErrorBody": {"message": "string"},
-  "retry": {"statuses": [429, 502, 503, 504], "maxAttempts": 3, "firstBackoffSeconds": 0.5},
+  "retry": {"statuses": [429, 502, 503, 504], "s3Statuses": [500, 503], "connectionErrorsAndTimeouts": true,
+            "maxAttempts": 3, "firstBackoffSeconds": 0.5},
   "timeouts": {"connectSeconds": 10, "readSeconds": 30},
   "routes": [
     {

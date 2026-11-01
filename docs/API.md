@@ -33,10 +33,14 @@ built and tested offline now, against mocked HTTP, instead of waiting for the de
   uses (with `orient="split"`), and its dtype inference is the same for both layouts, so both modes type columns the
   same way. Column order and index may differ. Checked with pandas 2.3.3 and 3.1.0: the same rows read through
   `split` and through `records` give equal frames with equal dtypes.
+- The frame does not keep exact values. In both modes pandas types each column from its values: a column of digit
+  strings becomes integers, or floats when some rows lack the field, so a barcode loses its leading zero there
+  (`"0012345678905"` reads as `12345678905`). A column holding any other string stays strings. The file,
+  `querySingleProduct` and `queryList` keep every stored value as it is. Checked with pandas 2.3.3 and 3.1.0.
 
 **Why:** vps-52s already writes and tests `bz2+json`. A JSON array of records can be read by any client without
 pandas: `villaProductSdk.inventory.ProductSdk.allQuery` already decodes it through s3bz (`bz2.decompress`, then
-`json.loads`). One return type lets a caller move to HTTPS mode by changing only the constructor.
+`json.loads`). One return type lets an `allQuery` caller move to HTTPS mode by changing only the constructor.
 
 Rejected:
 
@@ -273,10 +277,11 @@ ProductSdk(branch="dev-manual")   # Lambda mode, unchanged, with a DeprecationWa
 **Timeouts and retries:**
 
 - Timeouts are connect 10 s and read 30 s: the same `connect_timeout` and `read_timeout` arguments as Lambda mode.
-- Status 429, 502, 503 and 504, and connection errors, are retried with at most 3 attempts in all and exponential
-  backoff starting at 0.5 s.
-- `POST /ingest` is never retried. After a lost answer its upload is already deleted, so a retry answers 404. A
-  merge that changes nothing is skipped, so the caller can safely rerun `updateWithS3` instead.
+- Status 429, 502, 503 and 504, connection errors and timeouts are retried, with at most 3 attempts in all and
+  exponential backoff starting at 0.5 s.
+- The presigned S3 GET and PUT are retried the same way, on S3's 500 and 503 instead of the statuses above.
+- `POST /ingest` is never retried, whatever the error. After a lost answer its upload is already deleted, so a retry
+  answers 404. A merge that changes nothing is skipped, so the caller can safely rerun `updateWithS3` instead.
 
 **Errors:**
 
@@ -294,6 +299,10 @@ ProductSdk(branch="dev-manual")   # Lambda mode, unchanged, with a DeprecationWa
 | `updateWithS3(data, ...)` | per chunk of up to 1000 rows and 10 MiB: `POST /upload-request`, PUT, `POST /ingest` | `{"keys": [...], "result": {"success", "skipped", "failure", "errors"}}` |
 | `syncS3(timeout=300)` | `POST /products/sync`, then poll `GET /products/all-url` (a 404 counts as not ready) | `{"status": "done", "requestedAt", "generatedAt"}` |
 | `deleteProducts(iprcodes)` | `POST /products/delete`, in calls of 100 | `{"deleted": [...], "missing": [...]}`, and a code in either list has no row left; Lambda mode raises `ProductSdkError` |
+
+**Return values:** `querySingleProduct`, `queryList` and `allQuery` return the same types as in Lambda mode (a dict,
+a list of dicts, a DataFrame), with the code types of Q3. The results of `updateWithS3` and `syncS3` are the dicts
+above, which differ from Lambda mode's, so code that reads those two results checks `sdk.mode`.
 
 **`updateWithS3`:**
 
