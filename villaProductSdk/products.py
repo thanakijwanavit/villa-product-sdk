@@ -13,7 +13,7 @@ from typing import Optional, List, Any
 import ujson as json
 from nicHelper.wrappers import add_method
 from dataclasses_json import dataclass_json
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 import logging, uuid, zlib, requests, boto3
 
 log = logging.getLogger(__name__)
@@ -43,11 +43,22 @@ class ProductSdkError(Exception):
 
 
 def parseLambdaResponse(lambdaResponse:Any, functionName:Optional[str] = None)->Any:
-  '''the parsed body of an API Gateway style lambda response; ProductSdkError if it cannot be parsed or is not 200'''
+  '''the parsed body of an API Gateway style lambda response; ProductSdkError if it cannot be parsed or is not 200.
+  The headers may be under 'headers' (API Gateway) or 'header' (the deployed product functions); lambdaResponse
+  itself is left unchanged.'''
   if not isinstance(lambdaResponse, dict) or 'body' not in lambdaResponse:
     raise ProductSdkError('the lambda response has no body', functionName = functionName, body = lambdaResponse)
+  # vps-8z7: Response.fromDict passes every key to the constructor, so the deployed functions' 'header', or a proxy
+  # key Response has no field for (multiValueHeaders, isBase64Encoded), was a TypeError and every real answer a parse
+  # error. fromDict gets a new dict of Response's own fields (body, statusCode and headers in every awsSchema release
+  # settings.ini allows), and pops 'body' from that, not from the caller's dict. The fields are read here, not at
+  # import, so the module still imports against stub packages (tests/test_function_names_single_source.py).
+  responseFields = {f.name for f in fields(Response)}
+  responseInput = {k: v for k, v in lambdaResponse.items() if k in responseFields}
+  if 'header' in lambdaResponse and 'headers' in responseFields:
+    responseInput.setdefault('headers', lambdaResponse['header'])
   try:
-    response = Response.fromDict(dict(lambdaResponse))  # a copy: fromDict pops 'body' from its argument
+    response = Response.fromDict(responseInput)
   except Exception as e:
     raise ProductSdkError(f'the lambda response could not be parsed: {type(e).__name__}',
                           statusCode = lambdaResponse.get('statusCode'), functionName = functionName,
