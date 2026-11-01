@@ -8,7 +8,7 @@ from lambdasdk.lambdasdk import Lambda
 from .schema import Event, Response
 from .products import validateConfig
 import json, logging
-logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)  # a library never configures logging (vps-53u)
 
 # Cell
 class FunctionNames:
@@ -40,8 +40,8 @@ class ProductSdk:
     try:
       return Response.fromDict(lambdaResponse).body
     except:
-      logging.exception('error parsing body, perhaps there is no body in response')
-      logging.error(lambdaResponse)
+      log.exception('error parsing body, perhaps there is no body in response')
+      log.error(lambdaResponse)
   @staticmethod
   def printFirst(inputDict:dict):
     return next(iter(inputDict.items()))
@@ -56,18 +56,18 @@ class ProductSdk:
     # extract function name and inputbucket name
     inputBucketName = self.functionNames.inputBucket()
     functionName = self.functionNames.updateS3()
-    logging.info(f'bucket is {inputBucketName}')
+    log.info(f'bucket is {inputBucketName}')
 
     # save data to s3
     S3.save(key = inputKeyName,
             objectToSave = data ,
             bucket = inputBucketName,
             user=user, pw=pw)
-    logging.info('data is saved to s3, invoking ingestion function')
+    log.info('data is saved to s3, invoking ingestion function')
 
     # call lambda function
     inputValue = Event(body = json.dumps({ 'key': inputKeyName })).to_dict()
-    logging.info(f'input to lambda is {inputValue}')
+    log.info(f'input to lambda is {inputValue}')
     lambdaResponse = self.lambdaClient.invoke(
       functionName= functionName ,
       input=inputValue,
@@ -80,7 +80,7 @@ class ProductSdk:
     functionName = self.functionNames.singleQuery()
     query = {'iprcode': iprcode}
     inputValue = Event(body = json.dumps(query)).to_dict()
-    logging.info(inputValue)
+    log.info(inputValue)
     lambdaResponse = self.lambdaClient.invoke(
         functionName = functionName , input = inputValue )
     return self.returnLambdaResponse(lambdaResponse)
