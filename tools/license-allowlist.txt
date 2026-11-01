@@ -1,0 +1,1 @@
+# name: reason (vps-b5i). Only for a package whose license the tool cannot read; never for a copyleft one.
