@@ -3,7 +3,7 @@
 # s3bz, ujson, awsSchema, nicHelper, pytest) into a scratch requirements.in, one per line.
 # uv pip compile --universal --python-version 3.12 --no-annotate --no-header requirements.in; strip platform markers.
 # s3bz is held at 0.1.5 because 0.1.6+ invokes a broken import-time classmethod decorator.
-# urllib3 deliberately differs from settings.ini's 1.25.10 pin (owned by vps-9kk).
+# urllib3 2.8.0 satisfies settings.ini's urllib3>=1.26.19 floor (vps-9kk, vps-2e0).
 attrs==26.1.0
 awsSchema==0.0.27
 beartype==0.23.1
