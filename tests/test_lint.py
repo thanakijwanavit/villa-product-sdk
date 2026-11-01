@@ -1,4 +1,5 @@
-"""vps-3ah: the packages stay clean under the project's own ruff config (Pyflakes rules only)."""
+"""vps-3ah, vps-9he: the packages stay clean under the project's own ruff config: Pyflakes, plus no bare
+except (E722), no blind except Exception that swallows (BLE001) and no print in library code (T201)."""
 import shutil
 import subprocess
 from pathlib import Path
@@ -8,9 +9,15 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_ruff_config_selects_pyflakes_and_skips_notebooks():
+def test_ruff_config_selects_the_gate_rules_and_skips_notebooks():
     text = (ROOT / "ruff.toml").read_text()
-    assert 'select = ["F"]' in text and '"*.ipynb"' in text
+    assert 'select = ["F", "E722", "T201", "BLE001"]' in text and '"*.ipynb"' in text
+
+
+def test_no_bare_except_left_in_either_package():
+    hits = [f"{path.relative_to(ROOT)}:{n}" for path in sorted(ROOT.glob("villa*Sdk/*.py"))
+            for n, line in enumerate(path.read_text().splitlines(), 1) if line.strip().startswith("except:")]
+    assert hits == []
 
 
 @pytest.mark.skipif(not (shutil.which("ruff") or shutil.which("uvx")), reason="needs ruff or uvx")
