@@ -2,10 +2,12 @@
 tools/check_wheel.py and the packaging settings. Run: pytest -q tests
 """
 import configparser
+import io
 import os
 import shutil
 import subprocess
 import sys
+import tarfile
 import zipfile
 
 import pytest
@@ -78,6 +80,30 @@ def test_wheel_missing_listed_package_fails(tmp_path):
         zf.writestr("a-1.dist-info/METADATA", "")
     assert check_wheel.main([str(whl), "villaProductSdk"]) == 0
     assert check_wheel.main([str(whl), "villaProductSdk", "villaInventorySdk"]) == 1
+
+
+def sdist(tmp_path, *names):
+    path = tmp_path / "villaproductsdk-1.tar.gz"
+    with tarfile.open(path, "w:gz") as tf:
+        for n in names:
+            info = tarfile.TarInfo(f"villaproductsdk-1/{n}")
+            tf.addfile(info, io.BytesIO(b""))
+    return str(path)
+
+
+def test_sdist_with_tests_and_listed_packages_passes(tmp_path):
+    p = sdist(tmp_path, "setup.py", "PKG-INFO", "tests/test_x.py", "villaProductSdk/__init__.py",
+              "villaProductSdk.egg-info/PKG-INFO")
+    assert check_wheel.main([p, "villaProductSdk"]) == 0
+
+
+def test_sdist_with_leftover_package_fails(tmp_path):
+    p = sdist(tmp_path, "villaProductSdk/__init__.py", "nbdev_template/__init__.py")
+    assert check_wheel.main([p, "villaProductSdk"]) == 1
+    assert check_wheel.sdist_problems(["villaProductSdk/__init__.py", "nbdev_template/__init__.py"],
+                                      ["villaProductSdk", "villaInventorySdk"]) == [
+        "not a listed package: nbdev_template/__init__.py",
+        "listed package missing: villaInventorySdk/__init__.py"]
 
 
 # --- release_check.sh against fake tools --------------------------------------------
@@ -260,6 +286,14 @@ def test_upload_without_stamp_refuses(rel):
         p = release(rel, "--testpypi")
         assert p.returncode == 5 and "no release-check stamp" in p.stderr
         (rel[0] / "dist" / (f + ".bak")).rename(rel[0] / "dist" / f)
+    assert uploads(rel) == []
+
+
+def test_upload_with_empty_stamp_refuses(rel):
+    # sha256sum -c finds no lines and fails, so twine is never called with no files
+    (rel[0] / "dist" / ".release-check-ok").write_text("")
+    p = release(rel, "--testpypi")
+    assert p.returncode == 5 and "changed since release-check" in p.stderr
     assert uploads(rel) == []
 
 

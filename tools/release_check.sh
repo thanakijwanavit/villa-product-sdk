@@ -79,7 +79,12 @@ gate_build() {
     || { tail -30 "$WORK/build.log"; return 1; }
   ls dist
 }
-gate_contents() { python3 "$ROOT/tools/check_wheel.py" "$(wheel)" $PACKAGES; }
+gate_contents() {
+  local sd=(dist/*.tar.gz)
+  [ ${#sd[@]} -eq 1 ] && [ -f "${sd[0]}" ] || { echo "expected exactly one sdist in dist/" >&2; return 1; }
+  python3 "$ROOT/tools/check_wheel.py" "$(wheel)" $PACKAGES
+  python3 "$ROOT/tools/check_wheel.py" "${sd[0]}" $PACKAGES
+}
 gate_twine() { "$(tool twine)" check --strict dist/*; }
 gate_install() {
   local whl; whl=$(wheel)
