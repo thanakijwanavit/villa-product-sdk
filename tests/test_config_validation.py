@@ -20,7 +20,7 @@ def mods(monkeypatch):
     loaded = {name: importlib.import_module(name) for name in MODULES}
     calls = []
     for mod in loaded.values():  # no real Lambda client: count constructions instead
-        monkeypatch.setattr(mod, "Lambda", lambda *a, **k: calls.append((a, k)) or object())
+        monkeypatch.setattr(mod, "Lambda", lambda *a, **k: calls.append((a, k)) or types.SimpleNamespace())  # vps-up7 sets .lambdaClient on it
     return types.SimpleNamespace(loaded=loaded, calls=calls)
 
 

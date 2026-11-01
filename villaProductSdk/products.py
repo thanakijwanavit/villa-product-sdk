@@ -5,6 +5,7 @@ __all__ = ['log', 'INTCOLS', 'validateConfig', 'FunctionNames', 'ProductSdkError
 
 # Cell
 from s3bz.s3bz import S3
+from botocore.config import Config
 from lambdasdk.lambdasdk import Lambda, InvocationType
 # one Event/Response source (vps-jg2): awsSchema's, which has Event.getInput; the local schema module is not imported here
 from awsSchema.apigateway import Event, Response
@@ -13,7 +14,7 @@ import ujson as json
 from nicHelper.wrappers import add_method
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass
-import logging, uuid, zlib, requests
+import logging, uuid, zlib, requests, boto3
 
 log = logging.getLogger(__name__)
 
@@ -94,11 +95,20 @@ class ProductSdk:
                branch:str = 'dev-manual',
                user:Optional[str] = None,
                pw:Optional[str] = None,
-               region:str = 'ap-southeast-1'):
+               region:str = 'ap-southeast-1',
+               connect_timeout:float = 10,
+               read_timeout:float = 30):
     validateConfig(branch, region)
     self.branchName = branch
     self.functionNames = FunctionNames(branchName = branch)
     self.lambdaClient = Lambda(user =user, pw=pw, region = region)
+    # vps-up7: lambdasdk builds its boto3 client with no Config, so a stalled call could hang forever; the same
+    # client with timeouts and standard retries, under lambdasdk's own invoke()
+    self.lambdaClient.lambdaClient = boto3.client(
+      'lambda', region_name = region, aws_access_key_id = user, aws_secret_access_key = pw,
+      config = Config(connect_timeout = connect_timeout, read_timeout = read_timeout,
+                      retries = {'mode': 'standard', 'max_attempts': 3}))
+    self.timeouts = (connect_timeout, read_timeout)
     self.user = user; self.pw = pw; self.region = region
 
   @staticmethod
@@ -165,16 +175,16 @@ class ProductSdk:
   def allQuery(self):
     functionName = self.functionNames.allQuery()
     url = self.generalInvoke(functionName, {})['url']
-    result = retrieveJsonZl(url)
+    result = retrieveJsonZl(url, timeout = self.timeouts)  # vps-up7
     return result
   def syncS3(self):
     '''force s3 to sync with the newly input data'''
     return self.generalInvoke(self.functionNames.dumpToS3(), {})
 
 # Cell
-def retrieveJsonZl(url):
+def retrieveJsonZl(url, timeout = (10, 30)):
   '''download the zlib-compressed product table and read it with pandas (needed for allQuery only)'''
-  response:requests.Response = requests.get(url)
+  response:requests.Response = requests.get(url, timeout = timeout)  # vps-up7
   if response.status_code != 200:
     raise ProductSdkError('downloading the product table failed', statusCode = response.status_code, body = response.text[:500])
   import pandas as pd
