@@ -14,7 +14,7 @@ from nicHelper.exception import errorString
 from awsSchema.apigateway import Event, Response
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass
-import bz2,  boto3, base64, logging
+import bz2,  boto3, base64, logging, requests
 
 # Cell
 class FunctionNames:
@@ -41,10 +41,19 @@ class ProductSdk:
                branch:str = 'dev-manual',
                user:Optional[str] = None,
                pw:Optional[str] = None,
-               region:str = 'ap-southeast-1'):
+               region:str = 'ap-southeast-1',
+               connect_timeout:float = 10,
+               read_timeout:float = 30):
     self.branchName = branch
     self.functionNames = FunctionNames(branchName = branch)
     self.lambdaClient = Lambda(user =user, pw=pw, region = region)
+    # vps-up7: lambdasdk builds its boto3 client with no Config, so a stalled call could hang forever; the same
+    # client with timeouts and standard retries, under lambdasdk's own invoke()
+    self.lambdaClient.lambdaClient = boto3.client(
+      'lambda', region_name = region, aws_access_key_id = user, aws_secret_access_key = pw,
+      config = Config(connect_timeout = connect_timeout, read_timeout = read_timeout,
+                      retries = {'mode': 'standard', 'max_attempts': 3}))
+    self.timeouts = (connect_timeout, read_timeout)
     self.user = user; self.pw = pw; self.region = region
 
   @staticmethod
@@ -114,8 +123,12 @@ class ProductSdk:
       functionName = functionName, input = {}
     )
     url = Response.fromDict(lambdaResponse).body['url']
-    result = Requests.getContentFromUrl(url)
-    return result
+    # vps-up7: s3bz's getContentFromUrl had no timeout; the same decode (bz2, then json) with one
+    response = requests.get(url, timeout = self.timeouts)
+    if not response.ok:
+      logging.error(f'error downloading the product dump: HTTP {response.status_code}')
+      return response.content
+    return json.loads(bz2.decompress(response.content))
   def syncS3(self):
     '''force s3 to sync with the newly input data'''
     functionName = self.functionNames.dumpToS3()
