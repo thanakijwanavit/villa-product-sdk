@@ -1,0 +1,132 @@
+{
+  "awaySummaryEnabled": false,
+  "editorMode": "normal",
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "command": "export PATH=\"$HOME/go/bin:$HOME/.local/bin:$PATH\" && gc handoff --auto \"context cycle\"",
+            "type": "command"
+          }
+        ],
+        "matcher": ""
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "export PATH=\"$HOME/go/bin:$HOME/.local/bin:$PATH\" && GC_MANAGED_SESSION_HOOK=1 GC_HOOK_EVENT_NAME=SessionStart gc prime --hook --hook-format codex",
+            "type": "command"
+          }
+        ],
+        "matcher": "startup"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "export PATH=\"$HOME/go/bin:$HOME/.local/bin:$PATH\" && gc hook run --timeout 15s --timeout-exit-code 0 -- nudge drain --inject",
+            "type": "command"
+          },
+          {
+            "command": "export PATH=\"$HOME/go/bin:$HOME/.local/bin:$PATH\" && gc hook run --timeout 15s --timeout-exit-code 0 -- mail check --inject",
+            "type": "command"
+          }
+        ],
+        "matcher": ""
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(bd show:*)",
+      "Bash(bd comment:*)",
+      "Bash(bd comments:*)",
+      "Bash(ssh g2 ls:*)",
+      "Bash(ssh g2 cat:*)",
+      "Bash(ssh g2 head:*)",
+      "Bash(ssh g2 tail:*)",
+      "Bash(ssh g2 stat:*)",
+      "Bash(ssh g2 test:*)",
+      "Bash(ssh g2 df:*)",
+      "Bash(ssh g2 uptime:*)",
+      "Bash(ssh g2 nvidia-smi)",
+      "Bash(ssh g2 nvidia-smi --query:*)",
+      "Bash(ssh g4 ls:*)",
+      "Bash(ssh g4 cat:*)",
+      "Bash(ssh g4 head:*)",
+      "Bash(ssh g4 tail:*)",
+      "Bash(ssh g4 stat:*)",
+      "Bash(ssh g4 test:*)",
+      "Bash(ssh g4 df:*)",
+      "Bash(ssh g4 uptime:*)",
+      "Bash(ssh g4 nvidia-smi)",
+      "Bash(ssh g4 nvidia-smi --query:*)",
+      "Bash(ssh gpu-4-space ls:*)",
+      "Bash(ssh gpu-4-space cat:*)",
+      "Bash(ssh gpu-4-space head:*)",
+      "Bash(ssh gpu-4-space tail:*)",
+      "Bash(ssh gpu-4-space stat:*)",
+      "Bash(ssh gpu-4-space test:*)",
+      "Bash(ssh gpu-4-space df:*)",
+      "Bash(ssh gpu-4-space uptime:*)",
+      "Bash(ssh gpu-4-space nvidia-smi)",
+      "Bash(ssh gpu-4-space nvidia-smi --query:*)",
+      "Bash(ssh m1 ls:*)",
+      "Bash(ssh m1 cat:*)",
+      "Bash(ssh m1 head:*)",
+      "Bash(ssh m1 tail:*)",
+      "Bash(ssh m1 stat:*)",
+      "Bash(ssh m1 test:*)",
+      "Bash(ssh m1 df:*)",
+      "Bash(ssh m1 uptime:*)",
+      "Bash(ssh m1 nvidia-smi)",
+      "Bash(ssh m1 nvidia-smi --query:*)",
+      "Bash(ssh mac-pro-japan-16 ls:*)",
+      "Bash(ssh mac-pro-japan-16 cat:*)",
+      "Bash(ssh mac-pro-japan-16 head:*)",
+      "Bash(ssh mac-pro-japan-16 tail:*)",
+      "Bash(ssh mac-pro-japan-16 stat:*)",
+      "Bash(ssh mac-pro-japan-16 test:*)",
+      "Bash(ssh mac-pro-japan-16 df:*)",
+      "Bash(ssh mac-pro-japan-16 uptime:*)",
+      "Bash(ssh mac-pro-japan-16 nvidia-smi)",
+      "Bash(ssh mac-pro-japan-16 nvidia-smi --query:*)",
+      "Bash(ssh mb2 ls:*)",
+      "Bash(ssh mb2 cat:*)",
+      "Bash(ssh mb2 head:*)",
+      "Bash(ssh mb2 tail:*)",
+      "Bash(ssh mb2 stat:*)",
+      "Bash(ssh mb2 test:*)",
+      "Bash(ssh mb2 df:*)",
+      "Bash(ssh mb2 uptime:*)",
+      "Bash(ssh mb2 nvidia-smi)",
+      "Bash(ssh mb2 nvidia-smi --query:*)",
+      "Bash(ssh mpj16 ls:*)",
+      "Bash(ssh mpj16 cat:*)",
+      "Bash(ssh mpj16 head:*)",
+      "Bash(ssh mpj16 tail:*)",
+      "Bash(ssh mpj16 stat:*)",
+      "Bash(ssh mpj16 test:*)",
+      "Bash(ssh mpj16 df:*)",
+      "Bash(ssh mpj16 uptime:*)",
+      "Bash(ssh mpj16 nvidia-smi)",
+      "Bash(ssh mpj16 nvidia-smi --query:*)"
+    ],
+    "ask": [
+      "Bash(ssh nsu:*)",
+      "Bash(ssh agent@nsu:*)",
+      "Bash(ssh 100.75.116.63:*)",
+      "Bash(ssh mini3:*)",
+      "Bash(ssh mac-mini-3-1:*)",
+      "Bash(ssh 100.122.229.16:*)",
+      "Bash(ssh mb3:*)",
+      "Bash(ssh 100.75.125.68:*)"
+    ]
+  },
+  "skipDangerousModePermissionPrompt": true
+}
