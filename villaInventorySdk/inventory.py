@@ -7,7 +7,7 @@ from botocore.config import Config
 from s3bz.s3bz import S3, Requests
 from lambdasdk.lambdasdk import Lambda
 import bz2, json, boto3, base64, logging
-logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)  # a library never configures logging (vps-53u)
 
 # Cell
 class FunctionNames:
@@ -43,20 +43,20 @@ class ProductSdk:
     # extract function name and inputbucket name
     inputBucketName = self.functionNames.inputBucket()
     functionName = self.functionNames.updateS3()
-    logging.info(f'bucket is {inputBucketName}')
+    log.info(f'bucket is {inputBucketName}')
 
     # save data to s3
     S3.save(key = inputKeyName,
             objectToSave = data ,
             bucket = inputBucketName,
             user=user, pw=pw)
-    logging.info(f'data is saved to s3, invoking ingestion function')
+    log.info(f'data is saved to s3, invoking ingestion function')
 
     # call lambda function
     lambdaPayload = {
         'key': inputKeyName
     }
-    logging.info(f'input to lambda is {lambdaPayload}')
+    log.info(f'input to lambda is {lambdaPayload}')
     return self.lambdaClient.invoke(
       functionName= functionName ,
       input=lambdaPayload,
