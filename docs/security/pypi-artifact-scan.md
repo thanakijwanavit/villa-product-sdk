@@ -1,11 +1,12 @@
 # PyPI artifact secret scan
 
-<!-- written by tools/scan_pypi_artifacts.py (vps-eht); a re-run replaces this file, Triage included -->
+<!-- written by tools/scan_pypi_artifacts.py (vps-eht); a re-run rewrites the tables and keeps the Triage -->
+<!-- findings digest: 008ea23ed5631e4f -->
 
-- Scanned: 2026-11-01 06:19 UTC with gitleaks 8.30.1, default rules (`gitleaks dir --redact`).
+- Scanned: 2026-11-01 07:21 UTC with gitleaks 8.30.1, default rules (`gitleaks dir --redact`).
 - Source: every file of every release on PyPI of villaProductSdk, lambdasdk, s3bz, nicHelper, awsSchema.
 - Result: 412 files (10283 files inside them), 208 findings, 0 errors. A finding is shown as path:line [rule] only; secret values are never written here.
-- Each file was checked against its sha256, unpacked without running anything and scanned in full: `*.dist-info/` (wheel METADATA) and archives inside the package included, `gitleaks:allow` comments and any `.gitleaks.toml` or `.gitleaksignore` shipped in the package ignored.
+- Each file was checked against its sha256 and unpacked without running anything. Every non-empty file inside it counts as scanned only if gitleaks read it (a coverage rule fires per file read); a file it did not read (binary-looking, compiled, an archive inside the package, a path on its default allowlist) is an error. `*.dist-info/` (wheel METADATA) is read; `gitleaks:allow` comments and any `.gitleaks.toml` or `.gitleaksignore` shipped in the package or set in the caller's environment are ignored.
 
 ## Triage
 
@@ -20,8 +21,9 @@ the five packages. The 208 findings come from two README patterns:
 
 How the verdicts were checked (values were never printed):
 
-- Every one of the 10283 files inside the 412 archives is text: .py, .txt, .md, .cfg, .ini, PKG-INFO, METADATA, RECORD,
-  WHEEL, LICENSE. There are no binaries, .pyc files, notebooks or nested archives, so nothing sat outside what gitleaks reads.
+- gitleaks read every one of the 10283 files inside the 412 archives: the scanner's coverage rule fired for each
+  non-empty file, so the run has 0 errors. They are all text (.py, .txt, .md, .cfg, .ini, PKG-INFO, METADATA, RECORD,
+  WHEEL, LICENSE); there are no binaries, .pyc files, notebooks or nested archives.
 - A separate AWS key-ID regex, run without gitleaks' word boundaries, matches exactly the 36 files that gitleaks flagged.
 - No secret-shaped 40-character token sits near any key ID. No .py file (parsed with AST) and no README, PKG-INFO or
   METADATA has a string literal assigned to a credential name (password, pw, secret, token, api_key, access_key, ...),
@@ -31,8 +33,8 @@ How the verdicts were checked (values were never printed):
 - The PyPI JSON API and the Simple API (PEP 691) list the same 412 files, and none is yanked.
 
 Re-run with `tools/scan_pypi_artifacts.sh villaProductSdk lambdasdk s3bz nicHelper awsSchema --markdown
-docs/security/pypi-artifact-scan.md`; it needs network access and gitleaks 8.19 or later. It exits 1 for as long as the
-files above stay on PyPI. `tools/scan_pypi_artifacts.sh villaProductSdk` alone exits 0. Before uploading a release, run
+docs/security/pypi-artifact-scan.md`; it needs network access and gitleaks 8.19 or later. A re-run keeps this Triage
+section and flags it when the findings change. It exits 1 for as long as the files above stay on PyPI. `tools/scan_pypi_artifacts.sh villaProductSdk` alone exits 0. Before uploading a release, run
 `tools/scan_pypi_artifacts.sh --local dist`.
 
 ## Totals
@@ -45,7 +47,7 @@ files above stay on PyPI. `tools/scan_pypi_artifacts.sh villaProductSdk` alone e
 | nicHelper | 115 | 230 | 4 | 0 |
 | awsSchema | 21 | 42 | 104 | 0 |
 
-## Every file scanned
+## Every file checked
 
 | package | version | file | sha256 (first 12) | files inside | status | findings (path:line [rule]) |
 |---|---|---|---|---|---|---|
