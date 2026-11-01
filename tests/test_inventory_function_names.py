@@ -13,7 +13,7 @@ import types
 
 import pytest
 
-# Copied from villaProductSdk/products.py FunctionNames (lines 24-30) for branch 'x'.
+# The names villaProductSdk.names.FunctionNames gives for branch 'x' (one shared class since vps-u5v).
 PRODUCT_SDK_NAMES = {
     'dumpToS3': 'product-dump-s3-x',
     'updateProduct': 'product-update-x',
@@ -22,6 +22,7 @@ PRODUCT_SDK_NAMES = {
     'allQuery': 'product-get-all-x',
     'inputBucket': 'input-product-bucket-x',
     'inventoryBucket': 'product-bucket-x',
+    'listQuery': 'product-get-list-x',
 }
 
 

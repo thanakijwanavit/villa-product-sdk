@@ -6,24 +6,10 @@ __all__ = ['FunctionNames', 'ProductSdk']
 from s3bz.s3bz import S3, Requests
 from lambdasdk.lambdasdk import Lambda
 from .schema import Event, Response
-from .products import validateConfig
+# validateConfig and FunctionNames are defined once, in names.ipynb (villaProductSdk/names.py) (vps-u5v)
+from .names import validateConfig, FunctionNames
 import json, logging
 log = logging.getLogger(__name__)  # a library never configures logging (vps-53u)
-
-# Cell
-class FunctionNames:
-  '''determine function and resources name based on branchName'''
-  def __init__(self, branchName = 'dev-manual'):
-    validateConfig(branchName)
-    self.branchName = branchName
-  dumpToS3 = lambda self: f'product-dump-s3-{self.branchName}'
-  updateProduct = lambda self: f'product-update-{self.branchName}'
-  updateS3 = lambda self: f'product-update-s3-{self.branchName}'
-  singleQuery = lambda self: f'product-get-{self.branchName}'
-  allQuery = lambda self: f'product-get-all-{self.branchName}'
-  inputBucket = lambda self: f'input-product-bucket-{self.branchName}'
-  inventoryBucket = lambda self: f'product-bucket-{self.branchName}'
-
 
 # Cell
 class ProductSdk:

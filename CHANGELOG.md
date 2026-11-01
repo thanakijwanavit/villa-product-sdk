@@ -14,3 +14,6 @@ Breaking (vps-jg2): callers that checked for `None` or read an error body must c
 - `updateWithS3` sends the INTCOLS fields as integers (the notebook change of "convert keys to int", now in the
   library too). `allQuery` reads the zlib-compressed product table with pandas, which it imports when called.
 - `products.py` takes `Event` and `Response` from `awsSchema.apigateway` only, and logs through `logging` (no print).
+- `FunctionNames` and `validateConfig` are defined once, in `villaProductSdk.names` (from `names.ipynb`), and
+  imported by `villaProductSdk.products`, `villaProductSdk.inventory` and `villaInventorySdk.inventory` (vps-u5v).
+  `villaInventorySdk.inventory.FunctionNames` now also has `listQuery`.

@@ -6,10 +6,10 @@ index = {"Response": "Schema.ipynb",
          "Event": "Schema.ipynb",
          "Product": "Schema.ipynb",
          "Products": "Schema.ipynb",
+         "validateConfig": "names.ipynb",
+         "FunctionNames": "names.ipynb",
          "log": "product-sdk.ipynb",
          "INTCOLS": "product-sdk.ipynb",
-         "validateConfig": "product-sdk.ipynb",
-         "FunctionNames": "product-sdk.ipynb",
          "ProductSdkError": "product-sdk.ipynb",
          "parseLambdaResponse": "product-sdk.ipynb",
          "ProductSdk": "product-sdk.ipynb",
@@ -19,6 +19,7 @@ index = {"Response": "Schema.ipynb",
          "queryList": "product-sdk.ipynb"}
 
 modules = ["schema.py",
+           "names.py",
            "products.py"]
 
 doc_url = "https://thanakijwanavit.github.io/villa-product-sdk/"
