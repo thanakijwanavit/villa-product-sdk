@@ -1,0 +1,27 @@
+# nbdev docs/library toolchain for villaProductSdk (vps-d1o). Python 3.9.
+# Moved here from requirements-dev.txt (vps-2t7): requirements-dev.txt now holds the
+# Python 3.12 runtime/test pins (vps-b7v); pandas<2 here cannot build on 3.12.
+# nbdev 1.2.x fails show_doc on dataclass __init__ (Schema.ipynb), and newer
+# nbconvert/jupyter_client are async; these pins match the Jan 2021 build.
+# nbdev 1.x skips any path containing '/.', so build from a checkout outside
+# dot directories (not under .gc/worktrees).
+#   uv venv -p 3.9 .venv && uv pip install -r requirements-docs.txt -r <(sed -n "s/^requirements = //p" settings.ini | tr " " "\n")
+#   (run everything from the repo root; setup.py needs pkg_resources so -e . is not used)
+#   nbdev_build_lib && nbdev_build_docs --force_all True   # exit code is 0 even on failure: check for "Conversion failed"
+#   (tests run on 3.12 with requirements-dev.txt: see its header and CONTRIBUTING.md)
+nbdev==1.1.12
+fastcore==1.3.19
+nbconvert==5.6.1
+jupyter_client==6.1.12
+ipykernel==5.5.6
+ipython<8
+jinja2<3.1
+traitlets<5.10
+nbformat<5.2
+tornado<6.2
+pyzmq<25
+mistune<2
+markupsafe<2.1
+pandas<2
+numpy<2
+pytest
