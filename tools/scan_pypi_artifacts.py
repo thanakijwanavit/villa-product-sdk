@@ -21,6 +21,8 @@ gitleaks defaults that would hide part of a published file are turned off:
 
 Exit 0 = no findings; 1 = findings; 2 = setup error (gitleaks missing, nothing to scan, or a listing, download,
 checksum or unpack failure: a file that could not be scanned is never counted as clean).
+Needs gitleaks 8.19+ and a Python with tarfile extraction filters (3.12, or 3.8.17/3.9.17/3.10.12/3.11.4 and later);
+without them every file fails to unpack and the run exits 2.
 """
 import argparse
 import datetime
@@ -141,6 +143,11 @@ def gitleaks(tree: Path, content: Path, work: Path):
     return sorted(out)
 
 
+def cell(s):
+    """Path and file names come from the archives: keep them from breaking the Markdown table."""
+    return str(s).replace("|", "\\|").replace("`", "'")
+
+
 def write_markdown(path: Path, rows, sources, errors):
     version = subprocess.run(["gitleaks", "version"], capture_output=True, text=True).stdout.strip()
     when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
@@ -176,8 +183,9 @@ def write_markdown(path: Path, rows, sources, errors):
               "| package | version | file | sha256 (first 12) | files inside | status | findings (path:line [rule]) |",
               "|---|---|---|---|---|---|---|"]
     for pkg, version, filename, sha, status, n_inside, findings in rows:
-        f = "<br>".join(f"`{p}:{line}` [{rule}]" for p, line, rule in findings) or "none"
-        lines.append(f"| {pkg} | {version} | {filename} | {(sha or '-')[:12]} | {n_inside} | {status} | {f} |")
+        f = "<br>".join(f"`{cell(p)}:{line}` [{cell(rule)}]" for p, line, rule in findings) or "none"
+        lines.append(f"| {cell(pkg)} | {cell(version)} | {cell(filename)} | {(sha or '-')[:12]} | {n_inside} "
+                     f"| {status} | {f} |")
     path.write_text("\n".join(lines) + "\n")
 
 
