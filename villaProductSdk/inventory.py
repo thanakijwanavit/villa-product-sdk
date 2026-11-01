@@ -3,12 +3,11 @@
 __all__ = ['FunctionNames', 'ProductSdk']
 
 # Cell
-from botocore.config import Config
 from s3bz.s3bz import S3, Requests
 from lambdasdk.lambdasdk import Lambda
 from .schema import Event, Response
 from .products import validateConfig
-import bz2, json, boto3, base64, logging
+import json, logging
 logging.basicConfig(level=logging.INFO)
 
 # Cell
@@ -64,7 +63,7 @@ class ProductSdk:
             objectToSave = data ,
             bucket = inputBucketName,
             user=user, pw=pw)
-    logging.info(f'data is saved to s3, invoking ingestion function')
+    logging.info('data is saved to s3, invoking ingestion function')
 
     # call lambda function
     inputValue = Event(body = json.dumps({ 'key': inputKeyName })).to_dict()

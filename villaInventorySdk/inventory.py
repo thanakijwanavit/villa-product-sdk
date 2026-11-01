@@ -3,10 +3,9 @@
 __all__ = ['FunctionNames', 'ProductSdk']
 
 # Cell
-from botocore.config import Config
-from s3bz.s3bz import S3, Requests
+from s3bz.s3bz import S3
 from lambdasdk.lambdasdk import Lambda
-import bz2, json, boto3, base64, logging
+import logging
 
 # vps-160: a separate package with no notebook, so its own copy of villaProductSdk.products.validateConfig
 import re as _re
@@ -69,7 +68,7 @@ class ProductSdk:
             objectToSave = data ,
             bucket = inputBucketName,
             user=user, pw=pw)
-    logging.info(f'data is saved to s3, invoking ingestion function')
+    logging.info('data is saved to s3, invoking ingestion function')
 
     # call lambda function
     lambdaPayload = {
