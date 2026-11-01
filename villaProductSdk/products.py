@@ -3,10 +3,8 @@
 __all__ = ['FunctionNames', 'ProductSdk', 'querySingleProduct', 'ProductsFromList', 'queryList']
 
 # Cell
-from botocore.config import Config
 from s3bz.s3bz import S3, Requests
 from lambdasdk.lambdasdk import Lambda, InvocationType
-from .schema import Event, Response
 from typing import Optional, List
 import ujson as json
 from nicHelper.wrappers import add_method
@@ -14,7 +12,7 @@ from nicHelper.exception import errorString
 from awsSchema.apigateway import Event, Response
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass
-import bz2,  boto3, base64, logging
+import logging
 
 # Cell
 class FunctionNames:
@@ -94,7 +92,7 @@ class ProductSdk:
             objectToSave = data ,
             bucket = inputBucketName,
             user=user, pw=pw)
-    logging.info(f'data is saved to s3, invoking ingestion function')
+    logging.info('data is saved to s3, invoking ingestion function')
 
     # call lambda function
     inputValue = Event(body = json.dumps({ 'key': inputKeyName })).to_dict()
