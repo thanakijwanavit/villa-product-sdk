@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from packaging.requirements import Requirement
 
 import villaProductSdk.products as products
 from villaProductSdk.products import INTCOLS, ProductSdk, retrieveJsonZl
@@ -59,8 +60,11 @@ def test_all_exported_names_are_defined():
 def test_pandas_is_a_declared_requirement():
     cfg = configparser.ConfigParser()
     cfg.read(ROOT / 'settings.ini')
-    reqs = cfg['DEFAULT']['requirements'].split()
+    reqs = {Requirement(token).name: Requirement(token) for token in cfg['DEFAULT']['requirements'].split()}
     assert 'pandas' in reqs
+    # vps-0qr: a stated range, and one that admits pandas 3 (retrieveJsonZl works on 1.x to 3.x)
+    assert str(reqs['pandas'].specifier) == '>=1.1'
+    assert reqs['pandas'].specifier.contains('3.1.0') and not reqs['pandas'].specifier.contains('1.0.5')
 
 
 # --- fakes -------------------------------------------------------------------
@@ -125,6 +129,22 @@ def test_retrieve_json_zl_decodes_dataframe(monkeypatch):
                         lambda url, **kw: FakeHttpResponse(200, _zl_frame(df)))
     out = retrieveJsonZl('https://example.invalid/all')
     pd.testing.assert_frame_equal(out, df)
+
+
+def test_retrieve_json_zl_gives_read_json_a_buffer_not_a_str(monkeypatch):
+    # vps-0qr: pandas 2.1 deprecated literal JSON passed as a str and pandas 3 reads it as a file path
+    # (FileNotFoundError); this holds on every pandas version, including the pandas<2 dev pin
+    df = pd.DataFrame({'iprcode': [171670], 'pr_abb': ['KALE']})
+    monkeypatch.setattr(products.requests, 'get',
+                        lambda url, **kw: FakeHttpResponse(200, _zl_frame(df)))
+    seen = []
+    real_read_json = pd.read_json
+    def recording_read_json(source, *args, **kwargs):
+        seen.append(source)
+        return real_read_json(source, *args, **kwargs)
+    monkeypatch.setattr(pd, 'read_json', recording_read_json)
+    pd.testing.assert_frame_equal(retrieveJsonZl('https://example.invalid/all'), df)
+    assert len(seen) == 1 and not isinstance(seen[0], str) and hasattr(seen[0], 'read')
 
 
 def test_retrieve_json_zl_non_200_raises(monkeypatch):
