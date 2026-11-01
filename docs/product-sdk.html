@@ -40,6 +40,13 @@ nb_path: "product-sdk.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
 <div class="output_wrapper">
 <div class="output">
 
@@ -47,7 +54,7 @@ nb_path: "product-sdk.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FunctionNames" class="doc_header"><code>class</code> <code>FunctionNames</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FunctionNames</code>(<strong><code>branchName</code></strong>:<code>str</code>=<em><code>'dev-manual'</code></em>)</p>
+<h2 id="FunctionNames" class="doc_header"><code>class</code> <code>FunctionNames</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FunctionNames</code>(<strong><code>branchName</code></strong>:<code>str</code>=<em><code>'dev-manual'</code></em>)</p>
 </blockquote>
 
 <pre><code>determine function and resources name based on branchName</code></pre>
@@ -80,11 +87,45 @@ nb_path: "product-sdk.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ProductSdk" class="doc_header"><code>class</code> <code>ProductSdk</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductSdk</code>(<strong><code>branch</code></strong>:<code>str</code>=<em><code>'dev-manual'</code></em>, <strong><code>user</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>pw</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>region</code></strong>:<code>str</code>=<em><code>'ap-southeast-1'</code></em>)</p>
+<h2 id="ProductSdk" class="doc_header"><code>class</code> <code>ProductSdk</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L42" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductSdk</code>(<strong><code>branch</code></strong>:<code>str</code>=<em><code>'dev-manual'</code></em>, <strong><code>user</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>pw</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>region</code></strong>:<code>str</code>=<em><code>'ap-southeast-1'</code></em>)</p>
 </blockquote>
 
 <pre><code>the main class for interacting with product endpoint
 user/pw are optional</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="retrieveJsonZl" class="doc_header"><code>retrieveJsonZl</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L139" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>retrieveJsonZl</code>(<strong><code>url</code></strong>:<code>str</code>)</p>
+</blockquote>
+
+<pre><code>download a zlib-compressed json (orient="split") from `url` and return it as a DataFrame;
+prints the error body and returns None when the download is not 200</code></pre>
 
 </div>
 
@@ -116,13 +157,13 @@ user/pw are optional</code></pre>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">dataclasses_json</span> <span class="kn">import</span> <span class="n">dataclass_json</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randrange</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="kn">import</span> <span class="nn">boto3</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses_json</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">randrange</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">boto3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 </pre></div>
 
     </div>
@@ -145,7 +186,8 @@ user/pw are optional</code></pre>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sampleProducts</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;JIRAPAT YOUG KALE 2&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;05&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0171670&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;JIRAPAT YOUNG KALE 200 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;057&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;JIRAPAT ยอดคะน้า 200 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;JIRAPAT ยอดคะน้า 200 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;CM845     &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;EEBOO-PZCT3-PUZZLE&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;08&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0235141&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;EEBOO,ANIMAL COUNTING PUZZLE_3ED,PZCT3&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;113&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;eeboo,PUZZLE-PZCT3&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;EEBOO-PZCT3-ตัวต่อนับเลข ANIMAL COUNTING_3ED&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;CM1979    &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOC&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;98&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0217153&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;003&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOCOLATE OWL&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;F1222     &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO PIZZASSIMO 400&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;06&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0182223&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;06&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO PIZZASSIMO 400G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;004&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO ซอสทำพิซซ่า 400 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;CIRIO ซอสทำพิซซ่า 400 G.&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;2589      &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;cprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;iprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;oprcode&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;ordertype&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_abb&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE LYCHEE&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_active&#39;</span><span class="p">:</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_cgcode&#39;</span><span class="p">:</span> <span class="s1">&#39;02&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_code&#39;</span><span class="p">:</span> <span class="s1">&#39;0124461&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_dpcode&#39;</span><span class="p">:</span> <span class="s1">&#39;02&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_engname&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE LYCHEE&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_ggcode&#39;</span><span class="p">:</span> <span class="s1">&#39;003&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_market&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE กลิ่นลิ้นจี่&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_name&#39;</span><span class="p">:</span> <span class="s1">&#39;NEW CHOICE กลิ่นลิ้นจี่&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_puqty&#39;</span><span class="p">:</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sa_method&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pr_sucode1&#39;</span><span class="p">:</span> <span class="s1">&#39;695       &#39;</span><span class="p">,</span> <span class="s1">&#39;pr_suref3&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;prtype&#39;</span><span class="p">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;psqty&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;pstype&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">}]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sampleProducts</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">'cprcode'</span><span class="p">:</span> <span class="s1">'0171670'</span><span class="p">,</span> <span class="s1">'iprcode'</span><span class="p">:</span> <span class="s1">'0171670'</span><span class="p">,</span> <span class="s1">'oprcode'</span><span class="p">:</span> <span class="s1">'0171670'</span><span class="p">,</span> <span class="s1">'ordertype'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_abb'</span><span class="p">:</span> <span class="s1">'JIRAPAT YOUG KALE 2'</span><span class="p">,</span> <span class="s1">'pr_active'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_cgcode'</span><span class="p">:</span> <span class="s1">'05'</span><span class="p">,</span> <span class="s1">'pr_code'</span><span class="p">:</span> <span class="s1">'0171670'</span><span class="p">,</span> <span class="s1">'pr_dpcode'</span><span class="p">:</span> <span class="s1">'19'</span><span class="p">,</span> <span class="s1">'pr_engname'</span><span class="p">:</span> <span class="s1">'JIRAPAT YOUNG KALE 200 G.'</span><span class="p">,</span> <span class="s1">'pr_ggcode'</span><span class="p">:</span> <span class="s1">'057'</span><span class="p">,</span> <span class="s1">'pr_market'</span><span class="p">:</span> <span class="s1">'JIRAPAT ยอดคะน้า 200 G.'</span><span class="p">,</span> <span class="s1">'pr_name'</span><span class="p">:</span> <span class="s1">'JIRAPAT ยอดคะน้า 200 G.'</span><span class="p">,</span> <span class="s1">'pr_puqty'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pr_sa_method'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pr_sucode1'</span><span class="p">:</span> <span class="s1">'CM845     '</span><span class="p">,</span> <span class="s1">'pr_suref3'</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span> <span class="s1">'prtype'</span><span class="p">:</span> <span class="s1">'I'</span><span class="p">,</span> <span class="s1">'psqty'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pstype'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">},</span> <span class="p">{</span><span class="s1">'cprcode'</span><span class="p">:</span> <span class="s1">'0235141'</span><span class="p">,</span> <span class="s1">'iprcode'</span><span class="p">:</span> <span class="s1">'0235141'</span><span class="p">,</span> <span class="s1">'oprcode'</span><span class="p">:</span> <span class="s1">'0235141'</span><span class="p">,</span> <span class="s1">'ordertype'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_abb'</span><span class="p">:</span> <span class="s1">'EEBOO-PZCT3-PUZZLE'</span><span class="p">,</span> <span class="s1">'pr_active'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_cgcode'</span><span class="p">:</span> <span class="s1">'08'</span><span class="p">,</span> <span class="s1">'pr_code'</span><span class="p">:</span> <span class="s1">'0235141'</span><span class="p">,</span> <span class="s1">'pr_dpcode'</span><span class="p">:</span> <span class="s1">'19'</span><span class="p">,</span> <span class="s1">'pr_engname'</span><span class="p">:</span> <span class="s1">'EEBOO,ANIMAL COUNTING PUZZLE_3ED,PZCT3'</span><span class="p">,</span> <span class="s1">'pr_ggcode'</span><span class="p">:</span> <span class="s1">'113'</span><span class="p">,</span> <span class="s1">'pr_market'</span><span class="p">:</span> <span class="s1">'eeboo,PUZZLE-PZCT3'</span><span class="p">,</span> <span class="s1">'pr_name'</span><span class="p">:</span> <span class="s1">'EEBOO-PZCT3-ตัวต่อนับเลข ANIMAL COUNTING_3ED'</span><span class="p">,</span> <span class="s1">'pr_puqty'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pr_sa_method'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pr_sucode1'</span><span class="p">:</span> <span class="s1">'CM1979    '</span><span class="p">,</span> <span class="s1">'pr_suref3'</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span> <span class="s1">'prtype'</span><span class="p">:</span> <span class="s1">'I'</span><span class="p">,</span> <span class="s1">'psqty'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pstype'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">},</span> <span class="p">{</span><span class="s1">'cprcode'</span><span class="p">:</span> <span class="s1">'0217153'</span><span class="p">,</span> <span class="s1">'iprcode'</span><span class="p">:</span> <span class="s1">'0217153'</span><span class="p">,</span> <span class="s1">'oprcode'</span><span class="p">:</span> <span class="s1">'0217153'</span><span class="p">,</span> <span class="s1">'ordertype'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_abb'</span><span class="p">:</span> <span class="s1">'COCOA LOCO MILK CHOC'</span><span class="p">,</span> <span class="s1">'pr_active'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_cgcode'</span><span class="p">:</span> <span class="s1">'98'</span><span class="p">,</span> <span class="s1">'pr_code'</span><span class="p">:</span> <span class="s1">'0217153'</span><span class="p">,</span> <span class="s1">'pr_dpcode'</span><span class="p">:</span> <span class="s1">'28'</span><span class="p">,</span> <span class="s1">'pr_engname'</span><span class="p">:</span> <span class="s1">'COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.'</span><span class="p">,</span> <span class="s1">'pr_ggcode'</span><span class="p">:</span> <span class="s1">'003'</span><span class="p">,</span> <span class="s1">'pr_market'</span><span class="p">:</span> <span class="s1">'COCOA LOCO MILK CHOCOLATE OWL'</span><span class="p">,</span> <span class="s1">'pr_name'</span><span class="p">:</span> <span class="s1">'COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.'</span><span class="p">,</span> <span class="s1">'pr_puqty'</span><span class="p">:</span> <span class="s1">'24'</span><span class="p">,</span> <span class="s1">'pr_sa_method'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pr_sucode1'</span><span class="p">:</span> <span class="s1">'F1222     '</span><span class="p">,</span> <span class="s1">'pr_suref3'</span><span class="p">:</span> <span class="s1">'S'</span><span class="p">,</span> <span class="s1">'prtype'</span><span class="p">:</span> <span class="s1">'I'</span><span class="p">,</span> <span class="s1">'psqty'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pstype'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">},</span> <span class="p">{</span><span class="s1">'cprcode'</span><span class="p">:</span> <span class="s1">'0182223'</span><span class="p">,</span> <span class="s1">'iprcode'</span><span class="p">:</span> <span class="s1">'0182223'</span><span class="p">,</span> <span class="s1">'oprcode'</span><span class="p">:</span> <span class="s1">'0182223'</span><span class="p">,</span> <span class="s1">'ordertype'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_abb'</span><span class="p">:</span> <span class="s1">'CIRIO PIZZASSIMO 400'</span><span class="p">,</span> <span class="s1">'pr_active'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_cgcode'</span><span class="p">:</span> <span class="s1">'06'</span><span class="p">,</span> <span class="s1">'pr_code'</span><span class="p">:</span> <span class="s1">'0182223'</span><span class="p">,</span> <span class="s1">'pr_dpcode'</span><span class="p">:</span> <span class="s1">'06'</span><span class="p">,</span> <span class="s1">'pr_engname'</span><span class="p">:</span> <span class="s1">'CIRIO PIZZASSIMO 400G.'</span><span class="p">,</span> <span class="s1">'pr_ggcode'</span><span class="p">:</span> <span class="s1">'004'</span><span class="p">,</span> <span class="s1">'pr_market'</span><span class="p">:</span> <span class="s1">'CIRIO ซอสทำพิซซ่า 400 G.'</span><span class="p">,</span> <span class="s1">'pr_name'</span><span class="p">:</span> <span class="s1">'CIRIO ซอสทำพิซซ่า 400 G.'</span><span class="p">,</span> <span class="s1">'pr_puqty'</span><span class="p">:</span> <span class="s1">'12'</span><span class="p">,</span> <span class="s1">'pr_sa_method'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pr_sucode1'</span><span class="p">:</span> <span class="s1">'2589      '</span><span class="p">,</span> <span class="s1">'pr_suref3'</span><span class="p">:</span> <span class="s1">'C'</span><span class="p">,</span> <span class="s1">'prtype'</span><span class="p">:</span> <span class="s1">'I'</span><span class="p">,</span> <span class="s1">'psqty'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pstype'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">},</span> <span class="p">{</span><span class="s1">'cprcode'</span><span class="p">:</span> <span class="s1">'0124461'</span><span class="p">,</span> <span class="s1">'iprcode'</span><span class="p">:</span> <span class="s1">'0124461'</span><span class="p">,</span> <span class="s1">'oprcode'</span><span class="p">:</span> <span class="s1">'0124461'</span><span class="p">,</span> <span class="s1">'ordertype'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_abb'</span><span class="p">:</span> <span class="s1">'NEW CHOICE LYCHEE'</span><span class="p">,</span> <span class="s1">'pr_active'</span><span class="p">:</span> <span class="s1">'Y'</span><span class="p">,</span> <span class="s1">'pr_cgcode'</span><span class="p">:</span> <span class="s1">'02'</span><span class="p">,</span> <span class="s1">'pr_code'</span><span class="p">:</span> <span class="s1">'0124461'</span><span class="p">,</span> <span class="s1">'pr_dpcode'</span><span class="p">:</span> <span class="s1">'02'</span><span class="p">,</span> <span class="s1">'pr_engname'</span><span class="p">:</span> <span class="s1">'NEW CHOICE LYCHEE'</span><span class="p">,</span> <span class="s1">'pr_ggcode'</span><span class="p">:</span> <span class="s1">'003'</span><span class="p">,</span> <span class="s1">'pr_market'</span><span class="p">:</span> <span class="s1">'NEW CHOICE กลิ่นลิ้นจี่'</span><span class="p">,</span> <span class="s1">'pr_name'</span><span class="p">:</span> <span class="s1">'NEW CHOICE กลิ่นลิ้นจี่'</span><span class="p">,</span> <span class="s1">'pr_puqty'</span><span class="p">:</span> <span class="s1">'12'</span><span class="p">,</span> <span class="s1">'pr_sa_method'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pr_sucode1'</span><span class="p">:</span> <span class="s1">'695       '</span><span class="p">,</span> <span class="s1">'pr_suref3'</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span> <span class="s1">'prtype'</span><span class="p">:</span> <span class="s1">'I'</span><span class="p">,</span> <span class="s1">'psqty'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'pstype'</span><span class="p">:</span> <span class="s1">'1'</span><span class="p">}]</span>
+<span class="c1"># sampleProducts = [{k: int(v) if k in INTCOLS else v for k,v in product.items()}for product in sampleProducts]</span>
 </pre></div>
 
     </div>
@@ -168,24 +210,10 @@ user/pw are optional</code></pre>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sdk</span> <span class="o">=</span> <span class="n">ProductSdk</span><span class="p">(</span><span class="n">branch</span> <span class="o">=</span> <span class="s1">&#39;dev-manual&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sdk</span> <span class="o">=</span> <span class="n">ProductSdk</span><span class="p">(</span><span class="n">branch</span> <span class="o">=</span> <span class="s1">'dev-manual'</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>INFO:botocore.credentials:Found credentials in shared credentials file: ~/.aws/credentials
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -208,9 +236,12 @@ user/pw are optional</code></pre>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">updateWithS3</span><span class="p">(</span>
     <span class="n">sampleProducts</span><span class="p">,</span>
-    <span class="n">invocationType</span> <span class="o">=</span> <span class="n">InvocationType</span><span class="o">.</span><span class="n">event</span>
+    <span class="n">invocationType</span> <span class="o">=</span> <span class="n">InvocationType</span><span class="o">.</span><span class="n">requestResponse</span>
   <span class="p">)</span>
-<span class="n">result</span>
+<span class="k">if</span> <span class="s1">'error'</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">'error'</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -228,7 +259,7 @@ INFO:root:using accelerate endpoint
 INFO:root:data was saved to s3
 INFO:root:data is saved to s3, invoking ingestion function
 INFO:root:input to lambda is {&#39;body&#39;: &#39;{&#34;key&#34;:&#34;input-data-name&#34;}&#39;, &#39;headers&#39;: {}, &#39;statusCode&#39;: 200}
-INFO:root:lambdaResponse is True
+INFO:root:lambdaResponse is {&#39;body&#39;: &#39;{&#34;success&#34;:5,&#34;failure&#34;:0,&#34;skipped&#34;:0,&#34;failureMessage&#34;:[],&#34;timetaken(ms)&#34;:269.98}&#39;, &#39;statusCode&#39;: 200, &#39;headers&#39;: {&#39;Access-Control-Allow-Headers&#39;: &#39;*&#39;, &#39;Access-Control-Allow-Origin&#39;: &#39;*&#39;, &#39;Access-Control-Allow-Methods&#39;: &#39;*&#39;}}
 </pre>
 </div>
 </div>
@@ -236,20 +267,11 @@ INFO:root:lambdaResponse is True
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 51.1 ms, sys: 11.2 ms, total: 62.4 ms
-Wall time: 212 ms
+<pre>{&#39;success&#39;: 5, &#39;failure&#39;: 0, &#39;skipped&#39;: 0, &#39;failureMessage&#39;: [], &#39;timetaken(ms)&#39;: 269.98}
+CPU times: user 37.6 ms, sys: 3.83 ms, total: 41.4 ms
+Wall time: 1.16 s
 </pre>
 </div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;successfully sent event, please watch your slack&#39;</pre>
-</div>
-
 </div>
 
 </div>
@@ -271,7 +293,14 @@ Wall time: 212 ms
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./sampleData/products.csv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'./sampleData/products.csv'</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">'none'</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'string'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">INTCOLS</span><span class="p">:</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">'records'</span><span class="p">))</span>
+<span class="n">data</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># data = list(pd.read_csv('./sampleData/products.csv').fillna('none').astype('string').T.to_dict().values())</span>
 </pre></div>
 
     </div>
@@ -290,6 +319,65 @@ Wall time: 212 ms
 </div>
 </div>
 
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[{&#39;cprcode&#39;: 9,
+  &#39;iprcode&#39;: 9,
+  &#39;oprcode&#39;: 9,
+  &#39;ordertype&#39;: &#39;Y&#39;,
+  &#39;pr_abb&#39;: &#39;J. WALKER RED 70 CL.&#39;,
+  &#39;pr_active&#39;: &#39;Y&#39;,
+  &#39;pr_cgcode&#39;: &#39;1&#39;,
+  &#39;pr_code&#39;: &#39;9&#39;,
+  &#39;pr_dpcode&#39;: &#39;1.0&#39;,
+  &#39;pr_engname&#39;: &#39;JOHNNIE WALKER RED 70 CL.&#39;,
+  &#39;pr_ggcode&#39;: &#39;1&#39;,
+  &#39;pr_market&#39;: &#39;J. WALKER RED 70 CL&#39;,
+  &#39;pr_name&#39;: &#39;JOHNNIE WALKER RED 70 CL&#39;,
+  &#39;pr_puqty&#39;: &#39;12.0&#39;,
+  &#39;pr_sa_method&#39;: &#39;1&#39;,
+  &#39;pr_sucode1&#39;: &#39;1782&#39;,
+  &#39;pr_suref3&#39;: &#39;A&#39;,
+  &#39;prtype&#39;: &#39;I&#39;,
+  &#39;psqty&#39;: &#39;1.0&#39;,
+  &#39;pstype&#39;: &#39;1.0&#39;,
+  &#39;pr_country_th&#39;: &#39;none&#39;,
+  &#39;pr_country_en&#39;: &#39;United Kingdom&#39;,
+  &#39;pr_keyword_th&#39;: &#39;none&#39;,
+  &#39;pr_keyword_en&#39;: &#39;none&#39;,
+  &#39;pr_filter_th&#39;: &#39;Alcohol,Spirits  Liqueurs&#39;,
+  &#39;pr_filter_en&#39;: &#39;Alcohol,Spirits  Liqueurs&#39;,
+  &#39;online_category_l1_th&#39;: &#39;เบียร์, ไวน์และสุรา&#39;,
+  &#39;online_category_l1_en&#39;: &#39;Beer Wine &amp; Spirits&#39;,
+  &#39;online_category_l2_th&#39;: &#39;เหล้า&#39;,
+  &#39;online_category_l2_en&#39;: &#39;Spirits &amp; Liqueurs&#39;,
+  &#39;online_category_l3_th&#39;: &#39;none&#39;,
+  &#39;online_category_l3_en&#39;: &#39;none&#39;,
+  &#39;villa_category_l1_en&#39;: &#39;Dry Grocery&#39;,
+  &#39;villa_category_l2_en&#39;: &#39;Alcohol &amp; Beverage&#39;,
+  &#39;villa_category_l3_en&#39;: &#39;Whisky&#39;,
+  &#39;villa_category_l4_en&#39;: &#39;Scoth Whisky&#39;,
+  &#39;content_en&#39;: &#39;0000009 Johnnie Walker Red 700ml&#39;,
+  &#39;content_th&#39;: &#39;JOHNNIE WALKER RED 700ml&#39;,
+  &#39;hema_brand_th&#39;: &#39;Johnnie Walker&#39;,
+  &#39;hema_brand_en&#39;: &#39;Johnnie Walker&#39;,
+  &#39;hema_sizedesc&#39;: &#39;700ml&#39;,
+  &#39;pr_brand_en&#39;: &#39;Johnnie Walker&#39;,
+  &#39;pr_brand_th&#39;: &#39;Johnnie Walker&#39;,
+  &#39;pr_online_name_en&#39;: &#39;Johnnie Walker Red 700ml&#39;,
+  &#39;pr_online_name_th&#39;: &#39;JOHNNIE WALKER RED 700ml&#39;,
+  &#39;hema_name_en&#39;: &#39;Johnnie Walker Red&#39;,
+  &#39;hema_name_th&#39;: &#39;JOHNNIE WALKER RED&#39;,
+  &#39;pr_name_en&#39;: &#39;JOHNNIE WALKER RED 70 CL.&#39;,
+  &#39;pr_name_th&#39;: &#39;JOHNNIE WALKER RED 70 CL&#39;,
+  &#39;sort_weight&#39;: &#39;0.0&#39;}]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -304,10 +392,8 @@ Wall time: 212 ms
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="c1"># data[0]</span>
-<span class="c1"># try with 100 rows</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">updateWithS3</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">],</span>
+    <span class="n">data</span><span class="p">,</span>
     <span class="n">invocationType</span> <span class="o">=</span> <span class="n">InvocationType</span><span class="o">.</span><span class="n">event</span>
   <span class="p">)</span>
 <span class="n">result</span>
@@ -336,8 +422,8 @@ INFO:root:lambdaResponse is True
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 419 ms, sys: 3.95 ms, total: 423 ms
-Wall time: 545 ms
+<pre>CPU times: user 17.3 s, sys: 272 ms, total: 17.5 s
+Wall time: 17.8 s
 </pre>
 </div>
 </div>
@@ -348,6 +434,323 @@ Wall time: 545 ms
 
 <div class="output_text output_subarea output_execute_result">
 <pre>&#39;successfully sent event, please watch your slack&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sdk</span><span class="o">.</span><span class="n">allQuery</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cprcode</th>
+      <th>iprcode</th>
+      <th>oprcode</th>
+      <th>ordertype</th>
+      <th>pr_abb</th>
+      <th>pr_active</th>
+      <th>pr_cgcode</th>
+      <th>pr_code</th>
+      <th>pr_dpcode</th>
+      <th>pr_engname</th>
+      <th>...</th>
+      <th>pr_keyword_th</th>
+      <th>pr_name_en</th>
+      <th>pr_name_th</th>
+      <th>pr_online_name_en</th>
+      <th>pr_online_name_th</th>
+      <th>sort_weight</th>
+      <th>villa_category_l1_en</th>
+      <th>villa_category_l2_en</th>
+      <th>villa_category_l3_en</th>
+      <th>villa_category_l4_en</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>182223</td>
+      <td>182223</td>
+      <td>182223</td>
+      <td>Y</td>
+      <td>CIRIO PIZZASSIMO 400</td>
+      <td>Y</td>
+      <td>6</td>
+      <td>182223</td>
+      <td>6</td>
+      <td>CIRIO PIZZASSIMO 400G.</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>Y</td>
+      <td>J. WALKER RED 70 CL.</td>
+      <td>Y</td>
+      <td>1</td>
+      <td>9</td>
+      <td>1</td>
+      <td>JOHNNIE WALKER RED 70 CL.</td>
+      <td>...</td>
+      <td>none</td>
+      <td>JOHNNIE WALKER RED 70 CL.</td>
+      <td>JOHNNIE WALKER RED 70 CL</td>
+      <td>Johnnie Walker Red 700ml</td>
+      <td>JOHNNIE WALKER RED 700ml</td>
+      <td>0.0</td>
+      <td>Dry Grocery</td>
+      <td>Alcohol &amp; Beverage</td>
+      <td>Whisky</td>
+      <td>Scoth Whisky</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>235141</td>
+      <td>235141</td>
+      <td>235141</td>
+      <td>Y</td>
+      <td>EEBOO-PZCT3-PUZZLE</td>
+      <td>Y</td>
+      <td>8</td>
+      <td>235141</td>
+      <td>19</td>
+      <td>EEBOO,ANIMAL COUNTING PUZZLE_3ED,PZCT3</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>217153</td>
+      <td>217153</td>
+      <td>217153</td>
+      <td>Y</td>
+      <td>COCOA LOCO MILK CHOC</td>
+      <td>Y</td>
+      <td>98</td>
+      <td>217153</td>
+      <td>28</td>
+      <td>COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>28</td>
+      <td>28</td>
+      <td>28</td>
+      <td>Y</td>
+      <td>J B RARE WHISKY 750</td>
+      <td>Y</td>
+      <td>1</td>
+      <td>28</td>
+      <td>1</td>
+      <td>J B RARE WHISKY 750 ML.</td>
+      <td>...</td>
+      <td>none</td>
+      <td>J B RARE WHISKY 750 ML.</td>
+      <td>J B RARE WHISKY 750 ML</td>
+      <td>J&amp;B Rare Whisky 750ml</td>
+      <td>J&amp;B Rare Whisky 750ml</td>
+      <td>0.0</td>
+      <td>Dry Grocery</td>
+      <td>Alcohol &amp; Beverage</td>
+      <td>Whisky</td>
+      <td>Scoth Whisky</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>12</td>
+      <td>12</td>
+      <td>12</td>
+      <td>Y</td>
+      <td>J.WALER BLACK 70 CL</td>
+      <td>Y</td>
+      <td>1</td>
+      <td>12</td>
+      <td>1</td>
+      <td>JOHNNIE WALKER BLACK 70 CL.</td>
+      <td>...</td>
+      <td>none</td>
+      <td>JOHNNIE WALKER BLACK 70 CL.</td>
+      <td>JOHNNIE WALKER BLACK 70 CL.</td>
+      <td>Johnnie Walker Black 70 Cl.</td>
+      <td>JOHNNIE WALKER BLACK 70 CL.</td>
+      <td>0.0</td>
+      <td>Dry Grocery</td>
+      <td>Alcohol &amp; Beverage</td>
+      <td>Whisky</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>33</td>
+      <td>33</td>
+      <td>33</td>
+      <td>Y</td>
+      <td>BALLANTINE S 700ml.</td>
+      <td>Y</td>
+      <td>1</td>
+      <td>33</td>
+      <td>1</td>
+      <td>BALLANTINE S FINEST 700 ML.</td>
+      <td>...</td>
+      <td>none</td>
+      <td>BALLANTINE S FINEST 700 ML.</td>
+      <td>BALLANTINE S FINEST 700 ML</td>
+      <td>Ballentine's Finest Whisky 700ml</td>
+      <td>Ballentine's Finest Whisky 700ml</td>
+      <td>0.0</td>
+      <td>Dry Grocery</td>
+      <td>Alcohol &amp; Beverage</td>
+      <td>Whisky</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>26</td>
+      <td>26</td>
+      <td>26</td>
+      <td>Y</td>
+      <td>JOHN JAMESON 70 CL</td>
+      <td>Y</td>
+      <td>1</td>
+      <td>26</td>
+      <td>1</td>
+      <td>JOHN JAMESON 70 CL WHISKY</td>
+      <td>...</td>
+      <td>none</td>
+      <td>JOHN JAMESON 70 CL WHISKY</td>
+      <td>JOHN JAMESON 70 CL WHISKY</td>
+      <td>John Jameson Whisky 700ml</td>
+      <td>John Jameson Whisky 700ml</td>
+      <td>0.0</td>
+      <td>Dry Grocery</td>
+      <td>Alcohol &amp; Beverage</td>
+      <td>Whisky</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>124461</td>
+      <td>124461</td>
+      <td>124461</td>
+      <td>Y</td>
+      <td>NEW CHOICE LYCHEE</td>
+      <td>Y</td>
+      <td>2</td>
+      <td>124461</td>
+      <td>2</td>
+      <td>NEW CHOICE LYCHEE</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>171670</td>
+      <td>171670</td>
+      <td>171670</td>
+      <td>Y</td>
+      <td>JIRAPAT YOUG KALE 2</td>
+      <td>Y</td>
+      <td>5</td>
+      <td>171670</td>
+      <td>19</td>
+      <td>JIRAPAT YOUNG KALE 200 G.</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+<p>10 rows × 50 columns</p>
+</div>
 </div>
 
 </div>
@@ -375,7 +778,7 @@ Wall time: 545 ms
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="querySingleProduct" class="doc_header"><code>querySingleProduct</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L129" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>querySingleProduct</code>(<strong><code>iprcode</code></strong>=<em><code>'0171670'</code></em>, <strong><code>user</code></strong>=<em><code>None</code></em>, <strong><code>pw</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="querySingleProduct" class="doc_header"><code>querySingleProduct</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>querySingleProduct</code>(<strong><code>iprcode</code></strong>=<em><code>'0171670'</code></em>, <strong><code>user</code></strong>=<em><code>None</code></em>, <strong><code>pw</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 
 <pre><code>query a single product</code></pre>
@@ -404,7 +807,7 @@ Wall time: 545 ms
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">querySingleProduct</span><span class="p">(</span><span class="s1">&#39;0171670&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">querySingleProduct</span><span class="p">(</span><span class="s1">'0171670'</span><span class="p">)</span>
 <span class="n">result</span>
 </pre></div>
 
@@ -420,53 +823,16 @@ Wall time: 545 ms
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;0171670&#39;: {&#39;cprcode&#39;: &#39;0171670&#39;,
-  &#39;iprcode&#39;: &#39;0171670&#39;,
-  &#39;oprcode&#39;: &#39;0171670&#39;,
-  &#39;ordertype&#39;: &#39;Y&#39;,
-  &#39;pr_abb&#39;: &#39;JIRAPAT YOUNG KALE 2&#39;,
-  &#39;pr_active&#39;: &#39;Y&#39;,
-  &#39;pr_cgcode&#39;: &#39;05&#39;,
-  &#39;pr_code&#39;: &#39;0171670&#39;,
-  &#39;pr_dpcode&#39;: &#39;19&#39;,
-  &#39;pr_engname&#39;: &#39;JIRAPAT YOUNG KALE 200 G.&#39;,
-  &#39;pr_ggcode&#39;: &#39;057&#39;,
-  &#39;pr_market&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
-  &#39;pr_name&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
-  &#39;pr_puqty&#39;: &#39;1.00&#39;,
-  &#39;pr_sa_method&#39;: &#39;1&#39;,
-  &#39;pr_sucode1&#39;: &#39;CM845&#39;,
-  &#39;pr_suref3&#39;: &#39;A&#39;,
-  &#39;prtype&#39;: &#39;I&#39;,
-  &#39;psqty&#39;: &#39;1&#39;,
-  &#39;pstype&#39;: &#39;1&#39;,
-  &#39;pr_country_th&#39;: &#39;none&#39;,
-  &#39;pr_country_en&#39;: &#39;none&#39;,
-  &#39;pr_keyword_th&#39;: &#39;none&#39;,
-  &#39;pr_keyword_en&#39;: &#39;none&#39;,
-  &#39;pr_filter_th&#39;: &#39;none&#39;,
-  &#39;pr_filter_en&#39;: &#39;none&#39;,
-  &#39;online_category_l1_th&#39;: &#39;none&#39;,
-  &#39;online_category_l1_en&#39;: &#39;none&#39;,
-  &#39;online_category_l2_th&#39;: &#39;none&#39;,
-  &#39;online_category_l2_en&#39;: &#39;none&#39;,
-  &#39;online_category_l3_th&#39;: &#39;none&#39;,
-  &#39;online_category_l3_en&#39;: &#39;none&#39;,
-  &#39;content_en&#39;: &#39;0171670 JIRAPAT YOUNG KALE 200 G.&#39;,
-  &#39;content_th&#39;: &#39;JIRAPAT YOUNG KALE 200 G.&#39;,
-  &#39;hema_brand_th&#39;: &#39;none&#39;,
-  &#39;hema_brand_en&#39;: &#39;none&#39;,
-  &#39;hema_sizedesc&#39;: &#39;none&#39;},
+<pre>{&#39;cprcode&#39;: &#39;0171670&#39;,
  &#39;iprcode&#39;: &#39;0171670&#39;,
- &#39;cprcode&#39;: &#39;0171670&#39;,
  &#39;oprcode&#39;: &#39;0171670&#39;,
  &#39;ordertype&#39;: &#39;Y&#39;,
- &#39;pr_abb&#39;: &#39;JIRAPAT YOUG KALE 2&#39;,
+ &#39;pr_abb&#39;: &#39;JIRAPAT YOUNG KALE 2&#39;,
  &#39;pr_active&#39;: &#39;Y&#39;,
  &#39;pr_cgcode&#39;: &#39;05&#39;,
  &#39;pr_code&#39;: &#39;0171670&#39;,
  &#39;pr_dpcode&#39;: &#39;19&#39;,
- &#39;pr_engname&#39;: &#39;JIRAPAT YOUNG KALE 200 G.&#39;,
+ &#39;pr_engname&#39;: &#39;JIRAAT YOUNG KALE 200 G.&#39;,
  &#39;pr_ggcode&#39;: &#39;057&#39;,
  &#39;pr_market&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
  &#39;pr_name&#39;: &#39;JIRAPAT ยอดคะน้า 200 G.&#39;,
@@ -476,7 +842,39 @@ Wall time: 545 ms
  &#39;pr_suref3&#39;: &#39;A&#39;,
  &#39;prtype&#39;: &#39;I&#39;,
  &#39;psqty&#39;: &#39;1&#39;,
- &#39;pstype&#39;: &#39;1&#39;}</pre>
+ &#39;pstype&#39;: &#39;1&#39;,
+ &#39;pr_country_th&#39;: &#39;none&#39;,
+ &#39;pr_country_en&#39;: &#39;none&#39;,
+ &#39;pr_keyword_th&#39;: &#39;none&#39;,
+ &#39;pr_keyword_en&#39;: &#39;none&#39;,
+ &#39;pr_filter_th&#39;: &#39;none&#39;,
+ &#39;pr_filter_en&#39;: &#39;none&#39;,
+ &#39;online_category_l1_th&#39;: &#39;none&#39;,
+ &#39;online_category_l1_en&#39;: &#39;none&#39;,
+ &#39;online_category_l2_th&#39;: &#39;none&#39;,
+ &#39;online_category_l2_en&#39;: &#39;none&#39;,
+ &#39;online_category_l3_th&#39;: &#39;none&#39;,
+ &#39;online_category_l3_en&#39;: &#39;none&#39;,
+ &#39;villa_category_l1_en&#39;: &#39;none&#39;,
+ &#39;villa_category_l2_en&#39;: &#39;none&#39;,
+ &#39;villa_category_l3_en&#39;: &#39;none&#39;,
+ &#39;villa_category_l4_en&#39;: &#39;none&#39;,
+ &#39;content_en&#39;: &#39;0171670 JIRAPAT YOUNG KALE 200 G.&#39;,
+ &#39;content_th&#39;: &#39;JIRAPAT YOUNG KALE 200 G.&#39;,
+ &#39;hema_brand_th&#39;: &#39;none&#39;,
+ &#39;hema_brand_en&#39;: &#39;none&#39;,
+ &#39;hema_sizedesc&#39;: &#39;none&#39;,
+ &#39;pr_brand_en&#39;: &#39;none&#39;,
+ &#39;pr_brand_th&#39;: &#39;none&#39;,
+ &#39;pr_online_name_en&#39;: &#39;none&#39;,
+ &#39;pr_online_name_th&#39;: &#39;none&#39;,
+ &#39;hema_name_en&#39;: &#39;none&#39;,
+ &#39;hema_name_th&#39;: &#39;none&#39;,
+ &#39;pr_name_en&#39;: &#39;none&#39;,
+ &#39;pr_name_th&#39;: &#39;none&#39;,
+ &#39;pr_barcode&#39;: &#39;none&#39;,
+ &#39;pr_barcode2&#39;: &#39;none&#39;,
+ &#39;sort_weight&#39;: &#39;none&#39;}</pre>
 </div>
 
 </div>
@@ -494,7 +892,7 @@ Wall time: 545 ms
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">querySingleProduct</span><span class="p">(</span><span class="s1">&#39;3203290&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">querySingleProduct</span><span class="p">(</span><span class="s1">'3203290'</span><span class="p">)</span>
 <span class="n">result</span>
 </pre></div>
 
@@ -535,7 +933,8 @@ Wall time: 545 ms
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">sdk</span><span class="o">.</span><span class="n">allQuery</span><span class="p">()</span>
-<span class="n">sdk</span><span class="o">.</span><span class="n">printFirst</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -547,62 +946,182 @@ Wall time: 545 ms
 
 <div class="output_area">
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(711, 50)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
 
 
-<div class="output_text output_subarea output_execute_result">
-<pre>(&#39;0217153&#39;,
- {&#39;0217153&#39;: {&#39;cprcode&#39;: &#39;0217153&#39;,
-   &#39;iprcode&#39;: &#39;0217153&#39;,
-   &#39;oprcode&#39;: &#39;0217153&#39;,
-   &#39;ordertype&#39;: &#39;Y&#39;,
-   &#39;pr_abb&#39;: &#39;COCOA LOCO MILK CHOC&#39;,
-   &#39;pr_active&#39;: &#39;Y&#39;,
-   &#39;pr_cgcode&#39;: &#39;98&#39;,
-   &#39;pr_code&#39;: &#39;0217153&#39;,
-   &#39;pr_dpcode&#39;: &#39;28&#39;,
-   &#39;pr_engname&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_ggcode&#39;: &#39;003&#39;,
-   &#39;pr_market&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL&#39;,
-   &#39;pr_name&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_puqty&#39;: &#39;24.00&#39;,
-   &#39;pr_sa_method&#39;: &#39;1&#39;,
-   &#39;pr_sucode1&#39;: &#39;F1239&#39;,
-   &#39;pr_suref3&#39;: &#39;S&#39;,
-   &#39;prtype&#39;: &#39;I&#39;,
-   &#39;psqty&#39;: &#39;1&#39;,
-   &#39;pstype&#39;: &#39;1&#39;,
-   &#39;pr_country_th&#39;: &#39;&#39;,
-   &#39;pr_country_en&#39;: &#39;United Kingdom&#39;,
-   &#39;pr_keyword_th&#39;: &#39;&#39;,
-   &#39;pr_keyword_en&#39;: &#39;&#39;,
-   &#39;pr_filter_th&#39;: &#39;&#39;,
-   &#39;pr_filter_en&#39;: &#39;&#39;,
-   &#39;online_category_l1_th&#39;: &#39;&#39;,
-   &#39;online_category_l1_en&#39;: &#39;&#39;,
-   &#39;online_category_l2_th&#39;: &#39;&#39;,
-   &#39;online_category_l2_en&#39;: &#39;&#39;,
-   &#39;online_category_l3_th&#39;: &#39;&#39;,
-   &#39;online_category_l3_en&#39;: &#39;&#39;,
-   &#39;villa_category_l1_en&#39;: &#39;Dry Grocery&#39;,
-   &#39;villa_category_l2_en&#39;: &#39;Grocery&#39;,
-   &#39;villa_category_l3_en&#39;: &#39;Cookies &amp; Snacks&#39;,
-   &#39;villa_category_l4_en&#39;: &#39;Biscuits &amp; Crackers&#39;,
-   &#39;content_en&#39;: &#39;0217153 COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;content_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;hema_brand_th&#39;: &#39;&#39;,
-   &#39;hema_brand_en&#39;: &#39;&#39;,
-   &#39;hema_sizedesc&#39;: &#39;&#39;,
-   &#39;pr_brand_en&#39;: &#39;&#39;,
-   &#39;pr_brand_th&#39;: &#39;&#39;,
-   &#39;pr_online_name_en&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_online_name_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;hema_name_en&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;hema_name_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_name_en&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_name_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_barcode&#39;: &#39;5060148383378&#39;,
-   &#39;pr_barcode2&#39;: &#39;506014838337&#39;,
-   &#39;sort_weight&#39;: &#39;0&#39;}})</pre>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cprcode</th>
+      <th>iprcode</th>
+      <th>oprcode</th>
+      <th>ordertype</th>
+      <th>pr_abb</th>
+      <th>pr_active</th>
+      <th>pr_cgcode</th>
+      <th>pr_code</th>
+      <th>pr_dpcode</th>
+      <th>pr_engname</th>
+      <th>...</th>
+      <th>pr_keyword_th</th>
+      <th>pr_name_en</th>
+      <th>pr_name_th</th>
+      <th>pr_online_name_en</th>
+      <th>pr_online_name_th</th>
+      <th>sort_weight</th>
+      <th>villa_category_l1_en</th>
+      <th>villa_category_l2_en</th>
+      <th>villa_category_l3_en</th>
+      <th>villa_category_l4_en</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>182223</td>
+      <td>182223</td>
+      <td>182223</td>
+      <td>Y</td>
+      <td>CIRIO PIZZASSIMO 400</td>
+      <td>Y</td>
+      <td>6</td>
+      <td>182223</td>
+      <td>6</td>
+      <td>CIRIO PIZZASSIMO 400G.</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>9</td>
+      <td>9</td>
+      <td>9</td>
+      <td>Y</td>
+      <td>J. WALKER RED 70 CL.</td>
+      <td>Y</td>
+      <td>1</td>
+      <td>9</td>
+      <td>1</td>
+      <td>JOHNNIE WALKER RED 70 CL.</td>
+      <td>...</td>
+      <td>none</td>
+      <td>JOHNNIE WALKER RED 70 CL.</td>
+      <td>JOHNNIE WALKER RED 70 CL</td>
+      <td>Johnnie Walker Red 700ml</td>
+      <td>JOHNNIE WALKER RED 700ml</td>
+      <td>0.0</td>
+      <td>Dry Grocery</td>
+      <td>Alcohol &amp; Beverage</td>
+      <td>Whisky</td>
+      <td>Scoth Whisky</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>235141</td>
+      <td>235141</td>
+      <td>235141</td>
+      <td>Y</td>
+      <td>EEBOO-PZCT3-PUZZLE</td>
+      <td>Y</td>
+      <td>8</td>
+      <td>235141</td>
+      <td>19</td>
+      <td>EEBOO,ANIMAL COUNTING PUZZLE_3ED,PZCT3</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>217153</td>
+      <td>217153</td>
+      <td>217153</td>
+      <td>Y</td>
+      <td>COCOA LOCO MILK CHOC</td>
+      <td>Y</td>
+      <td>98</td>
+      <td>217153</td>
+      <td>28</td>
+      <td>COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>28</td>
+      <td>28</td>
+      <td>28</td>
+      <td>Y</td>
+      <td>J B RARE WHISKY 750</td>
+      <td>Y</td>
+      <td>1</td>
+      <td>28</td>
+      <td>1</td>
+      <td>J B RARE WHISKY 750 ML.</td>
+      <td>...</td>
+      <td>none</td>
+      <td>J B RARE WHISKY 750 ML.</td>
+      <td>J B RARE WHISKY 750 ML</td>
+      <td>J&amp;B Rare Whisky 750ml</td>
+      <td>J&amp;B Rare Whisky 750ml</td>
+      <td>0.0</td>
+      <td>Dry Grocery</td>
+      <td>Alcohol &amp; Beverage</td>
+      <td>Whisky</td>
+      <td>Scoth Whisky</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 50 columns</p>
+</div>
 </div>
 
 </div>
@@ -630,7 +1149,7 @@ Wall time: 545 ms
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ProductsFromList" class="doc_header"><code>class</code> <code>ProductsFromList</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L146" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductsFromList</code>(<strong><code>iprcodes</code></strong>:<code>List</code>[<code>str</code>])</p>
+<h2 id="ProductsFromList" class="doc_header"><code>class</code> <code>ProductsFromList</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L167" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ProductsFromList</code>(<strong><code>iprcodes</code></strong>:<code>List</code>[<code>str</code>])</p>
 </blockquote>
 
 <pre><code>ProductsFromList(iprcodes: List[str])</code></pre>
@@ -663,8 +1182,10 @@ Wall time: 545 ms
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="queryList" class="doc_header"><code>queryList</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L150" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>queryList</code>(<strong><code>iprcodes</code></strong>:<code>List</code>[<code>str</code>])</p>
+<h4 id="queryList" class="doc_header"><code>queryList</code><a href="https://github.com/thanakijwanavit/villa-product-sdk/tree/master/villaProductSdk/products.py#L173" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>queryList</code>(<strong><code>iprcodes</code></strong>:<code>List</code>[<code>str</code>])</p>
 </blockquote>
+
+<pre><code>query a list of products by iprcode; returns the response body</code></pre>
 
 </div>
 
@@ -690,8 +1211,39 @@ Wall time: 545 ms
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">iprcodes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0217153&#39;</span><span class="p">,</span><span class="s1">&#39;203915&#39;</span><span class="p">,</span><span class="s1">&#39;0000009&#39;</span><span class="p">]</span>
-<span class="n">sdk</span><span class="o">.</span><span class="n">queryList</span><span class="p">(</span><span class="n">iprcodes</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cprcodes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'0217153'</span><span class="p">,</span><span class="s1">'203915'</span><span class="p">,</span><span class="s1">'0000009'</span><span class="p">]</span>
+<span class="n">sdk</span><span class="o">.</span><span class="n">queryList</span><span class="p">(</span><span class="n">cprcodes</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>{&#39;errorMessage&#39;: &#34;&#39;cprcode&#39;&#34;, &#39;errorType&#39;: &#39;KeyError&#39;, &#39;stackTrace&#39;: [&#39;  File &#34;/opt/python/villaProductDatabase/database.py&#34;, line 104, in lambdaProductsFromList\n    result:pd.DataFrame = ProductDatabase.productsFromList(productsFromList.iprcodes)\n&#39;, &#39;  File &#34;/opt/python/nicHelper/wrappers.py&#34;, line 37, in wrapper\n    return func( cls, *args, **kwargs)\n&#39;, &#39;  File &#34;/opt/python/villaProductDatabase/query.py&#34;, line 66, in productsFromList\n    products = db[db[\&#39;cprcode\&#39;].isin(cprcodes)]\n&#39;, &#39;  File &#34;/opt/python/pandas/core/frame.py&#34;, line 2906, in __getitem__\n    indexer = self.columns.get_loc(key)\n&#39;, &#39;  File &#34;/opt/python/pandas/core/indexes/base.py&#34;, line 2900, in get_loc\n    raise KeyError(key) from err\n&#39;]}
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">Event</span><span class="o">.</span><span class="n">getInput</span><span class="p">({</span><span class="s1">'iprcodes'</span><span class="p">:</span><span class="n">cprcodes</span><span class="p">}))</span>
 </pre></div>
 
     </div>
@@ -706,158 +1258,7 @@ Wall time: 545 ms
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[{&#39;0217153&#39;: {&#39;cprcode&#39;: &#39;0217153&#39;,
-   &#39;iprcode&#39;: &#39;0217153&#39;,
-   &#39;oprcode&#39;: &#39;0217153&#39;,
-   &#39;ordertype&#39;: &#39;Y&#39;,
-   &#39;pr_abb&#39;: &#39;COCOA LOCO MILK CHOC&#39;,
-   &#39;pr_active&#39;: &#39;Y&#39;,
-   &#39;pr_cgcode&#39;: &#39;98&#39;,
-   &#39;pr_code&#39;: &#39;0217153&#39;,
-   &#39;pr_dpcode&#39;: &#39;28&#39;,
-   &#39;pr_engname&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_ggcode&#39;: &#39;003&#39;,
-   &#39;pr_market&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL&#39;,
-   &#39;pr_name&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_puqty&#39;: &#39;24.00&#39;,
-   &#39;pr_sa_method&#39;: &#39;1&#39;,
-   &#39;pr_sucode1&#39;: &#39;F1239&#39;,
-   &#39;pr_suref3&#39;: &#39;S&#39;,
-   &#39;prtype&#39;: &#39;I&#39;,
-   &#39;psqty&#39;: &#39;1&#39;,
-   &#39;pstype&#39;: &#39;1&#39;,
-   &#39;pr_country_th&#39;: &#39;&#39;,
-   &#39;pr_country_en&#39;: &#39;United Kingdom&#39;,
-   &#39;pr_keyword_th&#39;: &#39;&#39;,
-   &#39;pr_keyword_en&#39;: &#39;&#39;,
-   &#39;pr_filter_th&#39;: &#39;&#39;,
-   &#39;pr_filter_en&#39;: &#39;&#39;,
-   &#39;online_category_l1_th&#39;: &#39;&#39;,
-   &#39;online_category_l1_en&#39;: &#39;&#39;,
-   &#39;online_category_l2_th&#39;: &#39;&#39;,
-   &#39;online_category_l2_en&#39;: &#39;&#39;,
-   &#39;online_category_l3_th&#39;: &#39;&#39;,
-   &#39;online_category_l3_en&#39;: &#39;&#39;,
-   &#39;villa_category_l1_en&#39;: &#39;Dry Grocery&#39;,
-   &#39;villa_category_l2_en&#39;: &#39;Grocery&#39;,
-   &#39;villa_category_l3_en&#39;: &#39;Cookies &amp; Snacks&#39;,
-   &#39;villa_category_l4_en&#39;: &#39;Biscuits &amp; Crackers&#39;,
-   &#39;content_en&#39;: &#39;0217153 COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;content_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;hema_brand_th&#39;: &#39;&#39;,
-   &#39;hema_brand_en&#39;: &#39;&#39;,
-   &#39;hema_sizedesc&#39;: &#39;&#39;,
-   &#39;pr_brand_en&#39;: &#39;&#39;,
-   &#39;pr_brand_th&#39;: &#39;&#39;,
-   &#39;pr_online_name_en&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_online_name_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;hema_name_en&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;hema_name_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_name_en&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_name_th&#39;: &#39;COCOA LOCO MILK CHOCOLATE OWL LOLLY 26G.&#39;,
-   &#39;pr_barcode&#39;: &#39;5060148383378&#39;,
-   &#39;pr_barcode2&#39;: &#39;506014838337&#39;,
-   &#39;sort_weight&#39;: &#39;0&#39;}},
- {&#39;203915&#39;: {&#39;cprcode&#39;: &#39;203915&#39;,
-   &#39;iprcode&#39;: &#39;203915&#39;,
-   &#39;oprcode&#39;: &#39;203915&#39;,
-   &#39;ordertype&#39;: &#39;Y&#39;,
-   &#39;pr_abb&#39;: &#39;MEIJI GUMMY CHOCO GR&#39;,
-   &#39;pr_active&#39;: &#39;Y&#39;,
-   &#39;pr_cgcode&#39;: &#39;4&#39;,
-   &#39;pr_code&#39;: &#39;203915&#39;,
-   &#39;pr_dpcode&#39;: &#39;2.0&#39;,
-   &#39;pr_engname&#39;: &#39;MEIJI GUMMY CHOCO GREEN GRAPE 30G&#39;,
-   &#39;pr_ggcode&#39;: &#39;2&#39;,
-   &#39;pr_market&#39;: &#39;เมจิ กัมมี่ ช็อกโก กรีนเกรป 30&#39;,
-   &#39;pr_name&#39;: &#39;เมจิ กัมมี่ ช็อกโก กรีนเกรป 30 กรัม&#39;,
-   &#39;pr_puqty&#39;: &#39;20.0&#39;,
-   &#39;pr_sa_method&#39;: &#39;1&#39;,
-   &#39;pr_sucode1&#39;: &#39;2943&#39;,
-   &#39;pr_suref3&#39;: &#39;C&#39;,
-   &#39;prtype&#39;: &#39;I&#39;,
-   &#39;psqty&#39;: &#39;1.0&#39;,
-   &#39;pstype&#39;: &#39;1.0&#39;,
-   &#39;pr_country_th&#39;: &#39;none&#39;,
-   &#39;pr_country_en&#39;: &#39;China&#39;,
-   &#39;pr_keyword_th&#39;: &#39;none&#39;,
-   &#39;pr_keyword_en&#39;: &#39;none&#39;,
-   &#39;pr_filter_th&#39;: &#39;Grocery,Chocolate&#39;,
-   &#39;pr_filter_en&#39;: &#39;Grocery,Chocolate&#39;,
-   &#39;online_category_l1_th&#39;: &#39;สินค้าบริโภค&#39;,
-   &#39;online_category_l1_en&#39;: &#39;Grocery&#39;,
-   &#39;online_category_l2_th&#39;: &#39;ช็อคโกแลต&#39;,
-   &#39;online_category_l2_en&#39;: &#39;Chocolate&#39;,
-   &#39;online_category_l3_th&#39;: &#39;none&#39;,
-   &#39;online_category_l3_en&#39;: &#39;none&#39;,
-   &#39;villa_category_l1_en&#39;: &#39;Dry Grocery&#39;,
-   &#39;villa_category_l2_en&#39;: &#39;Grocery&#39;,
-   &#39;villa_category_l3_en&#39;: &#39;Candies&#39;,
-   &#39;villa_category_l4_en&#39;: &#39;Confectionery&#39;,
-   &#39;content_en&#39;: &#39;0203915 Meiji Gummy Choco Green Grape 30g&#39;,
-   &#39;content_th&#39;: &#39;Meiji Gummy Choco Green Grape 30g&#39;,
-   &#39;hema_brand_th&#39;: &#39;Meiji&#39;,
-   &#39;hema_brand_en&#39;: &#39;Meiji&#39;,
-   &#39;hema_sizedesc&#39;: &#39;30g&#39;,
-   &#39;pr_brand_en&#39;: &#39;MEIJI&#39;,
-   &#39;pr_brand_th&#39;: &#39;MEIJI&#39;,
-   &#39;pr_online_name_en&#39;: &#39;Meiji Gummy Choco Green Grape 30g&#39;,
-   &#39;pr_online_name_th&#39;: &#39;Meiji Gummy Choco Green Grape 30g&#39;,
-   &#39;hema_name_en&#39;: &#39;Gummy Choco Green Grape&#39;,
-   &#39;hema_name_th&#39;: &#39;Gummy Choco Green Grape&#39;,
-   &#39;pr_name_en&#39;: &#39;MEIJI GUMMY CHOCO GREEN GRAPE 30G&#39;,
-   &#39;pr_name_th&#39;: &#39;เมจิ กัมมี่ ช็อกโก กรีนเกรป 30 กรัม&#39;,
-   &#39;sort_weight&#39;: &#39;0.0&#39;}},
- {&#39;0000009&#39;: {&#39;cprcode&#39;: &#39;0000009&#39;,
-   &#39;iprcode&#39;: &#39;0000009&#39;,
-   &#39;oprcode&#39;: &#39;0000009&#39;,
-   &#39;ordertype&#39;: &#39;Y&#39;,
-   &#39;pr_abb&#39;: &#39;J. WALKER RED 70 CL.&#39;,
-   &#39;pr_active&#39;: &#39;Y&#39;,
-   &#39;pr_cgcode&#39;: &#39;01&#39;,
-   &#39;pr_code&#39;: &#39;0000009&#39;,
-   &#39;pr_dpcode&#39;: &#39;01&#39;,
-   &#39;pr_engname&#39;: &#39;JOHNNIE WALKER RED 70 CL.&#39;,
-   &#39;pr_ggcode&#39;: &#39;001&#39;,
-   &#39;pr_market&#39;: &#39;J. WALKER RED 70 CL&#39;,
-   &#39;pr_name&#39;: &#39;JOHNNIE WALKER RED 70 CL&#39;,
-   &#39;pr_puqty&#39;: &#39;12.00&#39;,
-   &#39;pr_sa_method&#39;: &#39;1&#39;,
-   &#39;pr_sucode1&#39;: &#39;1782&#39;,
-   &#39;pr_suref3&#39;: &#39;A&#39;,
-   &#39;prtype&#39;: &#39;I&#39;,
-   &#39;psqty&#39;: &#39;1&#39;,
-   &#39;pstype&#39;: &#39;1&#39;,
-   &#39;pr_country_th&#39;: &#39;&#39;,
-   &#39;pr_country_en&#39;: &#39;United Kingdom&#39;,
-   &#39;pr_keyword_th&#39;: &#39;&#39;,
-   &#39;pr_keyword_en&#39;: &#39;&#39;,
-   &#39;pr_filter_th&#39;: &#39;Alcohol,Spirits  Liqueurs&#39;,
-   &#39;pr_filter_en&#39;: &#39;Alcohol,Spirits  Liqueurs&#39;,
-   &#39;online_category_l1_th&#39;: &#39;เบียร์, ไวน์และสุรา&#39;,
-   &#39;online_category_l1_en&#39;: &#39;Beer Wine &amp; Spirits&#39;,
-   &#39;online_category_l2_th&#39;: &#39;เหล้า&#39;,
-   &#39;online_category_l2_en&#39;: &#39;Spirits &amp; Liqueurs&#39;,
-   &#39;online_category_l3_th&#39;: &#39;&#39;,
-   &#39;online_category_l3_en&#39;: &#39;&#39;,
-   &#39;villa_category_l1_en&#39;: &#39;Dry Grocery&#39;,
-   &#39;villa_category_l2_en&#39;: &#39;Alcohol &amp; Beverage&#39;,
-   &#39;villa_category_l3_en&#39;: &#39;Whisky&#39;,
-   &#39;villa_category_l4_en&#39;: &#39;Scoth Whisky&#39;,
-   &#39;content_en&#39;: &#39;0000009 Johnnie Walker Red 700ml&#39;,
-   &#39;content_th&#39;: &#39;JOHNNIE WALKER RED 700ml&#39;,
-   &#39;hema_brand_th&#39;: &#39;Johnnie Walker&#39;,
-   &#39;hema_brand_en&#39;: &#39;Johnnie Walker&#39;,
-   &#39;hema_sizedesc&#39;: &#39;700ml&#39;,
-   &#39;pr_brand_en&#39;: &#39;Johnnie Walker&#39;,
-   &#39;pr_brand_th&#39;: &#39;Johnnie Walker&#39;,
-   &#39;pr_online_name_en&#39;: &#39;Johnnie Walker Red 700ml&#39;,
-   &#39;pr_online_name_th&#39;: &#39;JOHNNIE WALKER RED 700ml&#39;,
-   &#39;hema_name_en&#39;: &#39;Johnnie Walker Red&#39;,
-   &#39;hema_name_th&#39;: &#39;JOHNNIE WALKER RED&#39;,
-   &#39;pr_name_en&#39;: &#39;JOHNNIE WALKER RED 70 CL.&#39;,
-   &#39;pr_name_th&#39;: &#39;JOHNNIE WALKER RED 70 CL&#39;,
-   &#39;sort_weight&#39;: 0}}]</pre>
+<pre>&#39;{&#34;body&#34;:&#34;{\\&#34;iprcodes\\&#34;:[\\&#34;0217153\\&#34;,\\&#34;203915\\&#34;,\\&#34;0000009\\&#34;]}&#34;,&#34;headers&#34;:{},&#34;statusCode&#34;:200}&#39;</pre>
 </div>
 
 </div>
@@ -890,6 +1291,80 @@ Wall time: 545 ms
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 15 ms, sys: 79 µs, total: 15 ms
+Wall time: 7.6 s
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;result&#39;: {&#39;cprcode&#39;: 182223,
+  &#39;iprcode&#39;: 182223,
+  &#39;oprcode&#39;: 182223,
+  &#39;ordertype&#39;: &#39;Y&#39;,
+  &#39;pr_abb&#39;: &#39;CIRIO PIZZASSIMO 400&#39;,
+  &#39;pr_active&#39;: &#39;Y&#39;,
+  &#39;pr_cgcode&#39;: &#39;06&#39;,
+  &#39;pr_code&#39;: &#39;0182223&#39;,
+  &#39;pr_dpcode&#39;: &#39;06&#39;,
+  &#39;pr_engname&#39;: &#39;CIRIO PIZZASSIMO 400G.&#39;,
+  &#39;pr_ggcode&#39;: &#39;004&#39;,
+  &#39;pr_market&#39;: &#39;CIRIO ซอสทำพิซซ่า 400 G.&#39;,
+  &#39;pr_name&#39;: &#39;CIRIO ซอสทำพิซซ่า 400 G.&#39;,
+  &#39;pr_puqty&#39;: &#39;12&#39;,
+  &#39;pr_sa_method&#39;: &#39;1&#39;,
+  &#39;pr_sucode1&#39;: &#39;2589&#39;,
+  &#39;pr_suref3&#39;: &#39;C&#39;,
+  &#39;prtype&#39;: &#39;I&#39;,
+  &#39;psqty&#39;: &#39;1&#39;,
+  &#39;pstype&#39;: &#39;1&#39;,
+  &#39;content_en&#39;: None,
+  &#39;content_th&#39;: None,
+  &#39;hema_brand_en&#39;: None,
+  &#39;hema_brand_th&#39;: None,
+  &#39;hema_name_en&#39;: None,
+  &#39;hema_name_th&#39;: None,
+  &#39;hema_sizedesc&#39;: None,
+  &#39;online_category_l1_en&#39;: None,
+  &#39;online_category_l1_th&#39;: None,
+  &#39;online_category_l2_en&#39;: None,
+  &#39;online_category_l2_th&#39;: None,
+  &#39;online_category_l3_en&#39;: None,
+  &#39;online_category_l3_th&#39;: None,
+  &#39;pr_brand_en&#39;: None,
+  &#39;pr_brand_th&#39;: None,
+  &#39;pr_country_en&#39;: None,
+  &#39;pr_country_th&#39;: None,
+  &#39;pr_filter_en&#39;: None,
+  &#39;pr_filter_th&#39;: None,
+  &#39;pr_keyword_en&#39;: None,
+  &#39;pr_keyword_th&#39;: None,
+  &#39;pr_name_en&#39;: None,
+  &#39;pr_name_th&#39;: None,
+  &#39;pr_online_name_en&#39;: None,
+  &#39;pr_online_name_th&#39;: None,
+  &#39;sort_weight&#39;: None,
+  &#39;villa_category_l1_en&#39;: None,
+  &#39;villa_category_l2_en&#39;: None,
+  &#39;villa_category_l3_en&#39;: None,
+  &#39;villa_category_l4_en&#39;: None}}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
@@ -901,14 +1376,14 @@ Wall time: 545 ms
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">time</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
 
 <span class="c1">##large Image</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://d19oj5aeuefgv.cloudfront.net&#39;</span>
-<span class="n">sku</span> <span class="o">=</span> <span class="s1">&#39;0189194&#39;</span>
-<span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">),</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PNG&#39;</span><span class="p">])</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">'http://d19oj5aeuefgv.cloudfront.net'</span>
+<span class="n">sku</span> <span class="o">=</span> <span class="s1">'0189194'</span>
+<span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">),</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s1">'PNG'</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -926,9 +1401,9 @@ Wall time: 545 ms
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">time</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://d1vl5j0v241n75.cloudfront.net&#39;</span>
-<span class="n">sku</span> <span class="o">=</span> <span class="s1">&#39;0189194&#39;</span>
-<span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">),</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PNG&#39;</span><span class="p">])</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">'https://d1vl5j0v241n75.cloudfront.net'</span>
+<span class="n">sku</span> <span class="o">=</span> <span class="s1">'0189194'</span>
+<span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">),</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="s1">'PNG'</span><span class="p">])</span>
 </pre></div>
 
     </div>
