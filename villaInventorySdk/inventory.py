@@ -7,12 +7,30 @@ from botocore.config import Config
 from s3bz.s3bz import S3, Requests
 from lambdasdk.lambdasdk import Lambda
 import bz2, json, boto3, base64, logging
+
+# vps-160: a separate package with no notebook, so its own copy of villaProductSdk.products.validateConfig
+import re as _re
+
+_BRANCH = _re.compile(r'^[a-z0-9][a-z0-9-]{0,40}[a-z0-9]?$')
+_REGION = _re.compile(r'^[a-z]{2}(-[a-z]+)+-[0-9]+$')
+
+def validateConfig(branch:str, region = ...):
+  '''raise ValueError, naming the argument, before any AWS name is built from it (vps-160).
+  branch goes into Lambda and S3 names ("input-product-bucket-<branch>" must stay within S3's 63 lowercase
+  characters), so it is lowercase letters, digits and hyphens, 1 to 42 characters, not starting with a hyphen.
+  region (when given: FunctionNames has none) looks like ap-southeast-1; None is refused.'''
+  if not isinstance(branch, str) or not _BRANCH.match(branch):
+    raise ValueError(f'invalid branch {branch!r}: use 1-42 lowercase letters, digits or hyphens, e.g. dev-manual')
+  if region is not ... and (not isinstance(region, str) or not _REGION.match(region)):
+    raise ValueError(f'invalid region {region!r}: expected an AWS region such as ap-southeast-1')
+
 logging.basicConfig(level=logging.INFO)
 
 # Cell
 class FunctionNames:
   '''determine function and resources name based on branchName'''
   def __init__(self, branchName = 'dev-manual'):
+    validateConfig(branchName)
     self.branchName = branchName
   dumpToS3 = lambda self: f'product-dump-s3-{self.branchName}'
   updateProduct = lambda self: f'product-update-{self.branchName}'
@@ -27,6 +45,7 @@ class FunctionNames:
 class ProductSdk:
 
   def __init__(self, branch = 'dev-manual', user = None, pw = None, region = 'ap-southeast-1'):
+    validateConfig(branch, region)
     self.branchName = branch
     self.functionNames = FunctionNames(branchName = branch)
     self.lambdaClient = Lambda(user =user, pw=pw, region = region)
