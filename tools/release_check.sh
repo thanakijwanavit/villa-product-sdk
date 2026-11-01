@@ -79,7 +79,8 @@ gate_build() {  # from an export of HEAD: untracked or ignored files never ship,
   rm -rf dist build ./*.egg-info "$WORK/src"
   mkdir -p "$WORK/src" dist
   git archive HEAD | tar -x -C "$WORK/src"
-  (cd "$WORK/src" && "$(tool python)" -m build --no-isolation --sdist --wheel --outdir "$ROOT/dist" .) \
+  local py; py=$(tool python)  # before the cd: TOOLS_BIN may be relative
+  (cd "$WORK/src" && "$py" -m build --no-isolation --sdist --wheel --outdir "$ROOT/dist" .) \
     >"$WORK/build.log" 2>&1 || { tail -30 "$WORK/build.log"; return 1; }
   ls dist
 }
