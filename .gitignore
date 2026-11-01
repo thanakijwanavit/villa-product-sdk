@@ -151,3 +151,5 @@ dask-worker-space/
 nbdev_template/
 # make release-env
 .release-venv/
+# real catalog exports never belong in this repo (vps-62z); tests use tests/fixtures/products_sample.csv
+sampleData/*.csv
