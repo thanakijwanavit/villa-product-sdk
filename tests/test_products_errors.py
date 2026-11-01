@@ -2,6 +2,7 @@
 and updateWithS3 uploads each call under its own key. Offline: the Lambda client and S3 are stubbed."""
 import ast
 import json
+import re
 import threading
 from pathlib import Path
 
@@ -188,6 +189,10 @@ def test_the_library_matches_the_notebook():
     nb = json.loads((ROOT / "product-sdk.ipynb").read_text())
     exported = ["".join(c["source"]).split("\n", 1)[1] for c in nb["cells"]
                 if c["cell_type"] == "code" and "".join(c["source"]).startswith("#export")]
+    # nbdev comments out the `_all_ = [...]` line it reads extra __all__ names from, and makes imports of the
+    # package relative (vps-u5v)
+    exported = [re.sub(r"^_all_ = ", "#nbdev_comment _all_ = ", e, flags=re.MULTILINE).replace("from villaProductSdk.", "from .")
+                for e in exported]
     cells = LIB.read_text().split("# Cell\n")[1:]
     norm = lambda text: "\n".join(line.rstrip() for line in text.strip().splitlines())  # nbdev drops trailing spaces
     assert [norm(c) for c in cells] == [norm(e) for e in exported]

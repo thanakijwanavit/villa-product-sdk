@@ -29,6 +29,8 @@ def _notebook_export_cells():
             body = src.split('\n', 1)[1]
             # nbdev rewrites absolute imports of the package to relative ones
             body = body.replace('from villaProductSdk.', 'from .')
+            # and comments out the `_all_ = [...]` line it reads extra __all__ names from (vps-u5v)
+            body = re.sub(r'^_all_ = ', '#nbdev_comment _all_ = ', body, flags=re.MULTILINE)
             cells.append(body.strip())
     return cells
 
