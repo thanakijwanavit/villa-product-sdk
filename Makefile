@@ -27,7 +27,7 @@ test:
 # passed at the current commit. `make release` = release-check, then TestPyPI. The real PyPI upload
 # is the separate, manual `make pypi`, and only after those same files went to TestPyPI.
 release-env:
-	uv venv -q -p $(RELEASE_PY) .release-venv
+	uv venv -q --clear -p $(RELEASE_PY) .release-venv
 	VIRTUAL_ENV=$(CURDIR)/.release-venv uv pip install -q -r tools/release-requirements.txt
 
 release-check:
