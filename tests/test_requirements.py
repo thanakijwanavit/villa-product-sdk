@@ -1,4 +1,4 @@
-"""vps-9kk: settings.ini keeps urllib3 off releases with fixed advisories without capping botocore or requests.
+"""vps-9kk, vps-2e0: settings.ini keeps urllib3 off releases with fixed advisories without capping botocore or requests.
 
 setup.py builds install_requires by splitting settings.ini's `requirements` on whitespace, so these tests
 read it the same way; Requirement() raises InvalidRequirement if a space cut one requirement in two.
