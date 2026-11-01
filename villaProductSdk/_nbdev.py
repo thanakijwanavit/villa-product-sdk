@@ -10,7 +10,12 @@ index = {"Response": "Schema.ipynb",
          "ProductSdk": "product-sdk.ipynb",
          "querySingleProduct": "product-sdk.ipynb",
          "ProductsFromList": "product-sdk.ipynb",
-         "queryList": "product-sdk.ipynb"}
+         "queryList": "product-sdk.ipynb",
+         "log": "product-sdk.ipynb",
+         "INTCOLS": "product-sdk.ipynb",
+         "ProductSdkError": "product-sdk.ipynb",
+         "parseLambdaResponse": "product-sdk.ipynb",
+         "retrieveJsonZl": "product-sdk.ipynb"}
 
 modules = ["schema.py",
            "products.py"]
