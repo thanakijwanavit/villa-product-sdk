@@ -213,6 +213,23 @@ def test_pytest_failure_stops_before_build(repo):
     assert not [l for l in repo[2].read_text().splitlines() if "-m build" in l]
 
 
+def test_build_uses_only_the_files_at_head(repo):
+    # an untracked file (or an ignored one, like tmp*.py) in the checkout must not reach the build,
+    # since the secrets gate scans only HEAD
+    r = repo[0]
+    (r / "tmp_untracked.py").write_text("KEY = 'x'\n")
+    seen = repo[2].parent / "build-src"
+    fake(repo[1], "python", f'pwd > "{seen}.cwd"; ls -A > "{seen}.ls"')
+    p = run(repo, "--only", "build")
+    assert p.returncode == 0, p.stdout + p.stderr
+    files = (repo[2].parent / "build-src.ls").read_text().split()
+    assert "settings.ini" in files and "tools" in files
+    assert "tmp_untracked.py" not in files and ".git" not in files
+    assert (repo[2].parent / "build-src.cwd").read_text().strip() != str(r)
+    build = next(l for l in repo[2].read_text().splitlines() if "-m build" in l)
+    assert f"--outdir {r}/dist" in build
+
+
 def test_secret_finding_fails(repo):
     fake(repo[1], "gitleaks", "exit 1")
     p = run(repo, "--only", "secrets")

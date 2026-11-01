@@ -11,7 +11,8 @@
 #   diff-nbs     nbdev_diff_nbs is empty: the library matches the notebooks
 #   pytest       the offline test suite in tests/, in a fresh venv (first tested Python) holding
 #                the settings.ini requirements plus pytest, setuptools and packaging
-#   build        sdist and wheel into dist/ (dist/ is emptied first)
+#   build        sdist and wheel of an export of HEAD (no untracked or ignored file) into dist/
+#                (dist/ is emptied first)
 #   contents     the wheel holds only the packages listed in settings.ini, nothing else at top level
 #   twine        twine check dist/*
 #   install      for each version in settings.ini tested_pythons: a fresh venv installs the wheel
@@ -73,10 +74,13 @@ gate_pytest() {  # a fresh venv on the first tested Python: the runtime requirem
   else "$env/bin/python" -m pip install -q "${reqs[@]}" $TEST_TOOLS; fi
   "$env/bin/python" -m pytest -q -p no:cacheprovider tests
 }
-gate_build() {
-  rm -rf dist build ./*.egg-info
-  "$(tool python)" -m build --no-isolation --sdist --wheel --outdir dist . >"$WORK/build.log" 2>&1 \
-    || { tail -30 "$WORK/build.log"; return 1; }
+gate_build() {  # from an export of HEAD: untracked or ignored files never ship, and what
+  # ships is exactly what the secrets gate scans
+  rm -rf dist build ./*.egg-info "$WORK/src"
+  mkdir -p "$WORK/src" dist
+  git archive HEAD | tar -x -C "$WORK/src"
+  (cd "$WORK/src" && "$(tool python)" -m build --no-isolation --sdist --wheel --outdir "$ROOT/dist" .) \
+    >"$WORK/build.log" 2>&1 || { tail -30 "$WORK/build.log"; return 1; }
   ls dist
 }
 gate_contents() {
