@@ -21,6 +21,10 @@ docs: $(SRC)
 test:
 	nbdev_test_nbs
 
+# merge gate (vps-a8a): pytest in a fresh py3.12 venv with requirements-dev.txt pins
+gate:
+	tools/gate.sh
+
 # Releases go through scripts/release.sh (docs/RELEASE.md): it builds, runs twine check, and uploads
 # only with --publish and a typed confirmation. Bump the version in settings.ini first.
 release-dry-run:
