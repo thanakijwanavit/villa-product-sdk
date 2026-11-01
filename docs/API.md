@@ -57,23 +57,24 @@ The SDK passes all of this through unchanged. For the 7-digit display form, use 
 **Why:**
 
 - The key is a DynamoDB number in both the old table (`product-table-dev-manual`) and the new one.
-- SDK version 20 (commit d30074d) casts the six `INTCOLS` (`iprcode`, `cprcode`, `oprcode`, `pr_barcode`,
-  `pr_barcode2`, `sellingPrice`) to int before every upload. So Lambda mode already returns ints for rows written
-  since then (product-sdk.ipynb: the `syncS3` output after the version 20 upload).
+- The notebook's `updateWithS3` has cast the code columns to int before every upload since commit d30074d ("convert
+  keys to int"). The unreleased 0.1.0 library (`integration/closed-beads`) brings that cast into `products.py`.
+  Released versions up to 0.0.20 send every value as given. Rows the notebook wrote already come back as ints in
+  Lambda mode (product-sdk.ipynb: the `syncS3` output after such an upload).
 - vps-52s does this today.
-- JSON integers are exact for 7-digit codes and 13-digit barcodes, which are all below 2^53.
+- JSON integers are exact for the 7-digit codes in use, as for any code below 2^53 (up to 15 digits).
 
 Rejected: 7-digit strings. The server would have to invent a width, since the API accepts codes of 1 to 18 digits,
-and they would still differ from what Lambda mode returns for rows written since version 20.
+and they would still differ from what Lambda mode returns for rows the notebook wrote.
 
 **Writes:** HTTPS-mode `updateWithS3` sends rows through the same cast as Lambda mode, using one helper for both modes
-(vps-t32 is hardening that cast). A row written through either mode is therefore stored the same way. The cast drops
-a barcode's leading zero, in both modes (vps-xh2).
+(vps-t32 is hardening that cast). A row written through either mode is therefore stored the same way. Barcodes are
+not cast: vps-xh2 sends `pr_barcode` and `pr_barcode2` as strings of digits, so a leading zero survives.
 
-**Parity rule (vps-hqj):** Lambda mode returns the stored `data` as is. Its `iprcode` and `cprcode` are strings for
-rows written before version 20 (product-sdk.ipynb: `querySingleProduct('0171670')` answered
-`'iprcode': '0171670'`) and ints after. The parity check therefore compares those two fields by integer value, and
-every other field exactly, type included.
+**Parity rule (vps-hqj):** Lambda mode returns the stored `data` as is, so its `iprcode` and `cprcode` are strings
+or ints depending on how each row was written. product-sdk.ipynb shows both: `querySingleProduct('0171670')` answered
+`'iprcode': '0171670'`, and rows the notebook wrote since d30074d hold ints. The parity check therefore compares those
+two fields by integer value, and every other field exactly, type included.
 
 ### Q4. Delete route
 
@@ -333,7 +334,7 @@ These are measured against `polecat/vps-52s` 4462400. Everything else there stay
 - vps-bgw: the backend changes above, on top of `polecat/vps-52s`.
 - vps-dlq: a contract test showing that `dump_all`'s output is readable by HTTPS-mode `allQuery`.
 - vps-o4r: handler responses checked against `tests/fixtures/https_contract.json`.
-- vps-xh2: the `INTCOLS` cast drops leading zeros from barcodes, in both modes.
+- vps-xh2: barcodes leave the `INTCOLS` cast and are sent as strings of digits, so a leading zero survives.
 
 ## Changing this contract
 
