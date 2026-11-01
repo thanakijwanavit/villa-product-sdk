@@ -1,0 +1,85 @@
+{
+  "_comment": "vps-h5t: the HTTPS product API contract (docs/API.md) in machine-readable form. Change it only together with docs/API.md, the handlers (infra/handlers/product_api.py) and the SDK's HTTPS mode; tests/test_https_contract.py keeps this file and docs/API.md in step.",
+  "doc": "docs/API.md",
+  "auth": {
+    "header": "x-api-key",
+    "scheme": "https",
+    "envEndpoint": "VILLA_PRODUCT_API_URL",
+    "envApiKey": "VILLA_PRODUCT_API_KEY"
+  },
+  "limits": {
+    "listCodes": 100,
+    "uploadProducts": 1000,
+    "uploadBytes": 10485760,
+    "presignedUrlSeconds": 900,
+    "apiTimeoutSeconds": 29,
+    "rateLimit": 10,
+    "burstLimit": 20,
+    "dailyQuota": 10000,
+    "uploadExpiryDays": 1,
+    "syncPollSeconds": 5,
+    "syncTimeoutSeconds": 300
+  },
+  "codes": {
+    "keyFields": ["iprcode", "cprcode"],
+    "responseType": "integer",
+    "requestPattern": "^[0-9]{1,18}$",
+    "requestAlsoInteger": true,
+    "echoedAsSent": ["missing", "deleted"]
+  },
+  "deleteRange": {"min": 9999000, "max": 9999999},
+  "dump": {
+    "format": "bz2+json",
+    "objectKey": "all-products.json.bz2",
+    "contentType": "application/x-bzip2",
+    "topLevel": "array of product",
+    "sdkReader": "pandas.read_json(io.StringIO(text), orient='records')",
+    "sdkReturns": "pandas.DataFrame"
+  },
+  "timestamps": "ISO 8601 UTC with milliseconds, e.g. 2026-11-01T12:00:00.000Z",
+  "product": {"iprcode": "integer", "cprcode": "integer"},
+  "handlerErrorBody": {"error": "string"},
+  "gatewayErrorBody": {"message": "string"},
+  "retry": {"statuses": [429, 502, 503, 504], "maxAttempts": 3, "firstBackoffSeconds": 0.5},
+  "timeouts": {"connectSeconds": 10, "readSeconds": 30},
+  "routes": [
+    {
+      "name": "getProduct", "method": "GET", "path": "/product", "sdk": ["querySingleProduct"],
+      "query": {"iprcode": "code"}, "body": null,
+      "status": 200, "response": "product", "errors": [400, 404], "retry": true, "new": false
+    },
+    {
+      "name": "listProducts", "method": "POST", "path": "/products/list", "sdk": ["queryList"],
+      "query": null, "body": {"iprcodes": "array"},
+      "status": 200, "response": {"products": "array", "missing": "array"}, "errors": [400], "retry": true, "new": false
+    },
+    {
+      "name": "allProductsUrl", "method": "GET", "path": "/products/all-url", "sdk": ["allQuery", "syncS3"],
+      "query": null, "body": null,
+      "status": 200, "response": {"url": "string", "expiresIn": "integer", "format": "string", "generatedAt": "string|null"},
+      "errors": [404], "retry": true, "new": false
+    },
+    {
+      "name": "uploadRequest", "method": "POST", "path": "/upload-request", "sdk": ["updateWithS3"],
+      "query": null, "body": null,
+      "status": 200, "response": {"key": "string", "url": "string", "method": "string", "headers": "object", "expiresIn": "integer"},
+      "errors": [], "retry": true, "new": false
+    },
+    {
+      "name": "ingest", "method": "POST", "path": "/ingest", "sdk": ["updateWithS3"],
+      "query": null, "body": {"key": "string"},
+      "status": 200, "response": {"success": "integer", "skipped": "integer", "failure": "integer", "errors": "array"},
+      "errors": [400, 404], "retry": false, "new": false
+    },
+    {
+      "name": "sync", "method": "POST", "path": "/products/sync", "sdk": ["syncS3"],
+      "query": null, "body": null,
+      "status": 202, "response": {"status": "string", "requestedAt": "string"}, "errors": [], "retry": true, "new": true
+    },
+    {
+      "name": "deleteProducts", "method": "POST", "path": "/products/delete", "sdk": ["deleteProducts"],
+      "query": null, "body": {"iprcodes": "array"},
+      "status": 200, "response": {"deleted": "array", "missing": "array"}, "errors": [400], "retry": true, "new": true
+    }
+  ]
+}
