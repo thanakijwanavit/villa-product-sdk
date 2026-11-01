@@ -9,6 +9,18 @@ nbdev_install_git_hooks
 
 Before making the repository public or pushing a release, run `tools/secret_scan.sh .`: gitleaks over every commit on every ref and over the files on disk (values redacted); accept a finding only with a `.gitleaks.toml` allowlist entry that says why.
 
+## Tests and the library build
+
+The offline tests run on Python 3.12 with the pins in `requirements-dev.txt`:
+
+```
+uv run --no-project --python 3.12 --with-requirements requirements-dev.txt python -m pytest -m 'not live' tests
+```
+
+`make gate` does the same in a fresh venv. The notebooks are the source of `villaProductSdk/`: after editing one,
+rebuild the library with the nbdev 1.x toolchain in `requirements-docs.txt` (Python 3.9; see its header) and
+`make lib`, and commit the notebook and the generated `.py` together. `make release-check` fails when they differ.
+
 ## Running the notebooks in Docker
 
 `docker-compose.yml` serves Jupyter on <http://127.0.0.1:8080> and the docs preview on <http://127.0.0.1:4000>, on

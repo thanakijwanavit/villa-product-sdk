@@ -159,10 +159,10 @@ Run `make release-env` once (Python 3.12 tools in `.release-venv`; needs `uv` an
 
 The tests in `tests/` run offline, with no AWS credentials and no deployed stack. They replace the AWS client libraries (`lambdasdk` and `s3bz`) with recording fakes, remove every `AWS_*` environment variable, and stub out boto3's credential lookup, so your own AWS credentials are never used. In the pytest process they block botocore API calls and HTTP requests, `requests` sessions, DNS lookups through the `socket` module, and IPv4/IPv6 connections and datagram sends through `socket.socket`. A blocked call fails the run, even when the code swallows the error. Code that uses the `_socket` module directly, and subprocesses that a test starts, are not covered (see `tests/conftest.py`).
 
-They need Python 3.12, the pins in `requirements-dev.txt` and pandas. From the repository root:
+They need Python 3.12 and the pins in `requirements-dev.txt`. From the repository root:
 
 ```bash
-uv run --no-project --python 3.12 --with-requirements requirements-dev.txt --with pandas python -m pytest -m 'not live' tests -q
+uv run --no-project --python 3.12 --with-requirements requirements-dev.txt python -m pytest -m 'not live' tests -q
 ```
 
-Without uv, install `requirements-dev.txt` and pandas into a Python 3.12 virtual environment and run `python -m pytest -m 'not live' tests -q`; `make test` runs pytest with the Python on your PATH, and `make gate` builds a fresh Python 3.12 venv for it. The notebooks call the live `dev-manual` stack and need AWS credentials: `make test-notebooks-live`. The nbdev 1.x toolchain that rebuilds the library and docs from the notebooks is pinned separately, for Python 3.9, in `requirements-docs.txt`.
+Without uv, install `requirements-dev.txt` into a Python 3.12 virtual environment and run `python -m pytest -m 'not live' tests -q`; `make test` runs pytest with the Python on your PATH, and `make gate` builds a fresh Python 3.12 venv for it. The notebooks call the live `dev-manual` stack and need AWS credentials: `make test-notebooks-live`. The nbdev 1.x toolchain that rebuilds the library and docs from the notebooks is pinned separately, for Python 3.9, in `requirements-docs.txt`.

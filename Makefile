@@ -5,8 +5,10 @@ RELEASE_PY ?= 3.12
 
 all: lib docs
 
+# vps-2t7: notebook2script is the export step of nbdev_build_lib without its first step, which recreates
+# docs/_config.yml (removed in vps-tzc) and fails on settings.ini's missing 'recursive' key.
 lib: $(SRC)
-	nbdev_build_lib
+	python -c 'from nbdev.export import notebook2script; notebook2script()'
 
 sync:
 	nbdev_update_lib

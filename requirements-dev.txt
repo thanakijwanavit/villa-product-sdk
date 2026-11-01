@@ -1,11 +1,13 @@
 # Exact Python 3.12 development/test pins for vps-b7v.
 # Regenerate: copy the direct pins below (dataclasses-json, boto3, requests, lambdasdk,
-# s3bz, ujson, awsSchema, nicHelper, pytest) into a scratch requirements.in, one per line.
+# s3bz, ujson, awsSchema, nicHelper, pytest, pandas) into a scratch requirements.in, one per line.
 # uv pip compile --universal --python-version 3.12 --no-annotate --no-header requirements.in; strip platform markers.
 # s3bz is held at 0.1.5 because 0.1.6+ invokes a broken import-time classmethod decorator.
 # urllib3 2.x here is within settings.ini's urllib3>=1.26.19 floor (vps-9kk, vps-2e0).
 # The nbdev 1.x toolchain (Python 3.9) is in requirements-docs.txt (vps-2t7).
-# Tests: uv run --no-project --python 3.12 --with-requirements requirements-dev.txt --with pandas python -m pytest -m 'not live' tests
+# pandas (settings.ini: pandas>=1.1; products.py imports it) and numpy/tzdata added in vps-2t7, when the
+# integration code that needs pandas met these pins.
+# Tests: uv run --no-project --python 3.12 --with-requirements requirements-dev.txt python -m pytest -m 'not live' tests
 attrs==26.1.0
 awsSchema==0.0.27
 beartype==0.23.1
@@ -22,13 +24,15 @@ genson==1.4.0
 idna==3.20
 iniconfig==2.3.1
 jmespath==1.1.0
-jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
+jsonschema==4.26.0
 lambdasdk==0.1.4
 marshmallow==3.26.2
 mypy-extensions==1.1.0
 nicHelper==0.0.123
+numpy==2.5.4
 packaging==26.3
+pandas==3.1.0
 pillow==13.0.0
 pluggy==1.7.0
 pycryptodome==4.2.0
@@ -44,5 +48,6 @@ s3transfer==0.19.3
 six==1.17.0
 typing-extensions==4.16.0
 typing-inspect==0.9.0
+tzdata==2026.6
 ujson==6.0.0
 urllib3==2.8.0
