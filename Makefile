@@ -11,9 +11,6 @@ lib: $(SRC)
 sync:
 	nbdev_update_lib
 
-docs_serve: docs
-	cd docs && bundle exec jekyll serve
-
 docs: $(SRC)
 	nbdev_build_docs
 	touch docs
