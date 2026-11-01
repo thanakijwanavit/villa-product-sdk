@@ -1,6 +1,7 @@
 # vps-3ah: the project's own lint config, so a user-level ruff config elsewhere does not apply.
-# Pyflakes only (real defects: unused or redefined imports, undefined names); style is out of scope.
+# Pyflakes (unused or redefined imports, undefined names) plus vps-9he: E722 bare except, BLE001 blind
+# except Exception that swallows, T201 print in library code. Other style rules are out of scope.
 extend-exclude = ["docs", "nbdev_template", "dask-worker-space", "*.ipynb"]
 
 [lint]
-select = ["F"]
+select = ["F", "E722", "T201", "BLE001"]
