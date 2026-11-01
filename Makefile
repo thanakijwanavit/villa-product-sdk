@@ -18,7 +18,15 @@ docs: $(SRC)
 	nbdev_build_docs
 	touch docs
 
+# vps-7af: the default test is the offline pytest suite (no AWS, no credentials). The notebooks call live
+# Lambda/S3, so running them is its own target; so are the tests marked live.
 test:
+	python3 -m pytest
+
+test-live:
+	python3 -m pytest -m live
+
+test-notebooks-live:
 	nbdev_test_nbs
 
 # merge gate (vps-a8a): pytest in a fresh py3.12 venv with requirements-dev.txt pins
