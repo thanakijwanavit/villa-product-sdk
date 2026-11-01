@@ -1,7 +1,6 @@
 """vps-up7: no call can hang a caller forever. The Lambda client has connect/read timeouts and standard retries,
 and allQuery's download has a timeout. Offline: s3bz is stubbed, keys are dummies, requests.get and the invoke are
 fakes."""
-import bz2
 import importlib
 import json
 import sys
